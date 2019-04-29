@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Share With';
 
-$string['menucoursenode'] = 'Share course to category';
+$string['menucoursenode'] = 'Copy course to category';
 $string['wordcopy'] = 'Share';
 $string['defaultsectionname'] = 'Topic';
 
