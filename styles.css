@@ -1,0 +1,17 @@
+.spinner {
+    display: none;
+    width: 15%;
+    height: auto;
+}
+
+.modal-content.alert-danger {
+    color: #712b29;
+    background-color: #f7dddc;
+    border-color: #f4cfce;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog-centered {
+        min-height: calc(100% - 3.5rem);
+    }
+}

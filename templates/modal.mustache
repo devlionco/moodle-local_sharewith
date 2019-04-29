@@ -1,0 +1,20 @@
+<div class="modal fade" id="selectItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{# str }}selectioncategories, local_sharewith {{/ str }}</h5>
+        <button type="button" data-ref = "close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer" style = "min-height: 69px;">
+        <button type="button" data-ref = "error" class="btn btn-danger" data-dismiss="modal">{{# str }}close, local_sharewith {{/ str }}</button>
+        <button type="button" data-ref = "approve" class="btn btn-secondary" data-dismiss="modal">{{# str }}approve, local_sharewith {{/ str }}</button>
+        <button type="button" data-ref = "cancel" class="btn btn-secondary" data-dismiss="modal">{{# str }}cancel, local_sharewith {{/ str }}</button>
+        <button type="button" data-ref = "submit" data-handler = "sendCategory"  class="btn btn-success">{{# str }}submit, local_sharewith {{/ str }}</button>
+      </div>
+    </div>
+  </div>
+</div>
