@@ -15,13 +15,13 @@ Purpose
 Share with plugin will allow to the teacher:
 1. copy activity from course to other course and section.
 2. copy course to different categories.
-3. copy section to some course.
+3. copy topic to some course.
 
 ![Copy Activity](https://blog.devlion.co/wp-content/uploads/sharewithPlugin.png) 
 
 Next Features
 ------------
-1. send activity to other teacher
+1. share activity to other teacher
 2. share activity to bank of activities
 
 Requirements

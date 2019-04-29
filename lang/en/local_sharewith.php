@@ -35,19 +35,19 @@ $string['defaultsectionname'] = 'Topic';
 $string['tasksharewith'] = 'Task sharewith';
 
 // Settings.
-$string['settingscoursecopy'] = 'Share course';
-$string['settingscoursecopydesc'] = 'Enable/disable share course';
-$string['settingssectioncopy'] = 'Share topic';
-$string['settingssectioncopydesc'] = 'Enable/disable share topic';
+$string['settingscoursecopy'] = 'Copy course';
+$string['settingscoursecopydesc'] = 'Enable/disable copy courses';
+$string['settingssectioncopy'] = 'Copy topic';
+$string['settingssectioncopydesc'] = 'Enable/disable copy topics';
 $string['settingsactivityteachercopy'] = 'Share activity to teacher';
-$string['settingsactivityteachercopydesc'] = 'Enable/disable share activity to teacher';
-$string['settingsactivityhimselfcopy'] = 'Share activity to himself';
-$string['settingsactivityhimselfcopydesc'] = 'Enable/disable share activity to himself';
+$string['settingsactivityteachercopydesc'] = 'Enable/disable share activities to teacher';
+$string['settingsactivityhimselfcopy'] = 'Copy activity';
+$string['settingsactivityhimselfcopydesc'] = 'Enable/disable copy activities';
 
 // Events.
-$string['eventcoursecopy'] = 'Share course';
-$string['eventsectioncopy'] = 'Share topic';
-$string['eventactivitycopy'] = 'Share activity';
+$string['eventcoursecopy'] = 'Copy course';
+$string['eventsectioncopy'] = 'Copy topic';
+$string['eventactivitycopy'] = 'Copy activity';
 
 // Modals.
 $string['selectioncategories'] = 'Select a categories to share the course';
@@ -59,7 +59,7 @@ $string['close'] = 'Close';
 $string['cancel'] = 'Cancel';
 $string['submit'] = 'Submit';
 $string['approve'] = 'Ok';
-$string['course_copied_to_section'] = 'Course copied to the category';
-$string['activity_copied_to_course'] = 'Activity copied to the course';
-$string['section_copied_to_course'] = 'Topic copied to course';
+$string['course_copied_to_section'] = 'Course is copied to the category';
+$string['activity_copied_to_course'] = 'Activity is copied to the course';
+$string['section_copied_to_course'] = 'Topic is copied to the course';
 $string['system_error_contact_administrator'] = 'System error, contact administrator';
