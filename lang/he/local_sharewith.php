@@ -19,7 +19,7 @@
  *
  * @package     local_sharewith
  * @category    string
- * @copyright   2017 nadavkav@gmail.com
+ * @copyright   2018 Devlion <info@devlion.co>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

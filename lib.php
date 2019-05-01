@@ -18,7 +18,7 @@
  * Local plugin "OER catalog" - Library
  *
  * @package    local_sharewith
- * @copyright  2017 Kathrin Osswald, Ulm University <kathrin.osswald@uni-ulm.de>
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

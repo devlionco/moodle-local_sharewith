@@ -18,7 +18,7 @@
  * Local plugin "sandbox" - Task definition
  *
  * @package    local_sharewith
- * @copyright  2014 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

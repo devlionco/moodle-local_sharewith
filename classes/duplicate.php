@@ -19,7 +19,7 @@
  *
  * @package    core_course
  * @category   external
- * @copyright  2009 Petr Skodak
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

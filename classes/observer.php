@@ -18,7 +18,7 @@
  * Event observer for meta enrolment plugin.
  *
  * @package    local_sharewith
- * @copyright  2013 Rajesh Taneja <rajesh@moodle.com>
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
