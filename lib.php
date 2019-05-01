@@ -69,7 +69,7 @@ function local_sharewith_extend_navigation_course($parentnode, $course, $context
 
             $url = 'Javascript:void(0)';
             $courseduplicatenode = \navigation_node::create($strmetadata, $url, \navigation_node::NODETYPE_LEAF,
-                    'courseduplicate', 'courseduplicate', new \pix_icon('t/portfolioadd', $strmetadata)
+                    'courseduplicate', 'courseduplicate', new \pix_icon('t/copy', $strmetadata)
             );
             $courseduplicatenode->add_class('selectCategory');
 

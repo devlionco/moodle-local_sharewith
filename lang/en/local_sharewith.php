@@ -50,7 +50,7 @@ $string['eventsectioncopy'] = 'Copy topic';
 $string['eventactivitycopy'] = 'Copy activity';
 
 // Modals.
-$string['selectioncategories'] = 'Select a categories to share the course';
+$string['selectioncategories'] = 'Select category';
 $string['sectionselection'] = 'Select topic';
 $string['selectcourse'] = 'Select course';
 $string['selectcourse_and_section'] = 'Select course and topic';
