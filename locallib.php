@@ -120,10 +120,10 @@ function local_sharewith_get_section_bycourse($courseid) {
     foreach ($preresult as $key => $obj) {
         if (empty($obj->section_name)) {
             $objtmp = $obj;
-            if($key == 0){
+            if ($key == 0) {
                 $objtmp->section_name = get_string('generalsectionname', 'local_sharewith');
-            }else{
-                $objtmp->section_name = get_string('sectionname', 'format_'.$course->format) . ' ' . $key;
+            } else {
+                $objtmp->section_name = get_string('sectionname', 'format_' . $course->format) . ' ' . $key;
             }
             $result[] = $objtmp;
         } else {
