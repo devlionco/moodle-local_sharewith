@@ -29,7 +29,6 @@ $string['pluginname'] = 'Share With';
 
 $string['menucoursenode'] = 'Copy course to category';
 $string['wordcopy'] = 'Share';
-$string['defaultsectionname'] = 'Topic';
 $string['generalsectionname'] = 'General';
 
 // Cron.

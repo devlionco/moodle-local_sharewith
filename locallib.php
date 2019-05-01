@@ -108,6 +108,8 @@ function local_sharewith_get_courses() {
 function local_sharewith_get_section_bycourse($courseid) {
     global $DB;
 
+    $course = get_course($courseid);
+
     $result = [];
     $sql = "SELECT cs.id AS section_id, cs.name AS section_name
             FROM {course} c
@@ -121,7 +123,7 @@ function local_sharewith_get_section_bycourse($courseid) {
             if($key == 0){
                 $objtmp->section_name = get_string('generalsectionname', 'local_sharewith');
             }else{
-                $objtmp->section_name = get_string('defaultsectionname', 'local_sharewith') . ' ' . $key;
+                $objtmp->section_name = get_string('sectionname', 'format_'.$course->format) . ' ' . $key;
             }
             $result[] = $objtmp;
         } else {
