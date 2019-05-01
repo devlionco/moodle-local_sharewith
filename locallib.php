@@ -45,11 +45,8 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
         $categoryid = null, $sourceactivityid = null, $metadata = null) {
     global $DB;
 
-    $user = \core_user::get_user($sourceuserid);
-    $isadmin = is_siteadmin($user);
-
     // Check permission.
-    if (local_sharewith_permission_allow($sourceuserid, $sourcecourseid) || $isadmin) {
+    if (local_sharewith_permission_allow($sourcecourseid, $sourceuserid)) {
         $obj = new \stdClass();
         $obj->type = $type;
         $obj->userid = $userid;
