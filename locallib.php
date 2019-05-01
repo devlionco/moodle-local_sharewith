@@ -118,8 +118,11 @@ function local_sharewith_get_section_bycourse($courseid) {
     foreach ($preresult as $key => $obj) {
         if (empty($obj->section_name)) {
             $objtmp = $obj;
-            $keytmp = $key + 1;
-            $objtmp->section_name = get_string('defaultsectionname', 'local_sharewith') . ' ' . $keytmp;
+            if($key == 0){
+                $objtmp->section_name = get_string('generalsectionname', 'local_sharewith');
+            }else{
+                $objtmp->section_name = get_string('defaultsectionname', 'local_sharewith') . ' ' . $key;
+            }
             $result[] = $objtmp;
         } else {
             $result[] = $obj;
