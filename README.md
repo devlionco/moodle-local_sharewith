@@ -17,7 +17,7 @@ Share with plugin will allow to the teacher:
 2. copy course to different categories.
 3. copy topic to some course.
 
-![Copy Activity](https://blog.devlion.co/wp-content/uploads/sharewithPlugin.png) 
+![Copy Activity](https://blog.devlion.co/wp-content/uploads/Sharewith-Plugin-1.jpg) 
 
 Next Features
 ------------
