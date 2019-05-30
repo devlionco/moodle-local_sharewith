@@ -48,6 +48,7 @@ $string['settingsactivityhimselfcopydesc'] = 'Enable/disable copy activities';
 $string['eventcoursecopy'] = 'Copy course';
 $string['eventsectioncopy'] = 'Copy topic';
 $string['eventactivitycopy'] = 'Copy activity';
+$string['eventactivityshare'] = 'Share activity';
 
 // Modals.
 $string['selectioncategories'] = 'Select category';
@@ -63,3 +64,48 @@ $string['course_copied_to_section'] = 'Course is copied to the category';
 $string['activity_copied_to_course'] = 'Activity is copied to the course';
 $string['section_copied_to_course'] = 'Topic is copied to the course';
 $string['system_error_contact_administrator'] = 'System error, contact administrator';
+$string['eventcopytomaagar'] = "Copy to Database";
+$string['eventcopytoteacher'] = "Share activity";
+$string['eventdownloadtoteacher'] = "Download activity";
+$string['eventdublicatetoteacher'] = "Copy activity";
+$string['eventcoursemodulevisibilitychanged'] = "Course module visibility cahnged";
+
+$string['menu_popup_title'] = "Choose how you want to share";
+$string['menu_popup_maagar'] = "Post in the Shared Database";
+$string['menu_popup_send_teacher'] = "Send to Teacher";
+$string['menu_popup_back'] = "back";
+$string['menu_popup_send'] = "send";
+$string['share_with_teacher'] = "Share with a teacher";
+$string['teachers_youve_sent'] = "Teachers you've sent the item to";
+$string['enter_teacher_here'] = "Enter the name of the teacher here ...";
+$string['comment_to_teacher'] = "Here a comment will be made that the teacher will share with the person who has chosen ...";
+$string['user_foto'] = "User foto";
+$string['nosharing'] = "No one sent yet";
+
+$string['subject_message_for_teacher_by'] = 'Activity {$a->activity_name} added by {$a->teacher_name}';
+$string['subject_message_for_teacher'] = 'You can share activity-{$a->activity_name} from teacher {$a->teacher_name}';
+$string['fullmessagehtml_for_teacher'] = 'You can share activity <a data-handler="saveActivity" data-sharing="{$a->restore_id}" href="#">here</a>';
+$string['info_message_for_teacher'] = 'Message from Sharing Activity';
+$string['enter_subject_name'] = 'Enter the name of the subject';
+
+$string['share'] = 'Share';
+$string['copy'] = 'Copy';
+$string['how_to_share'] = 'How to share ?';
+$string['share_national_shared'] = 'Share the national shared database';
+$string['send_to_teacher'] = 'Send to the teacher';
+$string['transfer_another_course'] = 'Transfer to another course';
+
+// sharing popup
+$string['choose'] = 'Choose...';
+$string['reduce_catalog_options'] = 'Reduce catalog options';
+$string['advanced_catalog_options'] = 'Advanced catalog options';
+$string['please_enter_item_name'] = 'Please enter the item name';
+$string['error'] = 'Error';
+$string['please_select_course_section'] = 'Please select course and section';
+$string['sent'] = 'Sent';
+$string['fails'] = 'Fails';
+$string['sharing_sent_successfully'] = 'A sharing invitation has been sent successfully';
+$string['staudysection'] = 'Study Section';
+
+$string['selectteacher'] = 'Select Teacher';
+$string['activitydeleted'] = 'This activity was deleted by author.';

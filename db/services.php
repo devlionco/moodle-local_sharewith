@@ -45,6 +45,16 @@ $functions = array(
                 'ajax' => true,
                 'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
         ),
+    
+        'add_saveactivity_task' => array(
+                'classname' => 'local_sharewith_external',
+                'methodname' => 'add_saveactivity_task',
+                'classpath' => 'local/sharewith/externallib.php',
+                'description' => 'Add sharing activity task to cron',
+                'type' => 'read',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        ),
 
         'get_categories' => array(
                 'classname' => 'local_sharewith_external',
@@ -72,6 +82,36 @@ $functions = array(
                 'classpath' => 'local/sharewith/externallib.php',
                 'description' => 'Get sections by course',
                 'type' => 'read',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        ),
+
+        'local_sharewith_get_teachers' => array(
+                'classname' => 'local_sharewith_external',
+                'methodname' => 'get_teachers',
+                'classpath' => 'local/sharewith/externallib.php',
+                'description' => 'Get teachers',
+                'type' => 'read',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        ),
+
+        'local_sharewith_autocomplete_teachers' => array(
+                'classname' => 'local_sharewith_external',
+                'methodname' => 'autocomplete_teachers',
+                'classpath' => 'local/sharewith/externallib.php',
+                'description' => 'Get teachers',
+                'type' => 'read',
+                'ajax' => true,
+                'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+        ),
+
+        'local_sharewith_submit_teachers' => array(
+                'classname' => 'local_sharewith_external',
+                'methodname' => 'submit_teachers',
+                'classpath' => 'local/sharewith/externallib.php',
+                'description' => 'Send to teachers',
+                'type' => 'write',
                 'ajax' => true,
                 'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
         ),

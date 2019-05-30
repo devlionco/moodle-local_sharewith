@@ -46,8 +46,8 @@ define([
         addCopyActivityButton: function (root) {
             root = $(root);
             var string = Str.get_string('eventactivitycopy', 'local_sharewith'),
-                menu = root.find(this.SELECTORS.menuActivity),
-                self = this;
+                    menu = root.find(this.SELECTORS.menuActivity),
+                    self = this;
             menu.each(function () {
                 var clone = $(this).children().last().clone();
                 string.done(function (s) {
@@ -67,6 +67,41 @@ define([
                         .attr('aria-label', s)
                         .removeAttr('class')
                         .addClass('icon fa fa-copy fa-fw');
+                });
+                $(this).append(clone);
+            });
+        },
+
+        /**
+         * Clone and add the button for copying activity.
+         *
+         * @method addCopyActivityButton
+         * @param {jquery} root The root element.
+         */
+        addShareActivityButton: function (root) {
+            root = $(root);
+            var string = Str.get_string('eventactivityshare', 'local_sharewith'),
+                    menu = root.find(this.SELECTORS.menuActivity),
+                    self = this;
+            menu.each(function () {
+                var clone = $(this).children().last().clone();
+                string.done(function (s) {
+                    clone
+                        .find('.menu-action-text')
+                        .text(s);
+                    clone
+                        .attr('data-toggle', 'modal')
+                        .attr('data-target', self.SELECTORS.modal)
+                        .attr('href', '#')
+                        .attr('data-handler', 'selectTeacher')
+                        .removeAttr('data-action')
+                        .addClass('sharingact_item');
+                    clone
+                        .find('.icon')
+                        .attr('title', s)
+                        .attr('aria-label', s)
+                        .removeAttr('class')
+                        .addClass('icon fa fa-share-alt fa-fw');
                 });
                 $(this).append(clone);
             });

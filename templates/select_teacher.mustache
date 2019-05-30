@@ -1,0 +1,312 @@
+<input id="send_popup_activity_id" type="hidden" value="{{activityid}}">
+<input id="send_popup_course_id" type="hidden" value="{{courseid}}">
+
+<div class = "prof__head">
+    <div class = "prof__tag-wrap"></div>
+</div>
+<form class = "prof__form">
+    <p class = "prof__header">{{#str}}share_with_teacher, local_sharewith{{/str}}</p>
+    <div class = "form-group">
+        <input class = "prof__input form-control mb-0" id="selectteacher" type = "text" placeholder="{{#str}}enter_teacher_here, local_sharewith{{/str}}">
+    </div>
+    <div class = "form-group">
+        <textarea id="send_popup_message" class = "prof__comment form-control" placeholder="{{#str}}comment_to_teacher, local_sharewith{{/str}}"></textarea>
+    </div>
+    <div class = "form-group">
+        <div class = "prof__btn-wrap">
+            <button  id ="btnSendResult" class = "btn btn-primary" type = "button" disabled>{{#str}}menu_popup_send, local_sharewith{{/str}}</button>
+            <span class="loading_dots btn d-none"><span class="fa fa-circle-o-notch fa-spin"></span></span>
+        </div>
+    </div>
+</form>
+<div class = "prof__cont prof__cont--bottom">
+    <p class = "prof__header">{{#str}}teachers_youve_sent, local_sharewith{{/str}}</p>
+    {{#teachers}}
+    <div class = "prof__answer">
+        <div class = "prof__avatar">
+            <img src = "{{ config.wwwroot }}{{teacher_url}}" alt = "{{#str}}user_foto, local_sharewith{{/str}}">
+        </div>
+        <span class = "prof__name">{{teacher_name}}</span>
+        <span class = "prof__date">{{date}}</span>
+        <span class = "prof__time">{{time}}</span>
+    </div>
+    {{/teachers}}
+    {{^teachers}}
+    <div class = "prof__noanswer">{{#str}}nosharing, local_sharewith{{/str}}</div>
+    {{/teachers}}
+</div>
+
+
+<style>
+.prof__background {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.prof {
+  position: fixed;
+  width: 600px;
+  margin: 0 auto;
+  right: calc(50% - 300px);
+  top: 25vh;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 17px;
+  background-color: #fff;
+  z-index: 1000;
+  &--error {
+    width: 80%;
+    right: 10%;
+    color: #000;
+  }
+}
+
+.prof__wrap {
+}
+
+.prof__close {
+}
+
+.prof__head {
+  display: flex;
+}
+.prof__back {
+  cursor: pointer;
+  padding-left: 30px;
+  position: relative;
+  color: #000;
+  margin-right: auto;
+}
+.prof__back::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  background: url([[pix:local_sharingactivities|arrow-right]]) 50% 50% no-repeat;
+  background-size: contain;
+}
+.dir-ltr .prof__back::before {
+  transform: rotate(180deg);
+}
+.prof__tag-wrap {
+  display: flex;
+}
+.prof__cont {
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  &--bottom {
+    margin-top: 22px;
+  }
+}
+
+.prof__header {
+  padding: 0 14px;
+  margin: 0;
+  color: #fff;
+  background-color: $purple;
+  border-radius: 5px 5px 0 0;
+}
+.prof__form {
+  display: flex;
+  position: relative;
+  padding: 10px;
+  flex-direction: column;
+}
+.prof__input {
+  display: block;
+}
+
+.prof__comment {
+  overflow-x: hidden;
+}
+
+.prof__btn-wrap {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 10px;
+}
+
+.prof__btn {
+  padding: 0 8px;
+  border-radius: 4px;
+  background-color: $purple;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  &--success {
+    background-color: $green !important;
+  }
+  &--error {
+    background-color: $red !important;
+  }
+}
+.prof__btn:disabled {
+  cursor: default;
+  background-color: $disabled;
+}
+.prof__btn:hover {
+  background-color: $hover_purple;
+}
+.prof__answer {
+  display: flex;
+  padding: 0 14px;
+  height: 76px;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+.prof__noanswer {
+  color: #000;
+  padding: 0 10px;
+}
+.prof__answer:last-child {
+  border: none;
+}
+.prof__avatar {
+  border-radius: 50%;
+  border: 2px solid #000;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+}
+.prof__avatar img{
+  width: 100%;
+  height: auto;
+  align-self: center;
+}
+.prof__name {
+  color: $purple;
+  padding-left: 14px;
+  display: inline-block;
+  margin-right: auto;
+}
+
+.prof__date {
+  color: #000;
+  display: inline-block;
+  margin-left: auto;
+  padding-right: 8px;
+  border-right: 1px solid #000;
+}
+
+.prof__time {
+  color: #000;
+  padding-left: 8px;
+}
+
+.prof #error_category_teacher {
+  width: 88%;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+    
+.dest {
+  position: relative;
+}
+
+.dest__dummy {
+  border: 1px solid $purple;
+  position: relative;
+  background-color: #fff;
+  padding: 0 10px;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.dest__dummy-del  {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  width: 32px;
+  height: 22px;
+  margin-right: 6px;
+}
+
+.dest__dummy-del:hover::after ,
+.dest__dummy-del:hover::before {
+  background-color: red;
+}
+
+.dest__dummy-del::before,
+.dest__dummy-del::after {
+  position: absolute;
+  left: 15px;
+  content: '';
+  height: 22px;
+  width: 2px;
+  background-color: purple;
+}
+.dest__dummy-del::before {
+  transform: rotate(45deg);
+}
+.dest__dummy-del::after {
+  transform: rotate(-45deg);
+}
+
+
+
+
+
+.dest__result-block {
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  position: absolute;
+  z-index: 99999;
+  top: 67px;
+  left: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.dest__unit {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid #ddd;
+  height: 80px;
+}
+.dest__unit:last-child {
+  border: none;
+}
+.dest__unit:not(.dest__selected):focus {
+  outline: none;
+  background-color: #eee;
+}
+.dest__name {
+  padding: 0;
+  padding-left: 20px;
+}
+.dest__img {
+  border-radius: 50%;
+  border: 2px solid #000;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+}
+.dest__img img {
+  width: 100%;
+  height: auto;
+  align-self: center;
+}
+.dest__selected {
+  opacity: .6;
+  cursor: inherit;
+}
+
+</style>

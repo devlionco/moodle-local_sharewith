@@ -44,6 +44,8 @@ define([
                 buildtree.addCopySectionButton(root);
             }
 
+            buildtree.addShareActivityButton(root);
+
             root.addEventListener('click', function (e) {
                 var target = e.target;
                 while (target !== root) {
@@ -60,6 +62,10 @@ define([
                         events.selectCourse(target);
                         return;
                     }
+                    if (target.dataset.handler === 'selectTeacher') {
+                        events.selectTeacher(target);
+                        return;
+                    }
                     if (target.dataset.handler === 'selectSection') {
                         events.selectSection();
                         return;
@@ -70,6 +76,14 @@ define([
                     }
                     if (target.dataset.handler === 'copySectionToCourse') {
                         events.copySectionToCourse();
+                        return;
+                    }
+                    if (target.dataset.handler === 'saveActivityToCourse') {
+                        events.saveActivityToCourse();
+                        return;
+                    }
+                    if (target.dataset.handler === 'saveActivity') {
+                        events.saveActivity(target);
                         return;
                     }
                     target = target.parentNode;
