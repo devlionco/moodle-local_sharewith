@@ -22,7 +22,6 @@
  * @copyright   2018 Devlion <info@devlion.co>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'שיתוף פעילויות';
@@ -43,6 +42,8 @@ $string['settingsactivityteachercopy'] = 'העתק פעילות למורה';
 $string['settingsactivityteachercopydesc'] = 'הפעלה / השבתה של פעילות העתקה למורה';
 $string['settingsactivityhimselfcopy'] = 'העתק פעילות לעצמו';
 $string['settingsactivityhimselfcopydesc'] = 'הפעלה / השבתה של פעילות העתקה לעצמו';
+$string['settingsactivitysending'] = 'Send activity';
+$string['settingsactivitysendingdesc'] = 'Enable/disable send activities';
 
 // Events.
 $string['eventcoursecopy'] = 'העתק קורס';
@@ -96,7 +97,7 @@ $string['share_national_shared'] = 'שיתוף במאגר המשותף הארצ�
 $string['send_to_teacher'] = 'שלח למורה';
 $string['transfer_another_course'] = 'העתקה לקורס אחר שלי';
 
-// sharing popup
+// Sharing popup.
 $string['choose'] = 'יש לבחור...';
 $string['reduce_catalog_options'] = 'צימצום אפשרויות קטלוג';
 $string['advanced_catalog_options'] = 'אפשרויות קטלוג מתקדמות';
@@ -111,3 +112,4 @@ $string['select_sub_topic'] = 'בחירת סעיף בתת נושא';
 
 $string['selectteacher'] = 'Select Teacher';
 $string['activitydeleted'] = 'This activity was deleted by author.';
+$string['sendingnotallowed'] = 'Share activities disabled by administrator.';

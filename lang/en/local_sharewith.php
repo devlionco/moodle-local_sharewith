@@ -43,6 +43,8 @@ $string['settingsactivityteachercopy'] = 'Share activity to teacher';
 $string['settingsactivityteachercopydesc'] = 'Enable/disable share activities to teacher';
 $string['settingsactivityhimselfcopy'] = 'Copy activity';
 $string['settingsactivityhimselfcopydesc'] = 'Enable/disable copy activities';
+$string['settingsactivitysending'] = 'Send activity';
+$string['settingsactivitysendingdesc'] = 'Enable/disable send activities';
 
 // Events.
 $string['eventcoursecopy'] = 'Copy course';
@@ -95,7 +97,7 @@ $string['share_national_shared'] = 'Share the national shared database';
 $string['send_to_teacher'] = 'Send to the teacher';
 $string['transfer_another_course'] = 'Transfer to another course';
 
-// sharing popup
+// Sharing popup.
 $string['choose'] = 'Choose...';
 $string['reduce_catalog_options'] = 'Reduce catalog options';
 $string['advanced_catalog_options'] = 'Advanced catalog options';
@@ -109,3 +111,4 @@ $string['staudysection'] = 'Study Section';
 
 $string['selectteacher'] = 'Select Teacher';
 $string['activitydeleted'] = 'This activity was deleted by author.';
+$string['sendingnotallowed'] = 'Share activities disabled by administrator.';

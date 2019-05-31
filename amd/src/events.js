@@ -29,14 +29,13 @@ define([
     'core/ajax',
     'local_sharewith/modal',
     'core/notification',
-], function ($, Str, Ajax, modal, notification) {
-
+], function($, Str, Ajax, modal, notification) {
 
     Str.get_strings([
         {key: 'sent', component: 'local_sharewith'},
         {key: 'fails', component: 'local_sharewith'},
         {key: 'sharing_sent_successfully', component: 'local_sharewith'},
-    ]).done(function () {});
+    ]).done();
 
     return /** @alias module:local_sharewith/events */ {
 
@@ -50,19 +49,19 @@ define([
          *
          * @method chooseCategory
          */
-        selectCategory: function () {
+        selectCategory: function() {
             var modalBody = modal.getBody();
 
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
 
                 var categories = Object.values(JSON.parse(responce.categories));
                 modal.init();
-                Str.get_string('selectioncategories', 'local_sharewith').done(function (s) {
+                Str.get_string('selectioncategories', 'local_sharewith').done(function(s) {
                     modal.getTitle().text(s);
                 });
                 modalBody
                         .append($('<select class = "categories form-control"></select>'));
-                categories.forEach(function (category) {
+                categories.forEach(function(category) {
                     modalBody.find('.categories')
                             .append($('<option data-categoryid =' + category.id + '>' + category.name + '</option>'));
                 });
@@ -82,16 +81,16 @@ define([
          *
          * @method copyCourseToCategory
          */
-        copyCourseToCategory: function () {
+        copyCourseToCategory: function() {
             var self = this,
                     categoryid = modal.getModal().find(':selected').attr('data-categoryid'),
                     modalBody = modal.getBody();
             self.addSpinner(modalBody);
 
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
                 if (responce.result) {
                     modal.approveState();
-                    Str.get_string('course_copied_to_section', 'local_sharewith').done(function (s) {
+                    Str.get_string('course_copied_to_section', 'local_sharewith').done(function(s) {
                         modalBody.text(s);
                     });
                 } else {
@@ -117,12 +116,12 @@ define([
          * @method selectCourse
          * @param {Node} target element.
          */
-        selectCourse: function (target) {
+        selectCourse: function(target) {
             var cmid = $(target).parents('.activity').find('[data-itemtype="activityname"]').data('itemid'),
                     sectionid = $(target).parents('.section').find('[data-itemtype="sectionname"]').data('itemid'),
                     modalBody = modal.getBody();
 
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
                 var courses = JSON.parse(responce.courses);
 
                 modal.init();
@@ -130,22 +129,24 @@ define([
                 if ($(target).data('ref') === 'copySection') {
                     this.setHandler('copySectionToCourse');
                     Str.get_string('selectcourse', 'local_sharewith')
-                            .done(function (s) {
+                            .done(function(s) {
                                 modal.getTitle().text(s);
                             });
                 } else {
                     this.setHandler('copySectionToCourse');
                     Str.get_string('selectcourse_and_section', 'local_sharewith')
-                            .done(function (s) {
+                            .done(function(s) {
                                 modal.getTitle().text(s);
                             });
                 }
                 modalBody
-                        .append($('<p>select course</p><select data-handler="selectSection" class = "courses form-control"></select>'))
+                        .append($('<p>select course</p>' +
+                        '<select data-handler="selectSection" class = "courses form-control">' +
+                        '</select>'))
                         .attr('data-cmid', cmid)
                         .attr('data-sectionid', sectionid)
                         .css('min-height', '100px');
-                courses.forEach(function (course) {
+                courses.forEach(function(course) {
                     modalBody.find('.courses')
                             .append($('<option data-courseid =' + course.id + '>' + course.fullname + '</option>'));
                 });
@@ -170,14 +171,14 @@ define([
          *
          * @method selectSection
          */
-        selectSection: function () {
+        selectSection: function() {
             var modalBody = modal.getBody(),
                     courseid = modalBody.find(':selected').attr('data-courseid');
 
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
                 var sections = JSON.parse(responce.sections);
                 modalBody.find('.sections').html('');
-                sections.forEach(function (section) {
+                sections.forEach(function(section) {
                     modalBody.find('.sections')
                             .append($('<option data-sectionid =' + section.section_id + '>' + section.section_name + '</option>'));
                 });
@@ -197,7 +198,7 @@ define([
          * @method selectCourse
          * @param {Node} target element.
          */
-        selectTeacher: function (target) {
+        selectTeacher: function(target) {
 
             var cmid = $(target).parents('.activity').find('[data-itemtype="activityname"]').data('itemid'),
                     courseid = $('#course').val(),
@@ -205,7 +206,7 @@ define([
 
             modal.cancelState();
 
-            var renderPopup = function (res) {
+            var renderPopup = function(res) {
 
                 var response = JSON.parse(res);
 
@@ -213,7 +214,7 @@ define([
 
                 this.setHandler('copySectionToCourse');
                 Str.get_string('selectteacher', 'local_sharewith')
-                        .done(function (s) {
+                        .done(function(s) {
                             modal.getTitle().text(s);
                         });
                 modalBody.append(response.html);
@@ -239,13 +240,11 @@ define([
          * @method selectCourse
          * @param {Node} target element.
          */
-        saveActivity: function (target) {
+        saveActivity: function(target) {
 
             var actid = target.dataset.sharing;
             var modalBody = modal.getBody();
-
-
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
                 var courses = JSON.parse(responce.courses);
 
                 modal.init();
@@ -254,22 +253,22 @@ define([
                 if ($(target).data('ref') === 'copySection') {
                     this.setHandler('copySectionToCourse');
                     Str.get_string('selectcourse', 'local_sharewith')
-                            .done(function (s) {
+                            .done(function(s) {
                                 modal.getTitle().text(s);
                             });
                 } else {
                     this.setHandler('copySectionToCourse');
                     Str.get_string('selectcourse_and_section', 'local_sharewith')
-                            .done(function (s) {
+                            .done(function(s) {
                                 modal.getTitle().text(s);
                             });
                 }
                 modalBody
-                        .append($('<p>select course</p><select data-handler="selectSection" class = "courses form-control"></select>'))
-                        //.attr('data-cmid', cmid)
-                        //.attr('data-sectionid', sectionid)
+                        .append($('<p>select course</p>' +
+                        '<select data-handler="selectSection" class = "courses form-control">' +
+                        '</select>'))
                         .css('min-height', '100px');
-                courses.forEach(function (course) {
+                courses.forEach(function(course) {
                     modalBody.find('.courses')
                             .append($('<option data-courseid =' + course.id + '>' + course.fullname + '</option>'));
                 });
@@ -294,16 +293,16 @@ define([
          *
          * @method copyActivityToCourse
          */
-        saveActivityToCourse: function () {
+        saveActivityToCourse: function() {
             var modalBody = modal.getBody(),
                     shareid = $('input[name="shareid"]').val(),
                     courseid = modalBody.find(':selected')[0].dataset.courseid,
                     courseName = modalBody.find(':selected')[0].innerHTML,
                     sectionid = modalBody.find(':selected')[1].dataset.sectionid;
 
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 if (response.result > 0) {
-                    Str.get_string('activity_copied_to_course', 'local_sharewith').done(function (s) {
+                    Str.get_string('activity_copied_to_course', 'local_sharewith').done(function(s) {
                         modalBody.text(s + ' ' + courseName);
                     });
                     modal.approveState();
@@ -331,17 +330,17 @@ define([
          *
          * @method copyActivityToCourse
          */
-        copyActivityToCourse: function () {
+        copyActivityToCourse: function() {
             var modalBody = modal.getBody(),
                     cmid = modalBody.data('cmid'),
                     courseid = modalBody.find(':selected')[0].dataset.courseid,
                     courseName = modalBody.find(':selected')[0].innerHTML,
                     sectionid = modalBody.find(':selected')[1].dataset.sectionid;
 
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
                 if (responce.result) {
                     modal.approveState();
-                    Str.get_string('activity_copied_to_course', 'local_sharewith').done(function (s) {
+                    Str.get_string('activity_copied_to_course', 'local_sharewith').done(function(s) {
                         modalBody.text(s + ' ' + courseName);
                     });
                 } else {
@@ -368,16 +367,16 @@ define([
          *
          * @method copySectionToCourse
          */
-        copySectionToCourse: function () {
+        copySectionToCourse: function() {
             var modalBody = modal.getBody(),
                     sectionid = modalBody.data('sectionid'),
                     courseid = modalBody.find(':selected').data('courseid'),
                     courseName = modalBody.find(':selected').text();
 
-            var renderPopup = function (responce) {
+            var renderPopup = function(responce) {
                 if (responce.result) {
                     modal.approveState();
-                    Str.get_string('section_copied_to_course', 'local_sharewith').done(function (s) {
+                    Str.get_string('section_copied_to_course', 'local_sharewith').done(function(s) {
                         modalBody.text(s + ' ' + courseName);
                     });
                 } else {
@@ -405,7 +404,7 @@ define([
          * @param {Node} $node target element.
          * @returns {*|jQuery}.
          */
-        addSpinner: function ($node) {
+        addSpinner: function($node) {
             var spinner = $('<img/>').attr('src', M.util.image_url(this.ICON.spinner, this.ICON.component))
                     .addClass('mx-auto spinner');
             $node.html('');
@@ -421,7 +420,7 @@ define([
          * @param {string} handler name of the handler.
          * @return {int} id number of the course.
          */
-        getCurrentCourse: function () {
+        getCurrentCourse: function() {
             var str = $('body').attr('class'),
                     result = str.match(/course-\d+/gi)[0].replace(/\D+/, '');
             return result;
@@ -433,67 +432,66 @@ define([
          * @method setHandler
          * @param {string} handler name of the handler.
          */
-        setHandler: function (handler) {
+        setHandler: function(handler) {
             modal.getSubmit().attr('data-handler', handler);
         },
 
-        selectDestination: (activity_id) => {
-            const NUM_OF_SIGNS = 3;
-            const main = document.querySelector(`.prof__form`);
-            const input = document.querySelector(`input.prof__input`);
-            // const inputWrapper = document.querySelector(`label.dest__insert-wrapper`);
-            const tagWrapper = document.querySelector(`.prof__tag-wrap`);
-            const resultBlock = document.createElement(`ul`);
-            const btnSendResult = document.querySelector(`#btnSendResult`);
-            const sesskey = M.cfg.sesskey;
+        selectDestination: function(activityId) {
+            var NUM_OF_SIGNS = 3;
+            var main = document.querySelector('.prof__form');
+            var input = document.querySelector('input.prof__input');
+            var tagWrapper = document.querySelector('.prof__tag-wrap');
+            var resultBlock = document.createElement('ul');
+            var btnSendResult = document.querySelector('#btnSendResult');
 
-            if (!main)
+            if (!main) {
                 return;
+            }
 
-            resultBlock.classList.add(`dest__result-block`);
+            resultBlock.classList.add('dest__result-block');
             main.appendChild(resultBlock);
 
-            const keySelect = (container, close) => {
+            var keySelect = function(container, close) {
 
-                const forms = Array.from(document.querySelectorAll(`form`));
-                forms.forEach((form) => {
+                var forms = Array.from(document.querySelectorAll('form'));
+                forms.forEach(function(form) {
                     if (form.contains(container)) {
-                        form.onkeydown = (event) => {
+                        form.onkeydown = function(event) {
                             if (event.keyCode == 13) {
                                 event.preventDefault();
                             }
-                        }
+                        };
                     }
                 });
 
-                let currentItem = 0;
-                const items = Array.from(container.children);
-                items.forEach((item) => {
+                var currentItem = 0;
+                var items = Array.from(container.children);
+                items.forEach(function(item) {
                     item.tabIndex = 0;
 
                 });
 
-                container.onmouseover = (e) => {
+                container.onmouseover = function(e) {
                     e.target.focus();
-                    items.forEach((item, index) => {
-                        item.onfocus = () => {
+                    items.forEach(function(item, index) {
+                        item.onfocus = function() {
                             currentItem = index;
-                        }
+                        };
                     });
-                }
+                };
 
-                const setBlur = () => {
+                var setBlur = function() {
                     items[currentItem].blur();
-                }
-                const setFocus = () => {
+                };
+                var setFocus = function() {
                     items[currentItem].focus();
-                }
+                };
 
-                const goUp = () => {
+                var goUp = function() {
                     if (currentItem <= 0) {
                         return;
                     }
-                    if (items[currentItem - 1].classList.contains(`dest__selected`)) {
+                    if (items[currentItem - 1].classList.contains('dest__selected')) {
                         currentItem--;
                         goUp();
                     } else {
@@ -501,12 +499,12 @@ define([
                         currentItem--;
                         setFocus();
                     }
-                }
-                const goDown = () => {
+                };
+                var goDown = function() {
                     if (currentItem >= items.length - 1) {
                         return;
                     }
-                    if (items[currentItem + 1].classList.contains(`dest__selected`)) {
+                    if (items[currentItem + 1].classList.contains('dest__selected')) {
                         currentItem++;
                         goDown();
                     } else {
@@ -514,43 +512,43 @@ define([
                         currentItem++;
                         setFocus();
                     }
-                }
-                const selectItem = () => {
-                    let event = new Event('click', {bubbles: true});
+                };
+                var selectItem = function() {
+                    var event = new Event('click', {bubbles: true});
                     items[currentItem].dispatchEvent(event);
 
-                }
-                const hideAll = () => {
+                };
+                var hideAll = function() {
                     container.innerHTML = '';
                     container.style.display = 'none';
                     currentItem = -1;
                     document.removeEventListener('keydown', keyCodeHandler);
-                }
+                };
 
-                const keyCodeHandler = (event) => {
+                var keyCodeHandler = function(event) {
                     switch (event.keyCode) {
-                        case 38: // arrow up
+                        case 38: // Arrow up.
                             goUp();
                             break;
-                        case 40:  // arrow down
+                        case 40: // Arrow down.
                             goDown();
                             break;
-                        case 13: // enter
+                        case 13: // Enter.
                             selectItem();
                             break;
-                        case 27: // esc
+                        case 27: // Esc.
                             hideAll();
                             break;
                     }
-                }
+                };
 
-                const closeBlockResult = (event) => {
+                var closeBlockResult = function(event) {
                     if (!resultBlock.contains(event.target) && !tagWrapper.contains(event.target)) {
-                        resultBlock.style.display = `none`;
-                        resultBlock.innerHTML = ``;
+                        resultBlock.style.display = 'none';
+                        resultBlock.innerHTML = '';
                         document.onclick = false;
                     }
-                }
+                };
 
                 if (close) {
                     document.onkeydown = false;
@@ -560,64 +558,67 @@ define([
                     document.onkeydown = keyCodeHandler;
                 }
 
-            }
+            };
 
-            const closeSearchResult = () => {
-                resultBlock.style.display = `none`;
-                resultBlock.innerHTML = ``;
-                keySelect(resultBlock, true)
-            }
+            var closeSearchResult = function() {
+                resultBlock.style.display = 'none';
+                resultBlock.innerHTML = '';
+                keySelect(resultBlock, true);
+            };
 
-            const showSearchResult = (item) => {
-                resultBlock.innerHTML = ``;
-                keySelect(resultBlock, true) // stop old event listeners before reloading
-                const units = JSON.parse(item);
+            var showSearchResult = function(item) {
+                resultBlock.innerHTML = '';
+                keySelect(resultBlock, true); // Stop old event listeners before reloading.
+                var units = JSON.parse(item);
+                var id;
                 for (id in units) {
-                    const unit = document.createElement(`li`);
+                    var unit = document.createElement('li');
                     unit.dataset.id = units[id].teacher_id;
-                    unit.classList.add(`dest__unit`);
-                    unit.innerHTML = `<div class = "dest__img" ><img src = "${M.cfg.wwwroot + units[id].teacher_url}" alt = ""></div><span class = "dest__name">${units[id].teacher_name}</span>`;
-                    if (tagWrapper.querySelector(`div.dest__dummy[data-id='${units[id].teacher_id}']`)) {
-                        unit.classList.add(`dest__selected`);
+                    unit.classList.add('dest__unit');
+                    unit.innerHTML = '<div class = "dest__img" >' +
+                    '<img src = "' + M.cfg.wwwroot + units[id].teacher_url + '" alt = "">' +
+                    '</div><span class = "dest__name">' + units[id].teacher_name + '</span>';
+                    if (tagWrapper.querySelector('div.dest__dummy[data-id="' + units[id].teacher_id + '"]')) {
+                        unit.classList.add('dest__selected');
                     }
-                    resultBlock.style.display = `block`;
+                    resultBlock.style.display = 'block';
                     resultBlock.appendChild(unit);
                 }
-                resultBlock.onclick = function (e) {
-                    let targetEl = e.target;
-                    while (targetEl.tagName != `UL`) {
-                        if (targetEl.tagName == `LI`) {
-                            if (targetEl.classList.contains(`dest__selected`)) {
+                resultBlock.onclick = function(e) {
+                    var targetEl = e.target;
+                    while (targetEl.tagName != 'UL') {
+                        if (targetEl.tagName == 'LI') {
+                            if (targetEl.classList.contains('dest__selected')) {
                                 return;
                             }
-                            const destinationName = setCurrentDestination(units[targetEl.dataset.id]);
-                            targetEl.classList.add(`dest__selected`);
+                            var destinationName = setCurrentDestination(units[targetEl.dataset.id]);
+                            targetEl.classList.add('dest__selected');
                             tagWrapper.appendChild(destinationName);
                             btnSendResult.disabled = false;
-                            input.value = ``;
+                            input.value = '';
 
                         }
                         targetEl = targetEl.parentNode;
                     }
-                }
+                };
 
                 keySelect(resultBlock);
 
-            }
+            };
 
-            const setCurrentDestination = (teacher) => { //add choosed name to the input block
-                let dummy = document.createElement(`div`);
-                dummy.classList.add(`dest__dummy`);
+            var setCurrentDestination = function(teacher) { // Add choosed name to the input block.
+                var dummy = document.createElement('div');
+                dummy.classList.add('dest__dummy');
                 dummy.dataset.id = teacher.teacher_id;
-                dummy.innerHTML = `<span class = "dest__dummy-del"></span><span>${teacher.teacher_name}</span>`;
+                dummy.innerHTML = '<span class = "dest__dummy-del"></span><span>' + teacher.teacher_name + '</span>';
 
-                dummy.querySelector(`.dest__dummy-del`).onclick = function (e) {
+                dummy.querySelector('.dest__dummy-del').onclick = function(e) {
                     e.target.parentNode.remove();
-                    if (document.querySelector(`li.dest__unit[data-id='${teacher.teacher_id}']`)) {
-                        document.querySelector(`li.dest__unit[data-id='${teacher.teacher_id}']`).classList.remove(`dest__selected`);
+                    if (document.querySelector('li.dest__unit[data-id="' + teacher.teacher_id + '"]')) {
+                        document.querySelector('li.dest__unit[data-id="' + teacher.teacher_id + '"]')
+                        .classList.remove('dest__selected');
                     }
-                    // document.querySelector(`input[data-id='${teacher.teacher_id}']`).remove();
-                    if (!document.querySelector(`.dest__dummy`)) {
+                    if (!document.querySelector('.dest__dummy')) {
                         closeSearchResult();
                         btnSendResult.disabled = true;
                     }
@@ -626,75 +627,74 @@ define([
                 };
 
                 return dummy;
-            }
+            };
 
-            // todo add pouse to ajax request
-            input.addEventListener('input', function (e) {
+            // Todo add pouse to ajax request.
+            input.addEventListener('input', function() {
 
-                const inputValue = this.value;
-                if (!document.querySelector(`div.dest__dummy`) && !inputValue) {
+                var inputValue = this.value;
+                if (!document.querySelector('div.dest__dummy') && !inputValue) {
                     closeSearchResult();
                 }
 
                 if (inputValue.length >= NUM_OF_SIGNS) {
 
-                    let courseId = $('#course').val();
+                    var courseId = $('#course').val();
                     Ajax.call([{
-                            methodname: 'local_sharewith_autocomplete_teachers',
-                            args: {
-                                activityid: activity_id,
-                                courseid: courseId,
-                                searchstring: inputValue
-                            },
-                            done: function (res) {
-                                showSearchResult(res);
-                            },
-                            fail: notification.exception
-                        }]);
+                        methodname: 'local_sharewith_autocomplete_teachers',
+                        args: {
+                            activityid: activityId,
+                            courseid: courseId,
+                            searchstring: inputValue
+                        },
+                        done: function(res) {
+                            showSearchResult(res);
+                        },
+                        fail: notification.exception
+                    }]);
 
                 }
             });
 
-            btnSendResult.addEventListener(`click`, function () {
-                const loadingIcon = document.querySelector(`.loading_dots`);
-                const chosenBlocks = Array.from(document.querySelectorAll(`.dest__dummy`));
-                const teachersId = [];
-                const commentToTeachers = document.querySelector(`textarea.prof__comment`).value.trim();
+            btnSendResult.addEventListener('click', function() {
+                var loadingIcon = document.querySelector('.loading_dots');
+                var chosenBlocks = Array.from(document.querySelectorAll('.dest__dummy'));
+                var teachersId = [];
 
                 btnSendResult.disabled = true;
-                loadingIcon.classList.remove(`d-none`);
-                chosenBlocks.forEach(function (item) {
+                loadingIcon.classList.remove('d-none');
+                chosenBlocks.forEach(function(item) {
                     teachersId.push(item.dataset.id);
                 });
 
-                let activity_id = $("#send_popup_activity_id").val();
-                let course_id = $("#send_popup_course_id").val();
-                let message = $("#send_popup_message").val();
+                var activityId = $("#send_popup_activity_id").val();
+                var courseId = $("#send_popup_course_id").val();
+                var message = $("#send_popup_message").val();
 
                 Ajax.call([{
                     methodname: 'local_sharewith_submit_teachers',
                     args: {
-                        activityid: activity_id,
-                        courseid: course_id,
+                        activityid: activityId,
+                        courseid: courseId,
                         teachersid: JSON.stringify(teachersId),
                         message: message
                     },
-                    done: function (res) {
-                        loadingIcon.classList.add(`d-none`);
-                        btnSendResult.classList.add(`prof__btn--success`);
+                    done: function() {
+                        loadingIcon.classList.add('d-none');
+                        btnSendResult.classList.add('prof__btn--success');
                         btnSendResult.innerHTML = M.util.get_string('sent', 'local_sharewith');
-                        chosenBlocks.forEach(function (item) {
+                        chosenBlocks.forEach(function(item) {
                             item.remove();
                         });
                         modal.approveState();
                     },
-                    fail: function () {
-                        btnSendResult.classList.add(`prof__btn--error`);
+                    fail: function() {
+                        btnSendResult.classList.add('prof__btn--error');
                         btnSendResult.innerHTML = M.util.get_string('fails', 'local_sharewith');
                     }
                 }]);
 
-                resultBlock.style.display = `none`;
+                resultBlock.style.display = 'none';
 
             });
         }

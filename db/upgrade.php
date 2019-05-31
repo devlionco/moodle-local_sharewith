@@ -21,7 +21,6 @@
  * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -32,11 +31,11 @@ function xmldb_local_sharewith_upgrade($oldversion) {
 
     global $DB;
     $dbman = $DB->get_manager();
-    
+
     if (!$dbman->table_exists('local_sharewith_shared')) {
         $table = new xmldb_table('local_sharewith_shared');
 
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);                   
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('useridto', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('useridfrom', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
@@ -50,6 +49,6 @@ function xmldb_local_sharewith_upgrade($oldversion) {
 
         $dbman->create_table($table);
     }
-    
+
     return true;
 }

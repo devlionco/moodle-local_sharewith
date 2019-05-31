@@ -50,4 +50,11 @@ $setting->add(new  admin_setting_configcheckbox(
                 '1')
 );
 
+$setting->add(new  admin_setting_configcheckbox(
+                'local_sharewith/activitysending',
+                get_string('settingsactivitysending', 'local_sharewith'),
+                get_string('settingsactivitysendingdesc', 'local_sharewith'),
+                '1')
+);
+
 $ADMIN->add('localplugins', $setting);

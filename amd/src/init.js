@@ -32,7 +32,7 @@ define([
 
     var root = document.querySelector('body');
     return {
-        init: function (sectioncopy, activitycopyhimself) {
+        init: function (sectioncopy, activitycopyhimself, sendactivity) {
             events.getCurrentCourse();
             modal.insertTemplates();
 
@@ -44,7 +44,9 @@ define([
                 buildtree.addCopySectionButton(root);
             }
 
-            buildtree.addShareActivityButton(root);
+            if (Number(sendactivity) === 1) {
+                buildtree.addShareActivityButton(root);
+            }
 
             root.addEventListener('click', function (e) {
                 var target = e.target;
