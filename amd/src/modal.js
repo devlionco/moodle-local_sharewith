@@ -112,6 +112,15 @@ define([
         },
 
         /**
+         * Set cancel state to the modal window.
+         *
+         * @method approveState
+         */
+        cancelState: function () {
+            this.getSubmit().fadeOut();
+        },
+
+        /**
          * Set error state to the modal window.
          *
          * @method errorState
@@ -126,6 +135,18 @@ define([
             }]).done(function (s) {
                 this.getBody().text(s);
             }.bind(this));
+        },
+
+        /**
+         * Set error text state to the modal window.
+         *
+         * @method errorState
+         */
+        errorTextState: function () {
+            this.getCancel().fadeOut();
+            this.getSubmit().fadeOut();
+            this.getError().delay('slow').fadeIn();
+            this.getContent().addClass('alert-danger');
         },
 
         /**

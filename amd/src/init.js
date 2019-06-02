@@ -32,7 +32,7 @@ define([
 
     var root = document.querySelector('body');
     return {
-        init: function (sectioncopy, activitycopyhimself) {
+        init: function (sectioncopy, activitycopyhimself, sendactivity) {
             events.getCurrentCourse();
             modal.insertTemplates();
 
@@ -42,6 +42,10 @@ define([
 
             if (Number(sectioncopy) === 1) {
                 buildtree.addCopySectionButton(root);
+            }
+
+            if (Number(sendactivity) === 1) {
+                buildtree.addShareActivityButton(root);
             }
 
             root.addEventListener('click', function (e) {
@@ -60,6 +64,10 @@ define([
                         events.selectCourse(target);
                         return;
                     }
+                    if (target.dataset.handler === 'selectTeacher') {
+                        events.selectTeacher(target);
+                        return;
+                    }
                     if (target.dataset.handler === 'selectSection') {
                         events.selectSection();
                         return;
@@ -70,6 +78,14 @@ define([
                     }
                     if (target.dataset.handler === 'copySectionToCourse') {
                         events.copySectionToCourse();
+                        return;
+                    }
+                    if (target.dataset.handler === 'saveActivityToCourse') {
+                        events.saveActivityToCourse();
+                        return;
+                    }
+                    if (target.dataset.handler === 'saveActivity') {
+                        events.saveActivity(target);
                         return;
                     }
                     target = target.parentNode;
