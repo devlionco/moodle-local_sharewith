@@ -22,12 +22,13 @@
         "activityid": "11",
         "activityname": "Quiz 1",
         "courseid": "2",
+        "config": "",
         "teachers": [
             {
-                "teacher_name": "Adam Smith", 
-                "teacher_url": "", 
-                "date": "01.01.1970", 
-                "time": "23:59" 
+                "teacher_name": "Adam Smith",
+                "teacher_url": "",
+                "date": "01.01.1970",
+                "time": "23:59"
             }
         ]
     }
@@ -59,7 +60,7 @@
     {{#teachers}}
     <div class = "prof__answer">
         <div class = "prof__avatar">
-            <img src = "{{ config.wwwroot }}{{teacher_url}}" alt = "{{#str}}user_foto, local_sharewith{{/str}}">
+            <img src="{{teacher_url}}" alt="{{#str}}user_foto, local_sharewith{{/str}}">
         </div>
         <span class = "prof__name">{{teacher_name}}</span>
         <span class = "prof__date">{{date}}</span>

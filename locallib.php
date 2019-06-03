@@ -202,7 +202,7 @@ function local_sharewith_get_section_bycourse($courseid) {
  * @return
  */
 function local_sharewith_get_teachers($activityid, $courseid) {
-    global $DB, $USER, $OUTPUT, $PAGE;
+    global $DB, $USER, $OUTPUT, $PAGE, $CFG;
 
     $context = context_course::instance($courseid);
     $PAGE->set_context($context);
@@ -215,7 +215,7 @@ function local_sharewith_get_teachers($activityid, $courseid) {
         u.firstname AS firstname,
         u.lastname AS lastname,
         CONCAT(u.firstname, ' ', u.lastname) AS teacher_name,
-        CONCAT('/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
+        CONCAT('" . $CFG->wwwroot . "/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
         DATE_FORMAT(FROM_UNIXTIME(ass.timecreated), '%d.%m.%Y') AS date,
         DATE_FORMAT(FROM_UNIXTIME(ass.timecreated), '%k:%i') AS time
 
