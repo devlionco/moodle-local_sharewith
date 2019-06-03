@@ -68,6 +68,9 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
         }
     }
 
+    /**
+     * run_cron_sharewith
+     */
     public function run_cron_sharewith() {
         global $CFG, $DB;
 
@@ -194,6 +197,11 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
         }
     }
 
+    /**
+     * Copy
+     *
+     * @return int
+     */
     public function copy_activity($sourceactivityid, $courseid, $sectionid) {
         global $DB;
 
@@ -208,6 +216,10 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
         return $newactivity;
     }
 
+    /**
+     *
+     * @return
+     */
     public function create_relevant_shortname($shortname) {
         global $DB;
 

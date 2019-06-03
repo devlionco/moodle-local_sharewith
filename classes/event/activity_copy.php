@@ -23,9 +23,14 @@
  */
 
 namespace local_sharewith\event;
+
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * @class
+ */
 class activity_copy extends \core\event\base {
+
     /**
      * Create instance of event.
      *
@@ -36,17 +41,15 @@ class activity_copy extends \core\event\base {
      * @since Moodle 2.7
      *
      */
-
     public static function create_event($id, $eventdata) {
 
         $contextid = \context_course::instance($id);
 
         $data = array(
-                'context' => $contextid,
-                'other' => $eventdata
+            'context' => $contextid,
+            'other' => $eventdata
         );
         /** @var chapter_viewed $event */
-
         $event = self::create($data);
         return $event;
     }
@@ -104,7 +107,11 @@ class activity_copy extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * @return
+     */
     public static function get_objectid_mapping() {
         return array();
     }
+
 }

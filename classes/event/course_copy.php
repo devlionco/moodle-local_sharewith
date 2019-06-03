@@ -25,7 +25,11 @@
 namespace local_sharewith\event;
 defined('MOODLE_INTERNAL') || die();
 
+    /**
+     * @class
+     */
 class course_copy extends \core\event\base {
+
     /**
      * Create instance of event.
      *
@@ -36,7 +40,6 @@ class course_copy extends \core\event\base {
      * @param \stdClass $chapter
      * @return chapter_viewed
      */
-
     public static function create_event($id, $eventdata) {
 
         $contextid = \context_course::instance($id);
@@ -101,6 +104,9 @@ class course_copy extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * @return
+     */
     public static function get_objectid_mapping() {
         return array();
     }

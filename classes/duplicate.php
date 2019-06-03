@@ -38,6 +38,9 @@ require_once(__DIR__ . '/../lib.php');
  */
 class duplicate extends external_api {
 
+    /**
+     * @return
+     */
     public function __construct() {
 
     }
@@ -45,6 +48,7 @@ class duplicate extends external_api {
     /**
      * Duplicate a course
      *
+     * @param int $userid
      * @param int $courseid
      * @param string $fullname Duplicated course fullname
      * @param string $shortname Duplicated course shortname
@@ -222,7 +226,8 @@ class duplicate extends external_api {
      * @param int $sourceactivityid source
      * @param int $courseid target
      * @param int $sectionid target
-     * @param int $masteractivityid target
+     * @param int $newactivityid target
+     * @param bool $availabilitydisable
      * @return cm_info|null cminfo object if we sucessfully duplicated the mod and found the new cm.
      */
     public static function duplicate_activity($sourceactivityid, $courseid, $sectionid, &$newactivityid,
@@ -420,6 +425,8 @@ class duplicate extends external_api {
      * @param int $activityid source
      * @param int $courseid target
      * @param int $sectionid target
+     * @param int $newactivityid target
+     * @param bool $availabilitydisable target
      * @return section_info|null section object if we sucessfully duplicated the section and found the new cm.
      */
     public static function duplicate_activity_from_availability($activityid, $courseid, $sectionid, &$newactivityid,
@@ -447,6 +454,9 @@ class duplicate extends external_api {
         }
     }
 
+    /**
+     * @return
+     */
     public static function send_notification($item, $newactivity) {
         global $DB;
 

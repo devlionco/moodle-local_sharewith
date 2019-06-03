@@ -31,6 +31,10 @@ $sharingtypes = array(
     'activitycopy',
 );
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_permission_allow($courseid, $userid) {
 
     if (has_capability('moodle/course:update', context_course::instance($courseid), $userid)) {
@@ -40,6 +44,10 @@ function local_sharewith_permission_allow($courseid, $userid) {
     return false;
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $sourcesectionid, $sectionid,
         $categoryid = null, $sourceactivityid = null, $metadata = null) {
     global $DB;
@@ -64,6 +72,10 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
     }
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $categoryid = null, $metadata = null,
         $sourcesectionid = null) {
     global $DB, $USER;
@@ -104,6 +116,10 @@ function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $cate
     }
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_get_categories() {
     global $DB;
 
@@ -113,6 +129,10 @@ function local_sharewith_get_categories() {
     return $categories;
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_get_courses() {
     global $DB, $USER;
 
@@ -144,6 +164,10 @@ function local_sharewith_get_courses() {
     return $result;
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_get_section_bycourse($courseid) {
     global $DB;
 
@@ -173,6 +197,10 @@ function local_sharewith_get_section_bycourse($courseid) {
     return $result;
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_get_teachers($activityid, $courseid) {
     global $DB, $USER, $OUTPUT, $PAGE;
 
@@ -213,6 +241,10 @@ function local_sharewith_get_teachers($activityid, $courseid) {
     return json_encode(array('result' => $result, 'html' => $html));
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_autocomplete_teachers($searchstring) {
     global $USER, $DB;
 
@@ -253,6 +285,10 @@ function local_sharewith_autocomplete_teachers($searchstring) {
     return $result;
 }
 
+/**
+ *
+ * @return
+ */
 function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $message) {
     global $USER, $DB;
 
