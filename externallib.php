@@ -67,7 +67,6 @@ class local_sharewith_external extends external_api {
             $result['result'] = 0;
             return $result;
         }
-
         // Check settings parameters.
         switch ($type) {
             case 'coursecopy':
@@ -89,8 +88,8 @@ class local_sharewith_external extends external_api {
                     return $result;
                 }
                 break;
-            case 'activityhimselfcopy':
-                if (!get_config('local_sharewith', 'activityhimselfcopy')) {
+            case 'activitycopy':
+                if (!get_config('local_sharewith', 'activitycopy')) {
                     $result['result'] = 0;
                     return $result;
                 }
@@ -167,8 +166,8 @@ class local_sharewith_external extends external_api {
                     return $result;
                 }
                 break;
-            case 'activityhimselfcopy':
-                if (!get_config('local_sharewith', 'activityhimselfcopy')) {
+            case 'activitycopy':
+                if (!get_config('local_sharewith', 'activitycopy')) {
                     $result['result'] = 0;
                     $result['text'] = 'can\'t copy itself';
                     return $result;

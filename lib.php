@@ -39,18 +39,18 @@ function local_sharewith_render_navbar_output() {
     $output = '';
 
     $sectioncopyenable = get_config('local_sharewith', 'sectioncopy');
-    $activityhimselfcopyenable = get_config('local_sharewith', 'activityhimselfcopy');
+    $activitycopyenable = get_config('local_sharewith', 'activitycopy');
     $sendenable = get_config('local_sharewith', 'activitysending');
 
     // Check permission.
     if (!local_sharewith_permission_allow($COURSE->id, $USER->id)) {
         $sectioncopyenable = 0;
-        $activityhimselfcopyenable = 0;
+        $activitycopyenable = 0;
     }
 
     $params = array(
             $sectioncopyenable,
-            $activityhimselfcopyenable,
+            $activitycopyenable,
             $sendenable
     );
 

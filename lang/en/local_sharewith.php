@@ -41,8 +41,8 @@ $string['settingssectioncopy'] = 'Copy topic';
 $string['settingssectioncopydesc'] = 'Enable/disable copy topics';
 $string['settingsactivityteachercopy'] = 'Share activity to teacher';
 $string['settingsactivityteachercopydesc'] = 'Enable/disable share activities to teacher';
-$string['settingsactivityhimselfcopy'] = 'Copy activity';
-$string['settingsactivityhimselfcopydesc'] = 'Enable/disable copy activities';
+$string['settingsactivitycopy'] = 'Copy activity';
+$string['settingsactivitycopydesc'] = 'Enable/disable copy activities';
 $string['settingsactivitysending'] = 'Send activity';
 $string['settingsactivitysendingdesc'] = 'Enable/disable send activities';
 
@@ -67,9 +67,10 @@ $string['activity_copied_to_course'] = 'Activity is copied to the course';
 $string['section_copied_to_course'] = 'Topic is copied to the course';
 $string['system_error_contact_administrator'] = 'System error, contact administrator';
 $string['eventcopytomaagar'] = "Copy to Database";
-$string['eventcopytoteacher'] = "Share activity";
+$string['eventcopytoteacher'] = "Share to teachers";
 $string['eventdownloadtoteacher'] = "Download activity";
 $string['eventdublicatetoteacher'] = "Copy activity";
+$string['activity_copied_to_course'] = 'Activity is copied to the course';
 $string['eventcoursemodulevisibilitychanged'] = "Course module visibility cahnged";
 
 $string['menu_popup_title'] = "Choose how you want to share";
@@ -85,10 +86,19 @@ $string['user_foto'] = "User foto";
 $string['nosharing'] = "No one sent yet";
 
 $string['subject_message_for_teacher_by'] = 'Activity {$a->activity_name} added by {$a->teacher_name}';
-$string['subject_message_for_teacher'] = 'You can share activity-{$a->activity_name} from teacher {$a->teacher_name}';
-$string['fullmessagehtml_for_teacher'] = 'You can share activity <a data-handler="saveActivity" data-sharing="{$a->restore_id}" href="#">here</a>';
+$string['subject_message_for_teacher'] = 'Teacher {$a->teacher_name} share to you activity {$a->activity_name}';
+$string['fullmessagehtml_for_teacher'] = 'Share it to you course <a data-handler="saveActivity" data-sharing="{$a->restore_id}" href="#">link</a> <br>Ask the teacher about the activity <a href="{$a->teacherlink}">link</a>.';
 $string['info_message_for_teacher'] = 'Message from Sharing Activity';
 $string['enter_subject_name'] = 'Enter the name of the subject';
+$string['succesfullyshared'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
+
+$string['activitycopy_title'] = 'Activity';
+$string['sectioncopy_title'] = 'Section';
+$string['coursecopy_title'] = 'Course';
+$string['notification_smallmessage_copied'] = 'Successfully copied!';
+$string['activitycopy_fullmessage'] = 'Your activity was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
+$string['sectioncopy_fullmessage'] = 'Your section was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
+$string['coursecopy_fullmessage'] = 'Your course was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 
 $string['share'] = 'Share';
 $string['copy'] = 'Copy';

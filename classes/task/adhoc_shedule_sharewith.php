@@ -99,7 +99,7 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
                         // Copy course.
                         $newcourse = \duplicate::duplicate_course($adminid, $tc->id, $fullname, $shortname,
-                                $item->categoryid);
+                                        $item->categoryid);
 
                         // Set user to course.
                         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
@@ -109,10 +109,10 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
                         // Sent event.
                         $eventdata = array(
-                                'userid' => $item->sourceuserid,
-                                'courseid' => $tc->id,
-                                'categoryid' => $item->categoryid,
-                                'targetcourseid' => $newcourse['id']
+                            'userid' => $item->sourceuserid,
+                            'courseid' => $tc->id,
+                            'categoryid' => $item->categoryid,
+                            'targetcourseid' => $newcourse['id']
                         );
 
                         \local_sharewith\event\course_copy::create_event($newcourse['id'], $eventdata)->trigger();
@@ -143,26 +143,26 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
                         // Sent event.
                         $eventdata = array(
-                                'userid' => $item->sourceuserid,
-                                'courseid' => $item->courseid,
-                                'sectionid' => $item->sourcesectionid,
-                                'targetuserid' => $item->userid,
-                                'targetcourseid' => $item->courseid,
-                                'targetsectionid' => $item->sectionid,
+                            'userid' => $item->sourceuserid,
+                            'courseid' => $item->courseid,
+                            'sectionid' => $item->sourcesectionid,
+                            'targetuserid' => $item->userid,
+                            'targetcourseid' => $item->courseid,
+                            'targetsectionid' => $item->sectionid,
                         );
 
                         \local_sharewith\event\section_copy::create_event($item->courseid, $eventdata)->trigger();
                     }
                     break;
 
-                case 'activityhimselfcopy':
+                case 'activitycopy':
                     // Required.
                     // $item->sourceactivityid.
                     // $item->courseid.
                     // $item->sectionid.
 
                     if (!empty($item->sourceactivityid) && !empty($item->courseid) && !empty($item->sectionid) &&
-                            get_config('local_sharewith', 'activityhimselfcopy') &&
+                            get_config('local_sharewith', 'activitycopy') &&
                             has_capability('moodle/backup:backupactivity', context_module::instance($item->sourceactivityid),
                                     $item->sourceuserid) &&
                             has_capability('moodle/restore:restoreactivity', context_course::instance($item->courseid),
@@ -172,11 +172,11 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
                         // Sent event.
                         $eventdata = array(
-                                'userid' => $item->sourceuserid,
-                                'courseid' => $item->courseid,
-                                'sectionid' => $item->sectionid,
-                                'activityid' => $item->sourceactivityid,
-                                'targetactivityid' => $newactivity->id
+                            'userid' => $item->sourceuserid,
+                            'courseid' => $item->courseid,
+                            'sectionid' => $item->sectionid,
+                            'activityid' => $item->sourceactivityid,
+                            'targetactivityid' => $newactivity->id
                         );
 
                         \local_sharewith\event\activity_copy::create_event($item->courseid, $eventdata)->trigger();
@@ -187,6 +187,10 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
             // End working.
             $item->status = 1;
             $DB->update_record('local_sharewith_task', $item);
+
+            if ($item->sourceuserid != $item->userid) {
+                \duplicate::send_notification($item, $newactivity);
+            }
         }
     }
 
@@ -220,4 +224,6 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
         return $shortname;
     }
+
 }
+

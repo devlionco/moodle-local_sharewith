@@ -44,9 +44,9 @@ $setting->add(new  admin_setting_configcheckbox(
 );
 
 $setting->add(new  admin_setting_configcheckbox(
-                'local_sharewith/activityhimselfcopy',
-                get_string('settingsactivityhimselfcopy', 'local_sharewith'),
-                get_string('settingsactivityhimselfcopydesc', 'local_sharewith'),
+                'local_sharewith/activitycopy',
+                get_string('settingsactivitycopy', 'local_sharewith'),
+                get_string('settingsactivitycopydesc', 'local_sharewith'),
                 '1')
 );
 

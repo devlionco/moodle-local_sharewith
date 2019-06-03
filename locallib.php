@@ -28,7 +28,7 @@ global $sharingtypes;
 $sharingtypes = array(
     'coursecopy',
     'sectioncopy',
-    'activityhimselfcopy',
+    'activitycopy',
 );
 
 function local_sharewith_permission_allow($courseid, $userid) {
@@ -256,6 +256,9 @@ function local_sharewith_autocomplete_teachers($searchstring) {
 function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $message) {
     global $USER, $DB;
 
+    $modinfo = get_fast_modinfo($courseid);
+    $cm = $modinfo->cms[$activityid];
+
     $teachersid = json_decode($teachersid);
     if (!empty($teachersid) && !empty($activityid) && $activityid != 0 && !empty($courseid) && $courseid != 0) {
 
@@ -284,7 +287,7 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 // Save in message DB.
                 // Prepare message for user.
                 $a = new stdClass;
-                $a->activity_name = $activityid;
+                $a->activity_name = $cm->name;
                 $a->teacher_name = $USER->firstname . ' ' . $USER->lastname;
                 $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
 
@@ -322,12 +325,13 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 // Update full message and fullmessagehtml.
                 $a = new stdClass;
                 $a->restore_id = $rowid;
+                $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id;
                 $fullmessage = get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 
                 $obj = new stdClass();
                 $obj->id = $messageid;
                 $obj->fullmessage = $message;
-                $obj->fullmessagehtml = $fullmessage . ' <br> ' . $message;
+                $obj->fullmessagehtml = $message . '<br>' . $fullmessage;
                 $DB->update_record('notifications', $obj);
             }
         }
