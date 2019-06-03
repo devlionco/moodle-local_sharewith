@@ -8,6 +8,7 @@ The "master" branch is no longer compatible with Moodle 3.5 or latter.
 Change Log
 ----------
 * 3.6, release 1    2019.04.17
+* 3.7, release 2    2019.05.03
 
 Purpose
 -------
@@ -16,13 +17,14 @@ Share with plugin will allow to the teacher:
 1. copy activity from course to other course and section.
 2. copy course to different categories.
 3. copy topic to some course.
+4. share activity to other teacher 
 
 ![Copy Activity](https://blog.devlion.co/wp-content/uploads/Sharewith-Plugin-1.jpg) 
 
 Next Features
 ------------
-1. share activity to other teacher
-2. share activity to bank of activities
+
+1. share activity to bank of activities
 
 Requirements
 ------------
