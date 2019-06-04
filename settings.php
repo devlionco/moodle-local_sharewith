@@ -18,7 +18,6 @@
  * Plugin administration pages are defined here.
  *
  * @package     local_sharewith
- * @category    admin
  * @copyright   2018 Devlion <info@devlion.co>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,9 +43,9 @@ $setting->add(new  admin_setting_configcheckbox(
 );
 
 $setting->add(new  admin_setting_configcheckbox(
-                'local_sharewith/activityhimselfcopy',
-                get_string('settingsactivityhimselfcopy', 'local_sharewith'),
-                get_string('settingsactivityhimselfcopydesc', 'local_sharewith'),
+                'local_sharewith/activitycopy',
+                get_string('settingsactivitycopy', 'local_sharewith'),
+                get_string('settingsactivitycopydesc', 'local_sharewith'),
                 '1')
 );
 

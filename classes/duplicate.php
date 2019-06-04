@@ -17,20 +17,20 @@
 /**
  * External course API
  *
- * @package    core_course
+ * @package    local_sharewith
  * @category   external
  * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/externallib.php");
+require_once(__DIR__ . '/../lib.php');
 
 /**
  * Course external functions
  *
- * @package    core_course
+ * @package    local_sharewith
  * @category   external
  * @copyright  2011 Jerome Mouneyrac
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -38,6 +38,9 @@ require_once("$CFG->libdir/externallib.php");
  */
 class duplicate extends external_api {
 
+    /**
+     * Construct
+     */
     public function __construct() {
 
     }
@@ -45,6 +48,7 @@ class duplicate extends external_api {
     /**
      * Duplicate a course
      *
+     * @param int $userid
      * @param int $courseid
      * @param string $fullname Duplicated course fullname
      * @param string $shortname Duplicated course shortname
@@ -62,15 +66,15 @@ class duplicate extends external_api {
 
         // Parameter validation.
         $params = self::validate_parameters(
-                self::duplicate_course_parameters(),
-                array(
-                        'courseid' => $courseid,
-                        'fullname' => $fullname,
-                        'shortname' => $shortname,
-                        'categoryid' => $categoryid,
-                        'visible' => $visible,
-                        'options' => $options
-                )
+                        self::duplicate_course_parameters(),
+                        array(
+                            'courseid' => $courseid,
+                            'fullname' => $fullname,
+                            'shortname' => $shortname,
+                            'categoryid' => $categoryid,
+                            'visible' => $visible,
+                            'options' => $options
+                        )
         );
 
         // Context validation.
@@ -92,16 +96,16 @@ class duplicate extends external_api {
         // ENROL_ALWAYS - Backup a course with enrolment methods and restore it without user data with enrolment methods.
 
         $backupdefaults = array(
-                'activities' => 1,
-                'blocks' => 1,
-                'filters' => 1,
-                'users' => 0,
-                'enrolments' => backup::ENROL_NEVER,
-                'role_assignments' => 0,
-                'comments' => 0,
-                'userscompletion' => 0,
-                'logs' => 0,
-                'grade_histories' => 0
+            'activities' => 1,
+            'blocks' => 1,
+            'filters' => 1,
+            'users' => 0,
+            'enrolments' => backup::ENROL_NEVER,
+            'role_assignments' => 0,
+            'comments' => 0,
+            'userscompletion' => 0,
+            'logs' => 0,
+            'grade_histories' => 0
         );
 
         $backupsettings = array();
@@ -154,7 +158,6 @@ class duplicate extends external_api {
         $bc->destroy();
 
         // Restore the backup immediately.
-
         // Check if we need to unzip the file because the backup temp dir does not contains backup files.
         if (!file_exists($backupbasepath . "/moodle_backup.xml")) {
             $file->extract_to_pathname(get_file_packer('application/vnd.moodle.backup'), $backupbasepath);
@@ -223,7 +226,8 @@ class duplicate extends external_api {
      * @param int $sourceactivityid source
      * @param int $courseid target
      * @param int $sectionid target
-     * @param int $masteractivityid target
+     * @param int $newactivityid target
+     * @param bool $availabilitydisable
      * @return cm_info|null cminfo object if we sucessfully duplicated the mod and found the new cm.
      */
     public static function duplicate_activity($sourceactivityid, $courseid, $sectionid, &$newactivityid,
@@ -241,14 +245,16 @@ class duplicate extends external_api {
         return $res;
     }
 
+
     /**
      * Duplicates activity
      *
-     * @param int $sourceactivityid source
-     * @param int $courseid target
-     * @param int $sectionid target
-     * @param int $masteractivityid target
-     * @return cm_info|null cminfo object if we sucessfully duplicated the mod and found the new cm.
+     * @param int $sourceactivityid
+     * @param int $courseid
+     * @param int $sectionid
+     * @param int $newactivityid
+     * @param bool $availabilitydisable
+     * @return obj cm_info
      */
     public static function duplicate_activity_source($sourceactivityid, $courseid, $sectionid, &$newactivityid,
             $availabilitydisable = false) {
@@ -348,12 +354,12 @@ class duplicate extends external_api {
         foreach ($files as $f) {
             if ($f->get_filesize() != 0 || $f->get_filename() != '.') {
                 $fileinfo = array(
-                        'contextid' => $ccnew->id,
-                        'component' => $f->get_component(),
-                        'filearea' => $f->get_filearea(),
-                        'itemid' => $newsection->id,
-                        'filepath' => $f->get_filepath(),
-                        'filename' => $f->get_filename()
+                    'contextid' => $ccnew->id,
+                    'component' => $f->get_component(),
+                    'filearea' => $f->get_filearea(),
+                    'itemid' => $newsection->id,
+                    'filepath' => $f->get_filepath(),
+                    'filename' => $f->get_filename()
                 );
 
                 // Save file.
@@ -383,34 +389,35 @@ class duplicate extends external_api {
      */
     public static function duplicate_course_parameters() {
         return new external_function_parameters(
-                array(
-                        'courseid' => new external_value(PARAM_INT, 'course to duplicate id'),
-                        'fullname' => new external_value(PARAM_TEXT, 'duplicated course full name'),
-                        'shortname' => new external_value(PARAM_TEXT, 'duplicated course short name'),
-                        'categoryid' => new external_value(PARAM_INT, 'duplicated course category parent'),
-                        'visible' => new external_value(PARAM_INT, 'duplicated course visible, default to yes', VALUE_DEFAULT, 1),
-                        'options' => new external_multiple_structure(
-                                new external_single_structure(
-                                        array(
-                                                'name' => new external_value(PARAM_ALPHAEXT, 'The backup option name:
-                            "activities" (int) Include course activites (default to 1 that is equal to yes),
-                            "blocks" (int) Include course blocks (default to 1 that is equal to yes),
-                            "filters" (int) Include course filters  (default to 1 that is equal to yes),
-                            "users" (int) Include users (default to 0 that is equal to no),
-                            "enrolments" (int) Include enrolment methods (default to 1 - restore only with users),
-                            "role_assignments" (int) Include role assignments  (default to 0 that is equal to no),
-                            "comments" (int) Include user comments  (default to 0 that is equal to no),
-                            "userscompletion" (int) Include user course completion information  (default to 0 that is equal to no),
-                            "logs" (int) Include course logs  (default to 0 that is equal to no),
-                            "grade_histories" (int) Include histories  (default to 0 that is equal to no)'
-                                                ),
-                                                'value' => new external_value(PARAM_RAW,
-                                                        'the value for the option 1 (yes) or 0 (no)'
-                                                )
-                                        )
-                                ), VALUE_DEFAULT, array()
-                        ),
-                )
+            array(
+                'courseid' => new external_value(PARAM_INT, 'course to duplicate id'),
+                'fullname' => new external_value(PARAM_TEXT, 'duplicated course full name'),
+                'shortname' => new external_value(PARAM_TEXT, 'duplicated course short name'),
+                'categoryid' => new external_value(PARAM_INT, 'duplicated course category parent'),
+                'visible' => new external_value(PARAM_INT, 'duplicated course visible, default to yes', VALUE_DEFAULT, 1),
+                'options' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            'name' => new external_value(PARAM_ALPHAEXT, 'The backup option name:
+                                "activities" (int) Include course activites (default to 1 that is equal to yes),
+                                "blocks" (int) Include course blocks (default to 1 that is equal to yes),
+                                "filters" (int) Include course filters  (default to 1 that is equal to yes),
+                                "users" (int) Include users (default to 0 that is equal to no),
+                                "enrolments" (int) Include enrolment methods (default to 1 - restore only with users),
+                                "role_assignments" (int) Include role assignments  (default to 0 that is equal to no),
+                                "comments" (int) Include user comments  (default to 0 that is equal to no),
+                                "userscompletion" (int) Include user course completion information
+                                (default to 0 that is equal to no),
+                                "logs" (int) Include course logs  (default to 0 that is equal to no),
+                                "grade_histories" (int) Include histories  (default to 0 that is equal to no)'
+                            ),
+                            'value' => new external_value(PARAM_RAW,
+                                    'the value for the option 1 (yes) or 0 (no)'
+                            )
+                        )
+                    ), VALUE_DEFAULT, array()
+                ),
+            )
         );
     }
 
@@ -420,6 +427,8 @@ class duplicate extends external_api {
      * @param int $activityid source
      * @param int $courseid target
      * @param int $sectionid target
+     * @param int $newactivityid target
+     * @param bool $availabilitydisable target
      * @return section_info|null section object if we sucessfully duplicated the section and found the new cm.
      */
     public static function duplicate_activity_from_availability($activityid, $courseid, $sectionid, &$newactivityid,
@@ -434,7 +443,7 @@ class duplicate extends external_api {
                 foreach ($obj->c as $key => $item) {
                     if ($item->type == 'completion') {
                         $newactivity = self::duplicate_activity_source($item->cm, $courseid, $sectionid, $newactivityid,
-                                $availabilitydisable);
+                                        $availabilitydisable);
 
                         $obj->c[$key]->cm = $newactivity->id;
                         $update = new stdClass();
@@ -444,8 +453,57 @@ class duplicate extends external_api {
                     }
                 }
             }
+        }
+    }
 
+    /**
+     * Send notification
+     * @param obj $item
+     * @param obj $newactivity
+     */
+    public static function send_notification($item, $newactivity) {
+        global $DB;
+
+        // Send notitification to a user, the shared activity successfully copied.
+        $course = get_course($item->courseid);
+        $a = new stdClass();
+        $a->coursename = $course->fullname;
+        switch ($item->type) {
+            case 'coursecopy':
+                $link = new moodle_url('/course/view.php', array('id' => $item->courseid));
+                $a->link = $link->out(false);
+                break;
+            case 'sectioncopy':
+                $sec = $DB->get_record('course_sections', array('id' => 21));
+                $link = new moodle_url('/course/view.php', array('id' => $item->courseid . "#section-" . $sec->section));
+                $a->link = $link->out(false);
+                break;
+            case 'activitycopy':
+                $modinfo = get_fast_modinfo($item->courseid);
+                $cm = $modinfo->cms[$newactivity->id];
+                $link = new moodle_url('/mod/' . $cm->modname . '/view.php', array('id' => $newactivity->id));
+                $a->link = $link->out(false);
+                break;
         }
 
+        $notif = new stdClass();
+        $notif->useridfrom = $item->sourceuserid;
+        $notif->useridto = $item->userid;
+        $notif->subject = get_string($item->type . '_title', 'local_sharewith');
+        $notif->fullmessage = '';
+        $notif->fullmessageformat = 2;
+        $notif->fullmessagehtml = get_string($item->type . '_fullmessage', 'local_sharewith', $a);
+        $notif->smallmessage = get_string('notification_smallmessage_copied', 'local_sharewith');
+        $notif->notification = 1;
+        $notif->timecreated = time();
+        $notif->component = 'local_sharewith';
+        $notif->eventtype = 'sharewith_notification';
+        $notificationid = $DB->insert_record('notifications', $notif);
+
+        $notifpopup = new stdClass();
+        $notifpopup->notificationid = $notificationid;
+        $DB->insert_record('message_popup_notifications', $notifpopup);
     }
+
 }
+

@@ -18,7 +18,6 @@
  * Plugin general functions are defined here.
  *
  * @package     local_sharewith
- * @category    admin
  * @copyright   2018 Devlion <info@devlion.co>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,9 +27,15 @@ global $sharingtypes;
 $sharingtypes = array(
     'coursecopy',
     'sectioncopy',
-    'activityhimselfcopy',
+    'activitycopy',
 );
 
+/**
+ * Check permisstions
+ * @param int $courseid
+ * @param int $userid
+ * @return boolean
+ */
 function local_sharewith_permission_allow($courseid, $userid) {
 
     if (has_capability('moodle/course:update', context_course::instance($courseid), $userid)) {
@@ -40,6 +45,20 @@ function local_sharewith_permission_allow($courseid, $userid) {
     return false;
 }
 
+/**
+ * Add task
+ * @param string $type
+ * @param int $userid
+ * @param int $sourceuserid
+ * @param int $sourcecourseid
+ * @param int $courseid
+ * @param int $sourcesectionid
+ * @param int $sectionid
+ * @param int $categoryid
+ * @param int $sourceactivityid
+ * @param obj $metadata
+ * @return obj
+ */
 function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $sourcesectionid, $sectionid,
         $categoryid = null, $sourceactivityid = null, $metadata = null) {
     global $DB;
@@ -64,6 +83,17 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
     }
 }
 
+/**
+ * Add new task for saving activity
+ * @param string $type
+ * @param int $shareid
+ * @param int $courseid
+ * @param int $sectionid
+ * @param int $categoryid
+ * @param obj $metadata
+ * @param int $sourcesectionid
+ * @return array
+ */
 function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $categoryid = null, $metadata = null,
         $sourcesectionid = null) {
     global $DB, $USER;
@@ -104,6 +134,10 @@ function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $cate
     }
 }
 
+/**
+ * Get categories
+ * @return obj
+ */
 function local_sharewith_get_categories() {
     global $DB;
 
@@ -113,6 +147,10 @@ function local_sharewith_get_categories() {
     return $categories;
 }
 
+/**
+ * Get user courses
+ * @return obj
+ */
 function local_sharewith_get_courses() {
     global $DB, $USER;
 
@@ -144,6 +182,11 @@ function local_sharewith_get_courses() {
     return $result;
 }
 
+/**
+ * Get sections by course
+ * @param int $courseid
+ * @return obj
+ */
 function local_sharewith_get_section_bycourse($courseid) {
     global $DB;
 
@@ -173,8 +216,14 @@ function local_sharewith_get_section_bycourse($courseid) {
     return $result;
 }
 
+/**
+ * Get teachers
+ * @param int $activityid
+ * @param int $courseid
+ * @return obj
+ */
 function local_sharewith_get_teachers($activityid, $courseid) {
-    global $DB, $USER, $OUTPUT, $PAGE;
+    global $DB, $USER, $OUTPUT, $PAGE, $CFG;
 
     $context = context_course::instance($courseid);
     $PAGE->set_context($context);
@@ -187,7 +236,7 @@ function local_sharewith_get_teachers($activityid, $courseid) {
         u.firstname AS firstname,
         u.lastname AS lastname,
         CONCAT(u.firstname, ' ', u.lastname) AS teacher_name,
-        CONCAT('/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
+        CONCAT('" . $CFG->wwwroot . "/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
         DATE_FORMAT(FROM_UNIXTIME(ass.timecreated), '%d.%m.%Y') AS date,
         DATE_FORMAT(FROM_UNIXTIME(ass.timecreated), '%k:%i') AS time
 
@@ -213,6 +262,11 @@ function local_sharewith_get_teachers($activityid, $courseid) {
     return json_encode(array('result' => $result, 'html' => $html));
 }
 
+/**
+ * Get teachers
+ * @param string $searchstring
+ * @return string
+ */
 function local_sharewith_autocomplete_teachers($searchstring) {
     global $USER, $DB;
 
@@ -253,8 +307,19 @@ function local_sharewith_autocomplete_teachers($searchstring) {
     return $result;
 }
 
+/**
+ * Submit new task to add activity
+ * @param int $activityid
+ * @param int $courseid
+ * @param int $teachersid
+ * @param string $message
+ * @return string
+ */
 function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $message) {
     global $USER, $DB;
+
+    $modinfo = get_fast_modinfo($courseid);
+    $cm = $modinfo->cms[$activityid];
 
     $teachersid = json_decode($teachersid);
     if (!empty($teachersid) && !empty($activityid) && $activityid != 0 && !empty($courseid) && $courseid != 0) {
@@ -284,7 +349,7 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 // Save in message DB.
                 // Prepare message for user.
                 $a = new stdClass;
-                $a->activity_name = $activityid;
+                $a->activity_name = $cm->name;
                 $a->teacher_name = $USER->firstname . ' ' . $USER->lastname;
                 $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
 
@@ -322,12 +387,13 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 // Update full message and fullmessagehtml.
                 $a = new stdClass;
                 $a->restore_id = $rowid;
+                $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id;
                 $fullmessage = get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 
                 $obj = new stdClass();
                 $obj->id = $messageid;
                 $obj->fullmessage = $message;
-                $obj->fullmessagehtml = $fullmessage . ' <br> ' . $message;
+                $obj->fullmessagehtml = $message . '<br>' . $fullmessage;
                 $DB->update_record('notifications', $obj);
             }
         }

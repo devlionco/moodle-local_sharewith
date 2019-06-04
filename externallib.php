@@ -34,6 +34,10 @@ require_once($CFG->dirroot . "/local/sharewith/locallib.php");
  */
 class local_sharewith_external extends external_api {
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function add_sharewith_task_parameters() {
         return new external_function_parameters(
                 array(
@@ -48,6 +52,10 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function add_sharewith_task_returns() {
         return new external_single_structure(
                 array(
@@ -56,6 +64,17 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Add share task
+     * @param int $sourcecourseid
+     * @param string $type
+     * @param int $categoryid
+     * @param int $courseid
+     * @param int $sectionid
+     * @param int $sourcesectionid
+     * @param int $sourceactivityid
+     * @return array
+     */
     public static function add_sharewith_task($sourcecourseid, $type, $categoryid, $courseid, $sectionid, $sourcesectionid,
             $sourceactivityid) {
         global $USER, $sharingtypes;
@@ -67,7 +86,6 @@ class local_sharewith_external extends external_api {
             $result['result'] = 0;
             return $result;
         }
-
         // Check settings parameters.
         switch ($type) {
             case 'coursecopy':
@@ -89,8 +107,8 @@ class local_sharewith_external extends external_api {
                     return $result;
                 }
                 break;
-            case 'activityhimselfcopy':
-                if (!get_config('local_sharewith', 'activityhimselfcopy')) {
+            case 'activitycopy':
+                if (!get_config('local_sharewith', 'activitycopy')) {
                     $result['result'] = 0;
                     return $result;
                 }
@@ -104,6 +122,10 @@ class local_sharewith_external extends external_api {
         return $result;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function add_saveactivity_task_parameters() {
         return new external_function_parameters(
                 array(
@@ -115,6 +137,10 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function add_saveactivity_task_returns() {
         return new external_single_structure(
                 array(
@@ -124,6 +150,14 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Add task for saving new activity
+     * @param int $courseid
+     * @param int $sectionid
+     * @param int $shareid
+     * @param string $type
+     * @return string
+     */
     public static function add_saveactivity_task($courseid, $sectionid, $shareid, $type) {
         global $USER, $sharingtypes;
 
@@ -167,8 +201,8 @@ class local_sharewith_external extends external_api {
                     return $result;
                 }
                 break;
-            case 'activityhimselfcopy':
-                if (!get_config('local_sharewith', 'activityhimselfcopy')) {
+            case 'activitycopy':
+                if (!get_config('local_sharewith', 'activitycopy')) {
                     $result['result'] = 0;
                     $result['text'] = 'can\'t copy itself';
                     return $result;
@@ -181,12 +215,20 @@ class local_sharewith_external extends external_api {
         return $result;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function get_categories_parameters() {
         return new external_function_parameters(
                 array()
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function get_categories_returns() {
         return new external_single_structure(
                 array(
@@ -196,6 +238,10 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Get categories
+     * @return array
+     */
     public static function get_categories() {
         $result = array();
 
@@ -212,12 +258,20 @@ class local_sharewith_external extends external_api {
         return $result;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function get_courses_parameters() {
         return new external_function_parameters(
                 array()
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function get_courses_returns() {
         return new external_single_structure(
                 array(
@@ -227,6 +281,10 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Get courses
+     * @return array
+     */
     public static function get_courses() {
         $result = array();
 
@@ -243,6 +301,10 @@ class local_sharewith_external extends external_api {
         return $result;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function get_sections_parameters() {
         return new external_function_parameters(
                 array(
@@ -251,6 +313,10 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function get_sections_returns() {
         return new external_single_structure(
                 array(
@@ -260,6 +326,11 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Get sections
+     * @param int $courseid
+     * @return array
+     */
     public static function get_sections($courseid) {
         $result = array();
 
@@ -276,6 +347,10 @@ class local_sharewith_external extends external_api {
         return $result;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function get_teachers_parameters() {
         return new external_function_parameters(
                 array(
@@ -285,10 +360,20 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function get_teachers_returns() {
         return new external_value(PARAM_RAW, 'Teachers form');
     }
 
+    /**
+     * Get teachers list
+     * @param int $activityid
+     * @param int $courseid
+     * @return array
+     */
     public static function get_teachers($activityid, $courseid) {
 
         $params = self::validate_parameters(self::get_teachers_parameters(),
@@ -303,6 +388,10 @@ class local_sharewith_external extends external_api {
         return $teachers;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function autocomplete_teachers_parameters() {
         return new external_function_parameters(
                 array(
@@ -313,10 +402,21 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function autocomplete_teachers_returns() {
         return new external_value(PARAM_RAW, 'Teachers list');
     }
 
+    /**
+     * Get teachers list
+     * @param int $activityid
+     * @param int $courseid
+     * @param string $searchstring
+     * @return array
+     */
     public static function autocomplete_teachers($activityid, $courseid, $searchstring) {
 
         $params = self::validate_parameters(self::autocomplete_teachers_parameters(),
@@ -332,6 +432,10 @@ class local_sharewith_external extends external_api {
         return $teachers;
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
     public static function submit_teachers_parameters() {
         return new external_function_parameters(
                 array(
@@ -343,10 +447,22 @@ class local_sharewith_external extends external_api {
         );
     }
 
+    /**
+     * Returns result
+     * @return result
+     */
     public static function submit_teachers_returns() {
         return new external_value(PARAM_RAW, 'Send activity result');
     }
 
+    /**
+     * Submit activity to teachers
+     * @param int $activityid
+     * @param int $courseid
+     * @param int $teachersid
+     * @param string $message
+     * @return array
+     */
     public static function submit_teachers($activityid, $courseid, $teachersid, $message) {
 
         $params = self::validate_parameters(self::submit_teachers_parameters(),

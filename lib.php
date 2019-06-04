@@ -32,25 +32,24 @@ require_once(__DIR__ . '/locallib.php');
  *
  * @return string HTML for the navbar
  */
-
 function local_sharewith_render_navbar_output() {
     global $PAGE, $USER, $COURSE;
 
     $output = '';
 
     $sectioncopyenable = get_config('local_sharewith', 'sectioncopy');
-    $activityhimselfcopyenable = get_config('local_sharewith', 'activityhimselfcopy');
+    $activitycopyenable = get_config('local_sharewith', 'activitycopy');
     $sendenable = get_config('local_sharewith', 'activitysending');
 
     // Check permission.
     if (!local_sharewith_permission_allow($COURSE->id, $USER->id)) {
         $sectioncopyenable = 0;
-        $activityhimselfcopyenable = 0;
+        $activitycopyenable = 0;
     }
 
     $params = array(
             $sectioncopyenable,
-            $activityhimselfcopyenable,
+            $activitycopyenable,
             $sendenable
     );
 
@@ -60,8 +59,10 @@ function local_sharewith_render_navbar_output() {
 
 /**
  * Hook function to extend the course settings navigation. Call all context functions
+ * @param obj $parentnode
+ * @param obj $course
+ * @param obj $context
  */
-
 function local_sharewith_extend_navigation_course($parentnode, $course, $context) {
     global $USER, $COURSE;
 

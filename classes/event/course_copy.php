@@ -25,18 +25,21 @@
 namespace local_sharewith\event;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Course copy
+ * @package    local_sharewith
+ * @copyright  2018 Devlion <info@devlion.co>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class course_copy extends \core\event\base {
+
     /**
      * Create instance of event.
      *
-     * @since Moodle 2.7
-     *
-     * @param \stdClass $book
-     * @param \context_module $context
-     * @param \stdClass $chapter
-     * @return chapter_viewed
+     * @param id $id
+     * @param obj $eventdata
+     * @return obj
      */
-
     public static function create_event($id, $eventdata) {
 
         $contextid = \context_course::instance($id);
@@ -101,6 +104,10 @@ class course_copy extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * Get mapping
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array();
     }

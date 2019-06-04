@@ -302,7 +302,7 @@ define([
 
             var renderPopup = function(response) {
                 if (response.result > 0) {
-                    Str.get_string('activity_copied_to_course', 'local_sharewith').done(function(s) {
+                    Str.get_string('succesfullyshared', 'local_sharewith').done(function(s) {
                         modalBody.text(s + ' ' + courseName);
                     });
                     modal.approveState();
@@ -318,7 +318,7 @@ define([
                     courseid: Number(courseid),
                     sectionid: Number(sectionid),
                     shareid: Number(shareid),
-                    type: 'activityhimselfcopy'
+                    type: 'activitycopy'
                 },
                 done: renderPopup,
                 fail: renderPopup
@@ -355,7 +355,7 @@ define([
                     sourcecourseid: Number(this.getCurrentCourse()),
                     sectionid: Number(sectionid),
                     sourceactivityid: Number(cmid),
-                    type: 'activityhimselfcopy'
+                    type: 'activitycopy'
                 },
                 done: renderPopup,
                 fail: renderPopup
