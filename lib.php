@@ -59,6 +59,9 @@ function local_sharewith_render_navbar_output() {
 
 /**
  * Hook function to extend the course settings navigation. Call all context functions
+ * @param obj $parentnode
+ * @param obj $course
+ * @param obj $context
  */
 function local_sharewith_extend_navigation_course($parentnode, $course, $context) {
     global $USER, $COURSE;

@@ -17,7 +17,7 @@
 /**
  * External course API
  *
- * @package    core_course
+ * @package    local_sharewith
  * @category   external
  * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,7 +30,7 @@ require_once(__DIR__ . '/../lib.php');
 /**
  * Course external functions
  *
- * @package    core_course
+ * @package    local_sharewith
  * @category   external
  * @copyright  2011 Jerome Mouneyrac
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -39,7 +39,7 @@ require_once(__DIR__ . '/../lib.php');
 class duplicate extends external_api {
 
     /**
-     * @return
+     * Construct
      */
     public function __construct() {
 
@@ -245,14 +245,16 @@ class duplicate extends external_api {
         return $res;
     }
 
+
     /**
      * Duplicates activity
      *
-     * @param int $sourceactivityid source
-     * @param int $courseid target
-     * @param int $sectionid target
-     * @param int $masteractivityid target
-     * @return cm_info|null cminfo object if we sucessfully duplicated the mod and found the new cm.
+     * @param int $sourceactivityid
+     * @param int $courseid
+     * @param int $sectionid
+     * @param int $newactivityid
+     * @param bool $availabilitydisable
+     * @return obj cm_info
      */
     public static function duplicate_activity_source($sourceactivityid, $courseid, $sectionid, &$newactivityid,
             $availabilitydisable = false) {
@@ -455,7 +457,9 @@ class duplicate extends external_api {
     }
 
     /**
-     * @return
+     * Send notification
+     * @param obj $item
+     * @param obj $newactivity
      */
     public static function send_notification($item, $newactivity) {
         global $DB;

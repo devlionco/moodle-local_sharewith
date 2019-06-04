@@ -24,6 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Process DB upgrade
  * @param int $oldversion the version we are upgrading from
  * @return bool result
  */

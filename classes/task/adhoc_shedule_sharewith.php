@@ -198,9 +198,12 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
     }
 
     /**
-     * Copy
+     * Copy activity
      *
-     * @return int
+     * @param int $sourceactivityid
+     * @param int $courseid
+     * @param int $sectionid
+     * @return obj $newactivity
      */
     public function copy_activity($sourceactivityid, $courseid, $sectionid) {
         global $DB;
@@ -217,8 +220,9 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
     }
 
     /**
-     *
-     * @return
+     * Create shortname
+     * @param string $shortname
+     * @return int
      */
     public function create_relevant_shortname($shortname) {
         global $DB;

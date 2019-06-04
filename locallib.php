@@ -18,7 +18,6 @@
  * Plugin general functions are defined here.
  *
  * @package     local_sharewith
- * @category    admin
  * @copyright   2018 Devlion <info@devlion.co>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,8 +31,10 @@ $sharingtypes = array(
 );
 
 /**
- *
- * @return
+ * Check permisstions
+ * @param int $courseid
+ * @param int $userid
+ * @return boolean
  */
 function local_sharewith_permission_allow($courseid, $userid) {
 
@@ -45,8 +46,18 @@ function local_sharewith_permission_allow($courseid, $userid) {
 }
 
 /**
- *
- * @return
+ * Add task
+ * @param string $type
+ * @param int $userid
+ * @param int $sourceuserid
+ * @param int $sourcecourseid
+ * @param int $courseid
+ * @param int $sourcesectionid
+ * @param int $sectionid
+ * @param int $categoryid
+ * @param int $sourceactivityid
+ * @param obj $metadata
+ * @return obj
  */
 function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $sourcesectionid, $sectionid,
         $categoryid = null, $sourceactivityid = null, $metadata = null) {
@@ -73,8 +84,15 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
 }
 
 /**
- *
- * @return
+ * Add new task for saving activity
+ * @param string $type
+ * @param int $shareid
+ * @param int $courseid
+ * @param int $sectionid
+ * @param int $categoryid
+ * @param obj $metadata
+ * @param int $sourcesectionid
+ * @return array
  */
 function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $categoryid = null, $metadata = null,
         $sourcesectionid = null) {
@@ -117,8 +135,8 @@ function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $cate
 }
 
 /**
- *
- * @return
+ * Get categories
+ * @return obj
  */
 function local_sharewith_get_categories() {
     global $DB;
@@ -130,8 +148,8 @@ function local_sharewith_get_categories() {
 }
 
 /**
- *
- * @return
+ * Get user courses
+ * @return obj
  */
 function local_sharewith_get_courses() {
     global $DB, $USER;
@@ -165,8 +183,9 @@ function local_sharewith_get_courses() {
 }
 
 /**
- *
- * @return
+ * Get sections by course
+ * @param int $courseid
+ * @return obj
  */
 function local_sharewith_get_section_bycourse($courseid) {
     global $DB;
@@ -198,8 +217,10 @@ function local_sharewith_get_section_bycourse($courseid) {
 }
 
 /**
- *
- * @return
+ * Get teachers
+ * @param int $activityid
+ * @param int $courseid
+ * @return obj
  */
 function local_sharewith_get_teachers($activityid, $courseid) {
     global $DB, $USER, $OUTPUT, $PAGE, $CFG;
@@ -242,8 +263,9 @@ function local_sharewith_get_teachers($activityid, $courseid) {
 }
 
 /**
- *
- * @return
+ * Get teachers
+ * @param string $searchstring
+ * @return string
  */
 function local_sharewith_autocomplete_teachers($searchstring) {
     global $USER, $DB;
@@ -286,8 +308,12 @@ function local_sharewith_autocomplete_teachers($searchstring) {
 }
 
 /**
- *
- * @return
+ * Submit new task to add activity
+ * @param int $activityid
+ * @param int $courseid
+ * @param int $teachersid
+ * @param string $message
+ * @return string
  */
 function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $message) {
     global $USER, $DB;

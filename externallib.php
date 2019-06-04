@@ -65,7 +65,15 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Add share task
+     * @param int $sourcecourseid
+     * @param string $type
+     * @param int $categoryid
+     * @param int $courseid
+     * @param int $sectionid
+     * @param int $sourcesectionid
+     * @param int $sourceactivityid
+     * @return array
      */
     public static function add_sharewith_task($sourcecourseid, $type, $categoryid, $courseid, $sectionid, $sourcesectionid,
             $sourceactivityid) {
@@ -143,7 +151,12 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Add task for saving new activity
+     * @param int $courseid
+     * @param int $sectionid
+     * @param int $shareid
+     * @param string $type
+     * @return string
      */
     public static function add_saveactivity_task($courseid, $sectionid, $shareid, $type) {
         global $USER, $sharingtypes;
@@ -226,7 +239,8 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Get categories
+     * @return array
      */
     public static function get_categories() {
         $result = array();
@@ -268,7 +282,8 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Get courses
+     * @return array
      */
     public static function get_courses() {
         $result = array();
@@ -312,7 +327,9 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Get sections
+     * @param int $courseid
+     * @return array
      */
     public static function get_sections($courseid) {
         $result = array();
@@ -352,7 +369,10 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Get teachers list
+     * @param int $activityid
+     * @param int $courseid
+     * @return array
      */
     public static function get_teachers($activityid, $courseid) {
 
@@ -391,7 +411,11 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Get teachers list
+     * @param int $activityid
+     * @param int $courseid
+     * @param string $searchstring
+     * @return array
      */
     public static function autocomplete_teachers($activityid, $courseid, $searchstring) {
 
@@ -432,7 +456,12 @@ class local_sharewith_external extends external_api {
     }
 
     /**
-     * @return
+     * Submit activity to teachers
+     * @param int $activityid
+     * @param int $courseid
+     * @param int $teachersid
+     * @param string $message
+     * @return array
      */
     public static function submit_teachers($activityid, $courseid, $teachersid, $message) {
 
