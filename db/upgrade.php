@@ -29,27 +29,5 @@ defined('MOODLE_INTERNAL') || die();
  * @return bool result
  */
 function xmldb_local_sharewith_upgrade($oldversion) {
-
-    global $DB;
-    $dbman = $DB->get_manager();
-
-    if (!$dbman->table_exists('local_sharewith_shared')) {
-        $table = new xmldb_table('local_sharewith_shared');
-
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('useridto', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('useridfrom', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('activityid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('messageid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('restoreid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-        $table->add_field('complete', XMLDB_TYPE_INTEGER, '2', null, null, null, null);
-        $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, null, null, null);
-        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        $dbman->create_table($table);
-    }
-
     return true;
 }
