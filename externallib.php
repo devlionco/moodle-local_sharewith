@@ -233,7 +233,7 @@ class local_sharewith_external extends external_api {
         return new external_single_structure(
                 array(
             'result' => new external_value(PARAM_INT, 'result bool'),
-            'categories' => new external_value(PARAM_TEXT, 'json categories'),
+            'categories' => new external_value(PARAM_RAW, 'json categories'),
                 )
         );
     }

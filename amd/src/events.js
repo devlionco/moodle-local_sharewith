@@ -52,9 +52,8 @@ define([
         selectCategory: function() {
             var modalBody = modal.getBody();
 
-            var renderPopup = function(responce) {
-
-                var categories = Object.values(JSON.parse(responce.categories));
+            var renderPopup = function(response) {
+                var categories = Object.values(JSON.parse(response.categories));
                 modal.init();
                 Str.get_string('selectioncategories', 'local_sharewith').done(function(s) {
                     modal.getTitle().text(s);
@@ -87,14 +86,15 @@ define([
                     modalBody = modal.getBody();
             self.addSpinner(modalBody);
 
-            var renderPopup = function(responce) {
-                if (responce.result) {
-                    modal.approveState();
-                    Str.get_string('course_copied_to_section', 'local_sharewith').done(function(s) {
+            var renderPopup = function(response) {
+                if (response.result) {
+                    Str.get_string('succesfullycopied', 'local_sharewith').done(function(s) {
                         modalBody.text(s);
                     });
+                    modal.approveState();
                 } else {
-                    modal.errorState();
+                    modal.errorTextState();
+                    modalBody.text(response.text);
                 }
             };
 
@@ -297,13 +297,12 @@ define([
             var modalBody = modal.getBody(),
                     shareid = $('input[name="shareid"]').val(),
                     courseid = modalBody.find(':selected')[0].dataset.courseid,
-                    courseName = modalBody.find(':selected')[0].innerHTML,
                     sectionid = modalBody.find(':selected')[1].dataset.sectionid;
 
             var renderPopup = function(response) {
                 if (response.result > 0) {
                     Str.get_string('succesfullyshared', 'local_sharewith').done(function(s) {
-                        modalBody.text(s + ' ' + courseName);
+                        modalBody.text(s);
                     });
                     modal.approveState();
                 } else {
@@ -334,17 +333,17 @@ define([
             var modalBody = modal.getBody(),
                     cmid = modalBody.data('cmid'),
                     courseid = modalBody.find(':selected')[0].dataset.courseid,
-                    courseName = modalBody.find(':selected')[0].innerHTML,
                     sectionid = modalBody.find(':selected')[1].dataset.sectionid;
 
-            var renderPopup = function(responce) {
-                if (responce.result) {
-                    modal.approveState();
-                    Str.get_string('activity_copied_to_course', 'local_sharewith').done(function(s) {
-                        modalBody.text(s + ' ' + courseName);
+            var renderPopup = function(response) {
+                if (response.result) {
+                    Str.get_string('succesfullycopied', 'local_sharewith').done(function(s) {
+                        modalBody.text(s);
                     });
+                    modal.approveState();
                 } else {
-                    modal.errorState();
+                    modal.errorTextState();
+                    modalBody.text(response.text);
                 }
             };
 
@@ -370,17 +369,17 @@ define([
         copySectionToCourse: function() {
             var modalBody = modal.getBody(),
                     sectionid = modalBody.data('sectionid'),
-                    courseid = modalBody.find(':selected').data('courseid'),
-                    courseName = modalBody.find(':selected').text();
+                    courseid = modalBody.find(':selected').data('courseid');
 
-            var renderPopup = function(responce) {
-                if (responce.result) {
-                    modal.approveState();
-                    Str.get_string('section_copied_to_course', 'local_sharewith').done(function(s) {
-                        modalBody.text(s + ' ' + courseName);
+            var renderPopup = function(response) {
+                if (response.result) {
+                    Str.get_string('succesfullycopied', 'local_sharewith').done(function(s) {
+                        modalBody.text(s);
                     });
+                    modal.approveState();
                 } else {
-                    modal.errorState();
+                    modal.errorTextState();
+                    modalBody.text(response.text);
                 }
             };
 
