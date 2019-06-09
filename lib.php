@@ -67,7 +67,7 @@ function local_sharewith_extend_navigation_course($parentnode, $course, $context
     global $USER, $COURSE;
 
     if (get_config('local_sharewith', 'coursecopy')) {
-        if (local_sharewith_permission_allow($COURSE->id, $USER->id)) {
+        if (has_capability('moodle/course:create', context_course::instance($COURSE->id), $USER->id)) {
             $strmetadata = get_string('menucoursenode', 'local_sharewith');
 
             $url = 'Javascript:void(0)';
