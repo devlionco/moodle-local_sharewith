@@ -20,11 +20,11 @@ This plugin allow to teachers share: Courses, Activity/Resource, Topic/Module to
 4. Teacher can copy topic with activities to specific course.
 [view](https://blog.devlion.co/moodle-local-share-with/)
 
-Copy items flow
+Share activities flow - Teacher send activity to others
 -------
 ![Share Activity](https://blog.devlion.co/wp-content/uploads/Share_with_plugin_-_Google_Slides-1568x919.png) 
 
-Share activities flow
+Copy items flow - Teacher duplicate itemns
 -------
 ![Copy Activity](https://blog.devlion.co/wp-content/uploads/Sharewith-Plugin-1.jpg) 
 
