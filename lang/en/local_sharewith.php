@@ -91,6 +91,7 @@ $string['fullmessagehtml_for_teacher'] = 'Share it to you course <a data-handler
 $string['info_message_for_teacher'] = 'Message from Sharing Activity';
 $string['enter_subject_name'] = 'Enter the name of the subject';
 $string['succesfullyshared'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
+$string['succesfullycopied'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
 
 $string['activitycopy_title'] = 'Activity';
 $string['sectioncopy_title'] = 'Section';
