@@ -13,18 +13,26 @@ Change Log
 Purpose
 -------
 
-Share with plugin will allow to the teacher:
-1. copy activity from course to other course and section.
-2. copy course to different categories.
-3. copy topic to some course.
-4. share activity to other teacher 
+This plugin allow to teachers share: Courses, Activity/Resource, Topic/Module to other teachers.
+1. Teacher can share activities to other teachers.
+2. Teacher can copy course to category if he has permission.
+3. Teacher can copy activity to specific topic.
+4. Teacher can copy topic with activities to specific course.
+[view](https://blog.devlion.co/moodle-local-share-with/)
 
+Copy items flow
+-------
+![Share Activity](https://blog.devlion.co/wp-content/uploads/Share_with_plugin_-_Google_Slides-1568x919.png) 
+
+Share activities flow
+-------
 ![Copy Activity](https://blog.devlion.co/wp-content/uploads/Sharewith-Plugin-1.jpg) 
+
 
 Next Features
 ------------
 
-1. share activity to bank of activities
+1. Share activity to bank of activities.
 
 Requirements
 ------------
