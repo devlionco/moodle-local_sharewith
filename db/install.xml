@@ -7,7 +7,7 @@
     <TABLE NAME="local_sharewith_task" COMMENT="Sharewith task">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT=""/>
+        <FIELD NAME="type" TYPE="char" LENGTH="100" NOTNULL="false" DEFAULT="" SEQUENCE="false" COMMENT=""/>
         <FIELD NAME="sourceuserid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT=""/>
         <FIELD NAME="sourcecourseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT=""/>
         <FIELD NAME="sourcesectionid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT=""/>

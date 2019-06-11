@@ -79,24 +79,29 @@ class local_sharewith_external extends external_api {
             $sourceactivityid) {
         global $USER, $sharingtypes;
 
+        $params = self::validate_parameters(self::add_sharewith_task_parameters(),
+                        array(
+                            'sourcecourseid' => $sourcecourseid,
+                            'type' => $type,
+                            'categoryid' => $categoryid,
+                            'courseid' => $courseid,
+                            'sectionid' => $sectionid,
+                            'sourcesectionid' => $sourcesectionid,
+                            'sourceactivityid' => $sourceactivityid,
+                        )
+        );
+
         $result = array();
 
         // If type wrong.
-        if (!in_array($type, $sharingtypes)) {
+        if (!in_array($params['type'], $sharingtypes)) {
             $result['result'] = 0;
             return $result;
         }
         // Check settings parameters.
-        switch ($type) {
+        switch ($params['type']) {
             case 'coursecopy':
                 if (!get_config('local_sharewith', 'coursecopy')) {
-                    $result['result'] = 0;
-                    return $result;
-                }
-
-                // Check capability for course.
-                $context = \context_course::instance($sourcecourseid);
-                if (!has_capability('moodle/course:update', $context)) {
                     $result['result'] = 0;
                     return $result;
                 }
@@ -115,8 +120,8 @@ class local_sharewith_external extends external_api {
                 break;
         }
 
-        $bool = local_sharewith_add_task($type, $USER->id, $USER->id, $sourcecourseid, $courseid, $sourcesectionid,
-                $sectionid, $categoryid, $sourceactivityid);
+        $bool = local_sharewith_add_task($params['type'], $USER->id, $USER->id, $params['sourcecourseid'], $params['courseid'],
+                $params['sourcesectionid'], $params['sectionid'], $params['categoryid'], $params['sourceactivityid']);
 
         $result['result'] = $bool;
         return $result;
@@ -186,13 +191,6 @@ class local_sharewith_external extends external_api {
                     $result['text'] = 'can\'t copy course';
                     return $result;
                 }
-                // Check capability for course.
-                $context = \context_course::instance($sourcecourseid);
-                if (!has_capability('moodle/course:update', $context)) {
-                    $result['result'] = 0;
-                    $result['text'] = 'no capability';
-                    return $result;
-                }
                 break;
             case 'sectioncopy':
                 if (!get_config('local_sharewith', 'sectioncopy')) {
@@ -202,9 +200,9 @@ class local_sharewith_external extends external_api {
                 }
                 break;
             case 'activitycopy':
-                if (!get_config('local_sharewith', 'activitycopy')) {
+                if (!get_config('local_sharewith', 'activitysending')) {
                     $result['result'] = 0;
-                    $result['text'] = 'can\'t copy itself';
+                    $result['text'] = 'can\'t share activity';
                     return $result;
                 }
                 break;

@@ -31,17 +31,54 @@ $sharingtypes = array(
 );
 
 /**
- * Check permisstions
- * @param int $courseid
+ * Check permisstions for copy
+ * @param str $type
  * @param int $userid
+ * @param int $sourceuserid
+ * @param int $sourcecourseid
+ * @param int $courseid
+ * @param int $categoryid
  * @return boolean
  */
-function local_sharewith_permission_allow($courseid, $userid) {
+function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid=null) {
 
-    if (has_capability('moodle/course:update', context_course::instance($courseid), $userid)) {
+    switch ($type) {
+        case "coursecopy":
+            if (has_capability('local/sharewith:copycourse', context_course::instance($sourcecourseid), $sourceuserid)
+                    AND has_capability('local/sharewith:copycourse', context_coursecat::instance($categoryid), $userid)) {
+                return true;
+            }
+            break;
+        case "sectioncopy":
+            if (has_capability('local/sharewith:copysection', context_course::instance($sourcecourseid), $sourceuserid)
+                    AND has_capability('local/sharewith:copysection', context_course::instance($courseid), $userid)) {
+                return true;
+            }
+            break;
+        case "activitycopy":
+            if (has_capability('local/sharewith:copyactivity', context_course::instance($sourcecourseid), $sourceuserid)
+                    AND has_capability('local/sharewith:copyactivity', context_course::instance($courseid), $userid)) {
+                return true;
+            }
+            break;
+    }
+    return false;
+}
+
+/**
+ * Check permisstions for share activity
+ * @param int $userid
+ * @param int $sourceuserid
+ * @param int $sourcecourseid
+ * @param int $courseid
+ * @return boolean
+ */
+function local_sharewith_permission_allow_share($userid, $sourceuserid, $sourcecourseid, $courseid) {
+
+    if (has_capability('local/sharewith:shareactivity', context_course::instance($sourcecourseid), $sourceuserid)
+            AND has_capability('local/sharewith:copyactivity', context_course::instance($courseid), $userid)) {
         return true;
     }
-
     return false;
 }
 
@@ -64,7 +101,7 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
     global $DB;
 
     // Check permission.
-    if (local_sharewith_permission_allow($sourcecourseid, $sourceuserid)) {
+    if (local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid)) {
         $obj = new \stdClass();
         $obj->type = $type;
         $obj->userid = $userid;
@@ -108,7 +145,7 @@ function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $cate
             $activity = $DB->get_record('course_modules', array('id' => $share->activityid));
             if ($activity) {
                 // Check permission.
-                if (local_sharewith_permission_allow($share->courseid, $share->useridfrom)) {
+                if (local_sharewith_permission_allow_share($USER->id, $share->useridfrom, $share->courseid, $courseid)) {
                     $obj = new \stdClass();
                     $obj->type = $type;
                     $obj->userid = $USER->id;
