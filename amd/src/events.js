@@ -68,7 +68,7 @@ define([
             }.bind(this);
 
             Ajax.call([{
-                methodname: 'get_categories',
+                methodname: 'local_sharewith_get_categories',
                 args: {},
                 done: renderPopup,
                 fail: renderPopup
@@ -99,7 +99,7 @@ define([
             };
 
             Ajax.call([{
-                methodname: 'add_sharewith_task',
+                methodname: 'local_sharewith_add_sharewith_task',
                 args: {
                     sourcecourseid: Number(this.getCurrentCourse()),
                     categoryid: Number(categoryid),
@@ -159,7 +159,7 @@ define([
             }.bind(this);
 
             Ajax.call([{
-                methodname: 'get_courses',
+                methodname: 'local_sharewith_get_courses',
                 args: {},
                 done: renderPopup,
                 fail: renderPopup
@@ -185,7 +185,7 @@ define([
             };
 
             Ajax.call([{
-                methodname: 'get_sections',
+                methodname: 'local_sharewith_get_sections',
                 args: {courseid: Number(courseid)},
                 done: renderPopup,
                 fail: renderPopup
@@ -281,7 +281,7 @@ define([
             }.bind(this);
 
             Ajax.call([{
-                methodname: 'get_courses',
+                methodname: 'local_sharewith_get_courses',
                 args: {},
                 done: renderPopup,
                 fail: renderPopup
@@ -312,12 +312,12 @@ define([
             };
 
             Ajax.call([{
-                methodname: 'add_saveactivity_task',
+                methodname: 'local_sharewith_add_saveactivity_task',
                 args: {
                     courseid: Number(courseid),
                     sectionid: Number(sectionid),
                     shareid: Number(shareid),
-                    type: 'activitycopy'
+                    type: 'activityshare'
                 },
                 done: renderPopup,
                 fail: renderPopup
@@ -348,7 +348,7 @@ define([
             };
 
             Ajax.call([{
-                methodname: 'add_sharewith_task',
+                methodname: 'local_sharewith_add_sharewith_task',
                 args: {
                     courseid: Number(courseid),
                     sourcecourseid: Number(this.getCurrentCourse()),
@@ -384,7 +384,7 @@ define([
             };
 
             Ajax.call([{
-                methodname: 'add_sharewith_task',
+                methodname: 'local_sharewith_add_sharewith_task',
                 args: {
                     courseid: Number(courseid),
                     sourcecourseid: Number(this.getCurrentCourse()),

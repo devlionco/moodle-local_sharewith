@@ -28,6 +28,7 @@ $sharingtypes = array(
     'coursecopy',
     'sectioncopy',
     'activitycopy',
+    'activityshare',
 );
 
 /**
@@ -209,6 +210,9 @@ function local_sharewith_get_courses() {
 
     $result = array();
     foreach ($mycourses as $course) {
+        if (!has_capability('moodle/course:update', context_course::instance($course->id), $USER->id)) {
+            continue;
+        }
         $tmp = array();
         $tmp['id'] = $course->id;
         $tmp['fullname'] = $course->fullname;

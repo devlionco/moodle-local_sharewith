@@ -94,10 +94,12 @@ $string['succesfullyshared'] = 'The request was successfully updated. It will co
 $string['succesfullycopied'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
 
 $string['activitycopy_title'] = 'Activity';
+$string['activityshare_title'] = 'Activity';
 $string['sectioncopy_title'] = 'Section';
 $string['coursecopy_title'] = 'Course';
 $string['notification_smallmessage_copied'] = 'Successfully copied!';
 $string['activitycopy_fullmessage'] = 'Your activity was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
+$string['activityshare_fullmessage'] = 'Your activity was successfully saved to the <a href="{$a->link}">{$a->coursename}</a>';
 $string['sectioncopy_fullmessage'] = 'Your section was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 $string['coursecopy_fullmessage'] = 'Your course was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 

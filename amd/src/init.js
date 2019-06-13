@@ -32,11 +32,11 @@ define([
 
     var root = document.querySelector('body');
     return {
-        init: function (sectioncopy, activitycopyhimself, sendactivity) {
+        init: function (sectioncopy, activitycopy, sendactivity) {
             events.getCurrentCourse();
             modal.insertTemplates();
 
-            if (Number(activitycopyhimself) === 1) {
+            if (Number(activitycopy) === 1) {
                 buildtree.addCopyActivityButton(root);
             }
 

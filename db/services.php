@@ -34,7 +34,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
-    'add_sharewith_task' => array(
+    'local_sharewith_add_sharewith_task' => array(
         'classname' => 'local_sharewith_external',
         'methodname' => 'add_sharewith_task',
         'classpath' => 'local/sharewith/externallib.php',
@@ -43,7 +43,7 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
-    'add_saveactivity_task' => array(
+    'local_sharewith_add_saveactivity_task' => array(
         'classname' => 'local_sharewith_external',
         'methodname' => 'add_saveactivity_task',
         'classpath' => 'local/sharewith/externallib.php',
@@ -52,7 +52,7 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
-    'get_categories' => array(
+    'local_sharewith_get_categories' => array(
         'classname' => 'local_sharewith_external',
         'methodname' => 'get_categories',
         'classpath' => 'local/sharewith/externallib.php',
@@ -61,7 +61,7 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
-    'get_courses' => array(
+    'local_sharewith_get_courses' => array(
         'classname' => 'local_sharewith_external',
         'methodname' => 'get_courses',
         'classpath' => 'local/sharewith/externallib.php',
@@ -70,7 +70,7 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
-    'get_sections' => array(
+    'local_sharewith_get_sections' => array(
         'classname' => 'local_sharewith_external',
         'methodname' => 'get_sections',
         'classpath' => 'local/sharewith/externallib.php',

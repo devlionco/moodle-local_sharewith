@@ -484,6 +484,12 @@ class duplicate extends external_api {
                 $link = new moodle_url('/mod/' . $cm->modname . '/view.php', array('id' => $newactivity->id));
                 $a->link = $link->out(false);
                 break;
+            case 'activityshare':
+                $modinfo = get_fast_modinfo($item->courseid);
+                $cm = $modinfo->cms[$newactivity->id];
+                $link = new moodle_url('/mod/' . $cm->modname . '/view.php', array('id' => $newactivity->id));
+                $a->link = $link->out(false);
+                break;
         }
 
         $notif = new stdClass();

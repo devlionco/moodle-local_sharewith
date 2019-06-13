@@ -199,7 +199,7 @@ class local_sharewith_external extends external_api {
                     return $result;
                 }
                 break;
-            case 'activitycopy':
+            case 'activityshare':
                 if (!get_config('local_sharewith', 'activitysending')) {
                     $result['result'] = 0;
                     $result['text'] = 'can\'t share activity';
