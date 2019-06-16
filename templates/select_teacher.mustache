@@ -1,0 +1,73 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_sharewith/select_teacher
+
+    Example context (json):
+    {
+        "activityid": "11",
+        "activityname": "Quiz 1",
+        "courseid": "2",
+        "config": "",
+        "teachers": [
+            {
+                "teacher_name": "Adam Smith",
+                "teacher_url": "",
+                "date": "01.01.1970",
+                "time": "23:59"
+            }
+        ]
+    }
+}}
+<input id="send_popup_activity_id" type="hidden" value="{{activityid}}">
+<input id="send_popup_activity_name" type="hidden" value="{{activityname}}">
+<input id="send_popup_course_id" type="hidden" value="{{courseid}}">
+
+<div class = "prof__head">
+    <div class = "prof__tag-wrap"></div>
+</div>
+<form class = "prof__form">
+    <p class = "prof__header">{{#str}}share_with_teacher, local_sharewith{{/str}}</p>
+    <div class = "form-group">
+        <input class = "prof__input form-control mb-0" id="selectteacher" type = "text" placeholder="{{#str}}enter_teacher_here, local_sharewith{{/str}}">
+    </div>
+    <div class = "form-group">
+        <textarea id="send_popup_message" class = "prof__comment form-control" placeholder="{{#str}}comment_to_teacher, local_sharewith{{/str}}"></textarea>
+    </div>
+    <div class = "form-group">
+        <div class = "prof__btn-wrap">
+            <button  id ="btnSendResult" class = "btn btn-primary" type = "button" disabled>{{#str}}menu_popup_send, local_sharewith{{/str}}</button>
+            <span class="loading_dots btn d-none"><span class="fa fa-circle-o-notch fa-spin"></span></span>
+        </div>
+    </div>
+</form>
+<div class = "prof__cont prof__cont--bottom">
+    <p class = "prof__header">{{#str}}teachers_youve_sent, local_sharewith{{/str}}</p>
+    {{#teachers}}
+    <div class = "prof__answer">
+        <div class = "prof__avatar">
+            <img src="{{#teacher_url}}{{teacher_url}}{{/teacher_url}}{{^teacher_url}}/theme/image.php/boost/core/1559478333/u/f2{{/teacher_url}}" alt="{{#str}}user_foto, local_sharewith{{/str}}">
+        </div>
+        <span class = "prof__name">{{teacher_name}}</span>
+        <span class = "prof__date">{{date}}</span>
+        <span class = "prof__time">{{time}}</span>
+    </div>
+    {{/teachers}}
+    {{^teachers}}
+    <div class = "prof__noanswer">{{#str}}nosharing, local_sharewith{{/str}}</div>
+    {{/teachers}}
+</div>
