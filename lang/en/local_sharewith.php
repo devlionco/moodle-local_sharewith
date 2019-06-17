@@ -94,11 +94,11 @@ $string['succesfullyshared'] = 'The request was successfully updated. It will co
 $string['succesfullycopied'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
 
 $string['activitycopy_title'] = 'Activity';
-$string['sectioncopy_title'] = 'Section';
+$string['sectioncopy_title'] = 'Topic';
 $string['coursecopy_title'] = 'Course';
 $string['notification_smallmessage_copied'] = 'Successfully copied!';
 $string['activitycopy_fullmessage'] = 'Your activity was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
-$string['sectioncopy_fullmessage'] = 'Your section was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
+$string['sectioncopy_fullmessage'] = 'Your topic was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 $string['coursecopy_fullmessage'] = 'Your course was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 
 $string['share'] = 'Share';
@@ -114,11 +114,11 @@ $string['reduce_catalog_options'] = 'Reduce catalog options';
 $string['advanced_catalog_options'] = 'Advanced catalog options';
 $string['please_enter_item_name'] = 'Please enter the item name';
 $string['error'] = 'Error';
-$string['please_select_course_section'] = 'Please select course and section';
+$string['please_select_course_section'] = 'Please select course and topic';
 $string['sent'] = 'Sent';
 $string['fails'] = 'Fails';
 $string['sharing_sent_successfully'] = 'A sharing invitation has been sent successfully';
-$string['staudysection'] = 'Study Section';
+$string['staudysection'] = 'Study Topic';
 
 $string['selectteacher'] = 'Select Teacher';
 $string['activitydeleted'] = 'This activity was deleted by author.';
