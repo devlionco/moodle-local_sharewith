@@ -53,7 +53,7 @@ $string['eventactivityshare'] = 'Share activity';
 
 // Modals.
 $string['selectioncategories'] = 'בחר קטגוריה להעתקת הקורס';
-$string['sectionselection'] = 'Select section';
+$string['sectionselection'] = 'Select topic';
 $string['selectcourse'] = 'בחירת קורס';
 $string['selectcourse_and_section'] = 'בחירת קורס ויחידה';
 $string['selecttopic'] = 'בחירת יחידה';
