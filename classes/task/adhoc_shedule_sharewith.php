@@ -195,18 +195,16 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                             has_capability('moodle/restore:restoreactivity', context_course::instance($item->courseid),
                                     $item->userid)) {
 
-                        $newactivity = $this->copy_activity($item->sourceactivityid, $item->courseid, $item->sectionid);
-
-                        // Sent event.
-                        $eventdata = array(
+                        $newactivityshared = $this->copy_activity($item->sourceactivityid, $item->courseid, $item->sectionid);
+                        // Send event.
+                        $eventdatashared = array(
                             'userid' => $item->sourceuserid,
                             'courseid' => $item->courseid,
                             'sectionid' => $item->sectionid,
                             'activityid' => $item->sourceactivityid,
-                            'targetactivityid' => $newactivity->id
+                            'targetactivityid' => $newactivityshared->id
                         );
-
-                        \local_sharewith\event\activity_copy::create_event($item->courseid, $eventdata)->trigger();
+                        \local_sharewith\event\activity_copy::create_event($item->courseid, $eventdatashared)->trigger();
                     }
                     break;
             }
