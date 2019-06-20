@@ -45,7 +45,6 @@ GPL v3 - http://www.gnu.org/copyleft/gpl.html
 
 Credits
 -------
-
-Was designed and funded by the [Department of science teaching](https://stwww1.weizmann.ac.il/en/) at the [Weizmann institute of science](http://www.weizmann.ac.il/pages/), israel.
-And developed for the [PeTeL - personalized teaching and learning envirunment](https://stwww1.weizmann.ac.il/petel/) ( [EN](https://stwww1.weizmann.ac.il/en/?page_id=1246) ) project by [DevLion](https://blog.devlion.co/moodle-filter-team-work-tutorial/) based on [Sharing Cart Plugin](And developed for the [PeTeL - personalized teaching and learning envirunment](https://stwww1.weizmann.ac.il/petel/) ( [EN](https://stwww1.weizmann.ac.il/en/?page_id=1246) ) project by [DevLion](https://blog.devlion.co/moodle-filter-team-work-tutorial/) based on [Sharing Cart Plugin]().
+Was developed by [DevLion](https://devlion.co/). Was designed and funded by the [Department of science teaching](https://stwww1.weizmann.ac.il/en/) at the [Weizmann institute of science](http://www.weizmann.ac.il/pages/), israel.
+And developed for the [PeTeL - personalized teaching and learning envirunment](https://stwww1.weizmann.ac.il/petel/) ( [EN](https://stwww1.weizmann.ac.il/en/?page_id=1246) ) and based on [Sharing Cart Plugin]
 ).
