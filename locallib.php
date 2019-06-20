@@ -357,7 +357,7 @@ function local_sharewith_autocomplete_teachers($searchstring) {
  * @return string
  */
 function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $message) {
-    global $USER, $DB;
+    global $USER, $DB, $CFG;
 
     $modinfo = get_fast_modinfo($courseid);
     $cm = $modinfo->cms[$activityid];

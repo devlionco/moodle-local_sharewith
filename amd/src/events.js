@@ -35,6 +35,8 @@ define([
         {key: 'sent', component: 'local_sharewith'},
         {key: 'fails', component: 'local_sharewith'},
         {key: 'sharing_sent_successfully', component: 'local_sharewith'},
+        {key: 'selectcourse', component: 'local_sharewith'},
+        {key: 'selecttopic', component: 'local_sharewith'}
     ]).done();
 
     return /** @alias module:local_sharewith/events */ {
@@ -264,7 +266,7 @@ define([
                             });
                 }
                 modalBody
-                        .append($('<p>select course</p>' +
+                        .append($('<p>' + M.util.get_string('selectcourse', 'local_sharewith') + '</p>' +
                         '<select data-handler="selectSection" class = "courses form-control">' +
                         '</select>'))
                         .css('min-height', '100px');
@@ -273,7 +275,8 @@ define([
                             .append($('<option data-courseid =' + course.id + '>' + course.fullname + '</option>'));
                 });
                 if ($(target).data('ref') !== 'copySection') {
-                    modalBody.append($('<p>select section</p><select class = "sections form-control"></select>'));
+                    modalBody.append($('<p>' + M.util.get_string('selecttopic', 'local_sharewith') + 
+                            '</p><select class = "sections form-control"></select>'));
                     this.setHandler('saveActivityToCourse');
                     this.selectSection($('[data-handler="selectSection"]'));
                 }
