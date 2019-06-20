@@ -275,7 +275,7 @@ define([
                             .append($('<option data-courseid =' + course.id + '>' + course.fullname + '</option>'));
                 });
                 if ($(target).data('ref') !== 'copySection') {
-                    modalBody.append($('<p>' + M.util.get_string('selecttopic', 'local_sharewith') + 
+                    modalBody.append($('<p>' + M.util.get_string('selecttopic', 'local_sharewith') +
                             '</p><select class = "sections form-control"></select>'));
                     this.setHandler('saveActivityToCourse');
                     this.selectSection($('[data-handler="selectSection"]'));
