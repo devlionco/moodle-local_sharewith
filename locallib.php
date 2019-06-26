@@ -387,55 +387,43 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
             // Check if present teacher.
             if (in_array($teacherid, $arrfortest)) {
 
-                // Save in message DB.
-                // Prepare message for user.
-                $a = new stdClass;
-                $a->activity_name = $cm->name;
-                $a->teacher_name = $USER->firstname . ' ' . $USER->lastname;
-                $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
-
-                $objinsert = new stdClass();
-                $objinsert->useridfrom = $USER->id;
-                $objinsert->useridto = $teacherid;
-                $objinsert->subject = $subject;
-                $objinsert->fullmessage = $message;
-                $objinsert->fullmessageformat = 2;
-                $objinsert->fullmessagehtml = '';
-                $objinsert->smallmessage = get_string('info_message_for_teacher', 'local_sharewith');
-                $objinsert->notification = 1;
-                $objinsert->timecreated = time();
-                $objinsert->component = 'local_sharewith';
-                $objinsert->eventtype = 'sharewith_notification';
-                $messageid = $DB->insert_record('notifications', $objinsert);
-
-                $objinsert = new stdClass();
-                $objinsert->notificationid = $messageid;
-                $DB->insert_record('message_popup_notifications', $objinsert);
-
                 // Save in local_sharewith_shared.
                 $objinsert = new stdClass();
                 $objinsert->useridto = $teacherid;
                 $objinsert->useridfrom = $USER->id;
                 $objinsert->courseid = $courseid;
                 $objinsert->activityid = $activityid;
-                $objinsert->messageid = $messageid;
+                $objinsert->messageid = null;
                 $objinsert->restoreid = null;
                 $objinsert->complete = 0;
                 $objinsert->timecreated = time();
 
                 $rowid = $DB->insert_record('local_sharewith_shared', $objinsert);
 
-                // Update full message and fullmessagehtml.
+                // Prepare message for user.
+                $a = new stdClass;
+                $a->activity_name = $cm->name;
+                $a->teacher_name = $USER->firstname . ' ' . $USER->lastname;
+                $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
                 $a = new stdClass;
                 $a->restore_id = $rowid;
                 $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id;
                 $fullmessage = get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 
-                $obj = new stdClass();
-                $obj->id = $messageid;
-                $obj->fullmessage = $message;
-                $obj->fullmessagehtml = $message . '<br>' . $fullmessage;
-                $DB->update_record('notifications', $obj);
+                $message = new \core\message\message();
+                $message->component = 'local_sharewith';
+                $message->name = 'sharewith_notification';
+                $message->userfrom = $USER->id;
+                $message->userto = $teacherid;
+                $message->subject = $subject;
+                $message->fullmessage = $fullmessage;
+                $message->fullmessageformat = FORMAT_HTML;
+                $message->fullmessagehtml = $fullmessage;
+                $message->smallmessage = get_string('info_message_for_teacher', 'local_sharewith');
+                $message->notification = 1;
+                $message->replyto = "";
+                $message->courseid = $courseid;
+                $messageid = message_send($message);
             }
         }
     }

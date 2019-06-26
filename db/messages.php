@@ -15,16 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Local plugin "OER catalog" - Library
  *
- * @package     local_sharewith
- * @copyright   2018 Devlion <info@devlion.co>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_sharewith
+ * @copyright  2019 Devlion <info@devlion.co>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_sharewith';
-$plugin->release = 'INITIAL';
-$plugin->version = 2019042908;
-$plugin->requires = 2016052300;
+$messageproviders = array (
+    // Notification - activity shared.
+    'sharewith_notification' => array(
+        'defaults' => array(
+            'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+        ),
+    ),
+    // Notification - activity saved.
+    'shared_notification' => array(
+        'defaults' => array(
+            'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+        ),
+    ),
+
+);

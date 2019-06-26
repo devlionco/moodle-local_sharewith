@@ -21,17 +21,16 @@
  * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = array(
-        array(
-                'classname' => 'local_sharewith\task\shedule_sharewith',
-                'blocking' => 0,
-                'minute' => '*',
-                'hour' => '*',
-                'day' => '*',
-                'dayofweek' => '*',
-                'month' => '*',
-        ),
+    array(
+        'classname' => 'local_sharewith\task\shedule_sharewith',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '*',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*',
+    ),
 );

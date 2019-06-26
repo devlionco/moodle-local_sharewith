@@ -487,28 +487,25 @@ class duplicate extends external_api {
             case 'activityshare':
                 $modinfo = get_fast_modinfo($item->courseid);
                 $cm = $modinfo->cms[$newactivity->id];
-                $link = new moodle_url('/mod/' . $cm->modname . '/view.php', array('id' => $newactivity->id));
+                $link = new moodle_url('/course/view.php', array('id' => $item->courseid));
                 $a->link = $link->out(false);
                 break;
         }
 
-        $notif = new stdClass();
-        $notif->useridfrom = $item->sourceuserid;
-        $notif->useridto = $item->userid;
-        $notif->subject = get_string($item->type . '_title', 'local_sharewith');
-        $notif->fullmessage = '';
-        $notif->fullmessageformat = 2;
-        $notif->fullmessagehtml = get_string($item->type . '_fullmessage', 'local_sharewith', $a);
-        $notif->smallmessage = get_string('notification_smallmessage_copied', 'local_sharewith');
-        $notif->notification = 1;
-        $notif->timecreated = time();
-        $notif->component = 'local_sharewith';
-        $notif->eventtype = 'sharewith_notification';
-        $notificationid = $DB->insert_record('notifications', $notif);
-
-        $notifpopup = new stdClass();
-        $notifpopup->notificationid = $notificationid;
-        $DB->insert_record('message_popup_notifications', $notifpopup);
+        $message = new \core\message\message();
+        $message->component = 'local_sharewith';
+        $message->name = 'shared_notification';
+        $message->userfrom = $item->sourceuserid;
+        $message->userto = $item->userid;
+        $message->subject = get_string($item->type . '_title', 'local_sharewith');
+        $message->fullmessage = '';
+        $message->fullmessageformat = FORMAT_HTML;
+        $message->fullmessagehtml = get_string($item->type . '_fullmessage', 'local_sharewith', $a);
+        $message->smallmessage = get_string('notification_smallmessage_copied', 'local_sharewith');
+        $message->notification = 1;
+        $message->replyto = "";
+        $message->courseid = $item->courseid;
+        $messageid = message_send($message);
     }
 
 }
