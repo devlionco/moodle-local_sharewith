@@ -269,35 +269,26 @@ function local_sharewith_get_teachers($activityid, $courseid) {
     $context = context_course::instance($courseid);
     $PAGE->set_context($context);
 
-    // Find teachers sended message.
+    // Find teachers whom sent message previously.
     $sql = "
         SELECT
-        ass.id,
-        ass.useridto AS user_id,
-        u.firstname AS firstname,
-        u.lastname AS lastname,
-        CONCAT(u.firstname, ' ', u.lastname) AS teacher_name,
-        CONCAT('" . $CFG->wwwroot . "/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
-        DATE_FORMAT(FROM_UNIXTIME(ass.timecreated), '%d.%m.%Y') AS date,
-        DATE_FORMAT(FROM_UNIXTIME(ass.timecreated), '%k:%i') AS time
-
-        FROM
-        (
-            SELECT *
-            FROM {local_sharewith_shared}
-            WHERE source IS NULL
-            ORDER BY timecreated DESC
-        ) AS ass
-
-        LEFT JOIN {user} u ON (ass.useridto=u.id)
-        WHERE ass.useridfrom=? AND ass.activityid=?
-        GROUP BY ass.useridto
+            DISTINCT(u.id) AS user_id,
+            u.firstname AS firstname,
+            u.lastname AS lastname,
+            CONCAT(u.firstname, ' ', u.lastname) AS teacher_name,
+            CONCAT('" . $CFG->wwwroot . "/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url
+            FROM {local_sharewith_shared} lss
+            LEFT JOIN {user} u
+                ON (lss.useridto=u.id)
+            WHERE lss.useridfrom=? AND lss.activityid=?
+                 AND (lss.source IS NULL OR lss.source = '')
     ";
     $arrteachers = $DB->get_records_sql($sql, array($USER->id, $activityid));
 
     $result = ($arrteachers) ? 1 : 0;
 
     $arr = array('activityid' => $activityid, 'courseid' => $courseid, 'teachers' => array_values($arrteachers));
+
     $html = $OUTPUT->render_from_template('local_sharewith/select_teacher', $arr);
 
     return json_encode(array('result' => $result, 'html' => $html));
@@ -408,22 +399,22 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 $a = new stdClass;
                 $a->restore_id = $rowid;
                 $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id;
-                $fullmessage = get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
+                $fullmessage = $message . "<br>" . get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 
-                $message = new \core\message\message();
-                $message->component = 'local_sharewith';
-                $message->name = 'sharewith_notification';
-                $message->userfrom = $USER->id;
-                $message->userto = $teacherid;
-                $message->subject = $subject;
-                $message->fullmessage = $fullmessage;
-                $message->fullmessageformat = FORMAT_HTML;
-                $message->fullmessagehtml = $fullmessage;
-                $message->smallmessage = get_string('info_message_for_teacher', 'local_sharewith');
-                $message->notification = 1;
-                $message->replyto = "";
-                $message->courseid = $courseid;
-                $messageid = message_send($message);
+                $notif = new \core\message\message();
+                $notif->component = 'local_sharewith';
+                $notif->name = 'sharewith_notification';
+                $notif->userfrom = 1;
+                $notif->userto = $teacherid;
+                $notif->subject = $subject;
+                $notif->fullmessage = $fullmessage;
+                $notif->fullmessageformat = FORMAT_HTML;
+                $notif->fullmessagehtml = $fullmessage;
+                $notif->smallmessage = get_string('info_message_for_teacher', 'local_sharewith');
+                $notif->notification = 1;
+                $notif->replyto = "";
+                $notif->courseid = $courseid;
+                $messageid = message_send($notif);
             }
         }
     }

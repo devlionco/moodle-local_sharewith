@@ -66,13 +66,17 @@
     margin-top: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .prof__header {
     padding: 0 14px;
     margin: 0;
     color: #fff;
+    font-weight: bold;
     border-radius: 5px 5px 0 0;
+    background-color: #ccc;
 }
 .prof__form {
     display: flex;
