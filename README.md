@@ -24,7 +24,7 @@ Share activities flow - Teacher send activity to others
 -------
 ![Share Activity](https://blog.devlion.co/wp-content/uploads/Share_with_plugin_-_Google_Slides-1568x919.png) 
 
-Copy items flow - Teacher duplicate itemns
+Copy items flow - Teacher duplicate items
 -------
 ![Copy Activity](https://blog.devlion.co/wp-content/uploads/Sharewith-Plugin-1.jpg) 
 
