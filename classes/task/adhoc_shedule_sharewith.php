@@ -64,8 +64,8 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
         if ($lock !== false) {
             $this->run_cron_sharewith();
-            $lock->release();
         }
+        $lock->release(); 
     }
 
     /**
