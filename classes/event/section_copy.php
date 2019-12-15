@@ -61,7 +61,6 @@ class section_copy extends \core\event\base {
      */
     public function get_description() {
         $userid = $this->other['userid'];
-        $instanceid = $this->other['instanceid'];
         $targetcourseid = $this->other['targetcourseid'];
         $sectionid = $this->other['sectionid'];
 
