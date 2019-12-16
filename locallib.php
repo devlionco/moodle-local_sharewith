@@ -326,7 +326,7 @@ function local_sharewith_autocomplete_teachers($searchstring) {
                 u.email AS teacher_mail
             FROM {course} c,
                  {role_assignments} AS ra,
-                 {user} AS u, mdl_context AS ct
+                 {user} AS u, {context} AS ct
             WHERE c.id = ct.instanceid
                 AND ra.roleid IN(1,2,3,4)
                 AND ra.userid = u.id
@@ -370,7 +370,7 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
         $sql = " SELECT DISTINCT u.id
             FROM {course} c,
                  {role_assignments} AS ra,
-                 {user} AS u, mdl_context AS ct
+                 {user} AS u, {context} AS ct
             WHERE
                 c.id = ct.instanceid
                 AND ra.roleid IN(1,2,3,4)
