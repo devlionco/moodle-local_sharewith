@@ -575,12 +575,12 @@ define([
                 var id;
                 for (id in units) {
                     var unit = document.createElement('li');
-                    unit.dataset.id = units[id].teacher_id;
+                    unit.dataset.id = units[id].id;
                     unit.classList.add('dest__unit');
                     unit.innerHTML = '<div class = "dest__img" >' +
                     '<img src = "' + M.cfg.wwwroot + units[id].teacher_url + '" alt = "">' +
                     '</div><span class = "dest__name">' + units[id].teacher_name + '</span>';
-                    if (tagWrapper.querySelector('div.dest__dummy[data-id="' + units[id].teacher_id + '"]')) {
+                    if (tagWrapper.querySelector('div.dest__dummy[data-id="' + units[id].id + '"]')) {
                         unit.classList.add('dest__selected');
                     }
                     resultBlock.style.display = 'block';
@@ -611,13 +611,13 @@ define([
             var setCurrentDestination = function(teacher) { // Add choosed name to the input block.
                 var dummy = document.createElement('div');
                 dummy.classList.add('dest__dummy');
-                dummy.dataset.id = teacher.teacher_id;
+                dummy.dataset.id = teacher.id;
                 dummy.innerHTML = '<span class = "dest__dummy-del"></span><span>' + teacher.teacher_name + '</span>';
 
                 dummy.querySelector('.dest__dummy-del').onclick = function(e) {
                     e.target.parentNode.remove();
-                    if (document.querySelector('li.dest__unit[data-id="' + teacher.teacher_id + '"]')) {
-                        document.querySelector('li.dest__unit[data-id="' + teacher.teacher_id + '"]')
+                    if (document.querySelector('li.dest__unit[data-id="' + teacher.id + '"]')) {
+                        document.querySelector('li.dest__unit[data-id="' + teacher.id + '"]')
                         .classList.remove('dest__selected');
                     }
                     if (!document.querySelector('.dest__dummy')) {
@@ -670,7 +670,7 @@ define([
                 });
 
                 var activityId = $("#send_popup_activity_id").val();
-                var courseId = $("#send_popup_course_id").val();
+                var courseId = $("#send_popup_courseid").val();
                 var message = $("#send_popup_message").val();
 
                 Ajax.call([{

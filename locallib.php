@@ -25,14 +25,15 @@ defined('MOODLE_INTERNAL') || die();
 
 global $sharingtypes;
 $sharingtypes = array(
-    'coursecopy',
-    'sectioncopy',
-    'activitycopy',
-    'activityshare',
+        'coursecopy',
+        'sectioncopy',
+        'activitycopy',
+        'activityshare',
 );
 
 /**
  * Check permisstions for copy
+ *
  * @param str $type
  * @param int $userid
  * @param int $sourceuserid
@@ -41,7 +42,7 @@ $sharingtypes = array(
  * @param int $categoryid
  * @return boolean
  */
-function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid=null) {
+function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid = null) {
 
     switch ($type) {
         case "coursecopy":
@@ -68,6 +69,7 @@ function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $s
 
 /**
  * Check permisstions for share activity
+ *
  * @param int $userid
  * @param int $sourceuserid
  * @param int $sourcecourseid
@@ -85,6 +87,7 @@ function local_sharewith_permission_allow_share($userid, $sourceuserid, $sourcec
 
 /**
  * Add task
+ *
  * @param string $type
  * @param int $userid
  * @param int $sourceuserid
@@ -123,6 +126,7 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
 
 /**
  * Add new task for saving activity
+ *
  * @param string $type
  * @param int $shareid
  * @param int $courseid
@@ -174,6 +178,7 @@ function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $cate
 
 /**
  * Get categories
+ *
  * @return obj
  */
 function local_sharewith_get_categories() {
@@ -187,6 +192,7 @@ function local_sharewith_get_categories() {
 
 /**
  * Get user courses
+ *
  * @return obj
  */
 function local_sharewith_get_courses() {
@@ -225,6 +231,7 @@ function local_sharewith_get_courses() {
 
 /**
  * Get sections by course
+ *
  * @param int $courseid
  * @return obj
  */
@@ -259,6 +266,7 @@ function local_sharewith_get_section_bycourse($courseid) {
 
 /**
  * Get teachers
+ *
  * @param int $activityid
  * @param int $courseid
  * @return obj
@@ -296,18 +304,22 @@ function local_sharewith_get_teachers($activityid, $courseid) {
 
 /**
  * Get teachers
+ *
  * @param string $searchstring
  * @return string
  */
 function local_sharewith_autocomplete_teachers($searchstring) {
-    global $USER, $DB;
+    global $DB;
 
     $result = '';
     if (!empty($searchstring)) {
-        $sql = "
+        $roles = get_config('local_sharewith', 'roles');
+        $teachers = [];
+        if ($roles) {
+            $sql = "
             SELECT
-                DISTINCT u.id AS teacher_id,
-                c.id AS course_id,
+                DISTINCT u.id,
+                c.id AS courseid,
                 c.fullname AS full_name,
                 u.username AS user_name,
                 u.firstname AS firstname,
@@ -317,23 +329,22 @@ function local_sharewith_autocomplete_teachers($searchstring) {
                 u.email AS teacher_mail
             FROM {course} c,
                  {role_assignments} AS ra,
-                 {user} AS u, mdl_context AS ct
+                 {user} AS u, {context} AS ct
             WHERE c.id = ct.instanceid
-                AND ra.roleid IN(1,2,3,4)
+                AND ra.roleid IN($roles)
                 AND ra.userid = u.id
                 AND ct.id = ra.contextid
                 AND ( u.email LIKE(?)
                     OR u.lastname LIKE(?)
                     OR u.firstname LIKE(?)
                     OR u.username LIKE(?)
-                    OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?))
-            GROUP BY u.id;
+                    OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?));
         ";
-
-        $searchstrquery = '%' . $searchstring . '%';
-        $arrteachers = $DB->get_records_sql($sql, array($searchstrquery, $searchstrquery,
-            $searchstrquery, $searchstrquery, $searchstrquery));
-        $result = json_encode($arrteachers);
+            $searchstrquery = '%' . $searchstring . '%';
+            $teachers = $DB->get_records_sql($sql, array($searchstrquery, $searchstrquery,
+                    $searchstrquery, $searchstrquery, $searchstrquery));
+        }
+        $result = json_encode($teachers);
     }
 
     return $result;
@@ -341,6 +352,7 @@ function local_sharewith_autocomplete_teachers($searchstring) {
 
 /**
  * Submit new task to add activity
+ *
  * @param int $activityid
  * @param int $courseid
  * @param int $teachersid
@@ -356,27 +368,30 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
     $teachersid = json_decode($teachersid);
     if (!empty($teachersid) && !empty($activityid) && $activityid != 0 && !empty($courseid) && $courseid != 0) {
 
-        $arrteachers = $DB->get_records_sql("
-            SELECT DISTINCT u.id AS teacher_id
-            FROM {course} c,
-                 {role_assignments} AS ra,
-                 {user} AS u, mdl_context AS ct
-            WHERE
-                c.id = ct.instanceid
-                AND ra.roleid IN(1,2,3,4)
-                AND ra.userid = u.id
-                AND ct.id = ra.contextid
-            GROUP BY u.id;
-        ");
+        $roles = get_config('local_sharewith', 'roles');
+        $teachers = [];
+        if ($roles) {
 
-        $arrfortest = array();
-        foreach ($arrteachers as $item) {
-            $arrfortest[] = $item->teacher_id;
+            $sql = "SELECT DISTINCT u.id
+                FROM {course} c,
+                     {role_assignments} AS ra,
+                     {user} AS u, {context} AS ct
+                WHERE
+                    c.id = ct.instanceid
+                    AND ra.roleid IN ($roles)
+                    AND ra.userid = u.id
+                    AND ct.id = ra.contextid;";
+            $teachers = $DB->get_records_sql($sql);
+        }
+
+        $teacherlist = array();
+        foreach ($teachers as $item) {
+            $teacherlist[] = $item->id;
         }
 
         foreach ($teachersid as $teacherid) {
             // Check if present teacher.
-            if (in_array($teacherid, $arrfortest)) {
+            if (in_array($teacherid, $teacherlist)) {
 
                 // Save in local_sharewith_shared.
                 $objinsert = new stdClass();
@@ -442,8 +457,8 @@ function local_sharewith_check_metadata_id($cmid) {
                    AND fieldid = :fieldid";
 
     $srcmetadatafieldid = $DB->get_record_sql($sql, array(
-        'instanceid' => $cmid,
-        'fieldid' => $fieldid->id
+            'instanceid' => $cmid,
+            'fieldid' => $fieldid->id
     ));
 
     if (empty($srcmetadatafieldid)) {

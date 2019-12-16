@@ -27,8 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'שיתוף פעילויות';
 
 $string['menucoursenode'] = 'העתק קורס ליחידה';
-$string['wordcopy'] = 'Copy';
-$string['defaultsectionname'] = 'Topic';
+$string['wordcopy'] = 'העתק';
+$string['defaultsectionname'] = 'יחידה';
 
 // Cron.
 $string['tasksharewith'] = 'פעילות שיתוף משימות';
@@ -42,18 +42,18 @@ $string['settingsactivityteachercopy'] = 'העתק פעילות למורה';
 $string['settingsactivityteachercopydesc'] = 'הפעלה / השבתה של פעילות העתקה למורה';
 $string['settingsactivitycopy'] = 'העתק פעילות לעצמו';
 $string['settingsactivitycopydesc'] = 'הפעלה / השבתה של פעילות העתקה לעצמו';
-$string['settingsactivitysending'] = 'Send activity';
-$string['settingsactivitysendingdesc'] = 'Enable/disable send activities';
+$string['settingsactivitysending'] = 'שליחת פעילות';
+$string['settingsactivitysendingdesc'] = 'הפעלה / השבתה שליחת פעילות';
 
 // Events.
 $string['eventcoursecopy'] = 'העתק קורס';
 $string['eventsectioncopy'] = 'העתק יחידה';
 $string['eventactivitycopy'] = 'העתק פעילות';
-$string['eventactivityshare'] = 'Share activity';
+$string['eventactivityshare'] = 'שיתוף פעילות';
 
 // Modals.
 $string['selectioncategories'] = 'בחר קטגוריה להעתקת הקורס';
-$string['sectionselection'] = 'Select topic';
+$string['sectionselection'] = 'בחירת יחידה';
 $string['selectcourse'] = 'בחירת קורס';
 $string['selectcourse_and_section'] = 'בחירת קורס ויחידה';
 $string['selecttopic'] = 'בחירת יחידה';
@@ -71,7 +71,7 @@ $string['eventcopytomaagar'] = "העתק למאגר";
 $string['eventcopytoteacher'] = "שיתוף פעילות";
 $string['eventdownloadtoteacher'] = "הורדת פעילות";
 $string['eventdublicatetoteacher'] = "העתקת פעילות";
-$string['eventcoursemodulevisibilitychanged'] = "Course module visibility cahnged";
+$string['eventcoursemodulevisibilitychanged'] = "Course module visibility changed";
 
 $string['menu_popup_title'] = "בחר כיצד אתה רוצה לשתף";
 $string['menu_popup_maagar'] = "פירסום במאגר המשותף";
@@ -85,9 +85,9 @@ $string['user_foto'] = "משתמש";
 $string['nosharing'] = "עדיין לא נשלח";
 
 $string['subject_message_for_teacher_by'] = 'פעילות {$a->activity_name} התווספה על ידי {$a->teacher_name}';
-$string['subject_message_for_teacher'] = 'You can share activity-{$a->activity_name} from teacher {$a->teacher_name}';
-$string['fullmessagehtml_for_teacher'] = 'You can share activity <a data-handler="saveActivity" data-sharing="{$a->restore_id}" href="#">here</a>';
-$string['info_message_for_teacher'] = 'Message from Sharing Activity';
+$string['subject_message_for_teacher'] = '{$a->teacher_name} תוכל לשתף פעילות {$a->activity_name} ממשתמש  ';
+$string['fullmessagehtml_for_teacher'] = '<a data-handler="saveActivity" data-sharing="{$a->restore_id}" href="#">לחץ לשיתוף</a> תוכל לשתף פעילות ';
+$string['info_message_for_teacher'] = 'הודעה מתוסף משיתוף';
 $string['enter_subject_name'] = 'נא להזין את שם הפריט';
 
 $string['share'] = 'שיתוף';
@@ -97,15 +97,15 @@ $string['share_national_shared'] = 'שיתוף במאגר המשותף הארצ�
 $string['send_to_teacher'] = 'שלח למורה';
 $string['transfer_another_course'] = 'העתקה לקורס אחר שלי';
 
-$string['succesfullyshared'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
+$string['succesfullyshared'] = 'הבקשה עודכנה בהצלחה. יועתק לאחר מספר דקות. תודה!';
 
-$string['activitycopy_title'] = 'Activity';
-$string['sectioncopy_title'] = 'Section';
-$string['coursecopy_title'] = 'Course';
-$string['notification_smallmessage_copied'] = 'Successfully copied!';
-$string['activitycopy_fullmessage'] = 'Your activity was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
-$string['sectioncopy_fullmessage'] = 'Your section was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
-$string['coursecopy_fullmessage'] = 'Your course was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
+$string['activitycopy_title'] = 'פעילות';
+$string['sectioncopy_title'] = 'יחדיה';
+$string['coursecopy_title'] = 'קורס';
+$string['notification_smallmessage_copied'] = 'מועתק בהצלחה';
+$string['activitycopy_fullmessage'] = '<a href="{$a->link}">{$a->coursename}</a> מועתק בהצלחה לקורס';
+$string['sectioncopy_fullmessage'] = '<a href="{$a->link}">{$a->coursename} מועתק בהצלחה לקורס</a> ';
+$string['coursecopy_fullmessage'] = '<a href="{$a->link}">{$a->coursename}</a> מועתק בהצלחה לקורס';
 
 // Sharing popup.
 $string['choose'] = 'יש לבחור...';
@@ -120,6 +120,9 @@ $string['sharing_sent_successfully'] = 'הזמנה לשיתוף נשלחה בה�
 $string['staudysection'] = 'יחידת־הוראה ';
 $string['select_sub_topic'] = 'בחירת סעיף בתת נושא';
 
-$string['selectteacher'] = 'Select Teacher';
-$string['activitydeleted'] = 'This activity was deleted by author.';
-$string['sendingnotallowed'] = 'Share activities disabled by administrator.';
+$string['selectteacher'] = 'בחר';
+$string['activitydeleted'] = 'הפעילות נמחק';
+$string['sendingnotallowed'] = 'אין הרשאה לשלוח';
+
+$string['rolesoptions'] = 'תפקידים שניתן לשתף את הפעילות';
+$string['rolesdisplayoptions'] = 'תפקידים שמאפשרים לעשות פעולה שיתוף';
