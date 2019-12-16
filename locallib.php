@@ -313,7 +313,10 @@ function local_sharewith_autocomplete_teachers($searchstring) {
 
     $result = '';
     if (!empty($searchstring)) {
-        $sql = "
+        $roles = get_config('local_sharewith', 'roles');
+        $teachers = [];
+        if ($roles) {
+            $sql = "
             SELECT
                 DISTINCT u.id,
                 c.id AS courseid,
@@ -328,21 +331,20 @@ function local_sharewith_autocomplete_teachers($searchstring) {
                  {role_assignments} AS ra,
                  {user} AS u, {context} AS ct
             WHERE c.id = ct.instanceid
-                AND ra.roleid IN(1,2,3,4)
+                AND ra.roleid IN($roles)
                 AND ra.userid = u.id
                 AND ct.id = ra.contextid
                 AND ( u.email LIKE(?)
                     OR u.lastname LIKE(?)
                     OR u.firstname LIKE(?)
                     OR u.username LIKE(?)
-                    OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?))
-            GROUP BY u.id;
+                    OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?));
         ";
-
-        $searchstrquery = '%' . $searchstring . '%';
-        $arrteachers = $DB->get_records_sql($sql, array($searchstrquery, $searchstrquery,
-                $searchstrquery, $searchstrquery, $searchstrquery));
-        $result = json_encode($arrteachers);
+            $searchstrquery = '%' . $searchstring . '%';
+            $teachers = $DB->get_records_sql($sql, array($searchstrquery, $searchstrquery,
+                    $searchstrquery, $searchstrquery, $searchstrquery));
+        }
+        $result = json_encode($teachers);
     }
 
     return $result;
@@ -366,18 +368,21 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
     $teachersid = json_decode($teachersid);
     if (!empty($teachersid) && !empty($activityid) && $activityid != 0 && !empty($courseid) && $courseid != 0) {
 
+        $roles = get_config('local_sharewith', 'roles');
+        $teachers = [];
+        if ($roles) {
 
-        $sql = " SELECT DISTINCT u.id
-            FROM {course} c,
-                 {role_assignments} AS ra,
-                 {user} AS u, {context} AS ct
-            WHERE
-                c.id = ct.instanceid
-                AND ra.roleid IN(1,2,3,4)
-                AND ra.userid = u.id
-                AND ct.id = ra.contextid;";
-
-        $teachers = $DB->get_records_sql($sql);
+            $sql = "SELECT DISTINCT u.id
+                FROM {course} c,
+                     {role_assignments} AS ra,
+                     {user} AS u, {context} AS ct
+                WHERE
+                    c.id = ct.instanceid
+                    AND ra.roleid IN ($roles)
+                    AND ra.userid = u.id
+                    AND ct.id = ra.contextid;";
+            $teachers = $DB->get_records_sql($sql);
+        }
 
         $teacherlist = array();
         foreach ($teachers as $item) {

@@ -71,7 +71,7 @@ $string['eventcopytoteacher'] = "Share to teachers";
 $string['eventdownloadtoteacher'] = "Download activity";
 $string['eventdublicatetoteacher'] = "Copy activity";
 $string['activity_copied_to_course'] = 'Activity is copied to the course';
-$string['eventcoursemodulevisibilitychanged'] = "Course module visibility cahnged";
+$string['eventcoursemodulevisibilitychanged'] = "Course module visibility changed";
 
 $string['menu_popup_title'] = "Choose how you want to share";
 $string['menu_popup_maagar'] = "Post in the Shared Database";
@@ -125,3 +125,6 @@ $string['staudysection'] = 'Study Topic';
 $string['selectteacher'] = 'Select Teacher';
 $string['activitydeleted'] = 'This activity was deleted by author.';
 $string['sendingnotallowed'] = 'Share activities disabled by administrator.';
+
+$string['rolesoptions'] = 'Sharing roles permissions ';
+$string['rolesdisplayoptions'] = 'Roles that can be shared activities';
