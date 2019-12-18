@@ -18,39 +18,39 @@
  * The local_sharewith chapter viewed event.
  *
  * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
+ * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_sharewith\event;
-
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Section copy
- * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class section_copy extends \core\event\base {
-
+class course_copied extends \core\event\base {
     /**
      * Create instance of event.
      *
-     * @param int $id
-     * @param obj $eventdata
-     * @return obj
+     * @since Moodle 2.7
+     *
+     * @param \stdClass $book
+     * @param \context_module $context
+     * @param \stdClass $chapter
+     * @return chapter_viewed
      */
+     
     public static function create_event($id, $eventdata) {
-
+        
         $contextid = \context_course::instance($id);
-
+        
         $data = array(
             'context' => $contextid,
             'other' => $eventdata
         );
         /** @var chapter_viewed $event */
+                        
         $event = self::create($data);
+        
+        $f = new \stdClass();        
+        //$event->add_record_snapshot('enter_maagar', $f);        
         return $event;
     }
 
@@ -61,11 +61,12 @@ class section_copy extends \core\event\base {
      */
     public function get_description() {
         $userid = $this->other['userid'];
-        $instanceid = $this->other['instanceid'];
-        $targetcourseid = $this->other['targetcourseid'];
-        $sectionid = $this->other['sectionid'];
+        $new_courseid = $this->other['new_courseid'];
+        $old_courseid = $this->other['old_courseid'];
+        $category = $this->other['category'];
+        $name_course = $this->other['name_course'];
 
-        return "The user with id '$userid' copied section with id '$sectionid' to course id " . $targetcourseid;
+        return "The user with id '$userid' copied course id '$old_courseid' to course '$name_course' with id '$new_courseid'";
     }
 
     /**
@@ -83,7 +84,7 @@ class section_copy extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventsectioncopy', 'local_sharewith');
+        return get_string('eventcoursecopied', 'local_sharewith');
     }
 
     /**
@@ -105,12 +106,7 @@ class section_copy extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
-    /**
-     * Get mapping
-     * @return array
-     */
     public static function get_objectid_mapping() {
         return array();
     }
-
 }

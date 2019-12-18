@@ -25,15 +25,14 @@ defined('MOODLE_INTERNAL') || die();
 
 global $sharingtypes;
 $sharingtypes = array(
-        'coursecopy',
-        'sectioncopy',
-        'activitycopy',
-        'activityshare',
+    'coursecopy',
+    'sectioncopy',
+    'activitycopy',
+    'activityshare',
 );
 
 /**
  * Check permisstions for copy
- *
  * @param str $type
  * @param int $userid
  * @param int $sourceuserid
@@ -42,14 +41,12 @@ $sharingtypes = array(
  * @param int $categoryid
  * @return boolean
  */
-function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid = null) {
+function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid=null) {
 
     switch ($type) {
         case "coursecopy":
-            if (has_capability('local/sharewith:copycourse', context_course::instance($sourcecourseid), $sourceuserid)
-                    AND has_capability('local/sharewith:copycourse', context_coursecat::instance($categoryid), $userid)) {
-                return true;
-            }
+
+            return true;
             break;
         case "sectioncopy":
             if (has_capability('local/sharewith:copysection', context_course::instance($sourcecourseid), $sourceuserid)
@@ -69,7 +66,6 @@ function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $s
 
 /**
  * Check permisstions for share activity
- *
  * @param int $userid
  * @param int $sourceuserid
  * @param int $sourcecourseid
@@ -87,7 +83,6 @@ function local_sharewith_permission_allow_share($userid, $sourceuserid, $sourcec
 
 /**
  * Add task
- *
  * @param string $type
  * @param int $userid
  * @param int $sourceuserid
@@ -104,6 +99,7 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
         $categoryid = null, $sourceactivityid = null, $metadata = null) {
     global $DB;
 
+    $result = false;
     // Check permission.
     if (local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $sourcecourseid, $courseid, $categoryid)) {
         $obj = new \stdClass();
@@ -120,13 +116,13 @@ function local_sharewith_add_task($type, $userid, $sourceuserid, $sourcecourseid
         $obj->status = 0;
         $obj->timemodified = time();
 
-        return $DB->insert_record('local_sharewith_task', $obj);
+        $result = $DB->insert_record('local_sharewith_task', $obj);
     }
+    return $result;
 }
 
 /**
  * Add new task for saving activity
- *
  * @param string $type
  * @param int $shareid
  * @param int $courseid
@@ -178,21 +174,19 @@ function local_sharewith_save_task($type, $shareid, $courseid, $sectionid, $cate
 
 /**
  * Get categories
- *
  * @return obj
  */
 function local_sharewith_get_categories() {
     global $DB;
 
-    // Get all categories.
+    // Get all visible categories.
     $categories = $DB->get_records('course_categories', array('visible' => 1));
 
-    return $categories;
+    return array_values($categories);
 }
 
 /**
  * Get user courses
- *
  * @return obj
  */
 function local_sharewith_get_courses() {
@@ -231,7 +225,6 @@ function local_sharewith_get_courses() {
 
 /**
  * Get sections by course
- *
  * @param int $courseid
  * @return obj
  */
@@ -266,13 +259,12 @@ function local_sharewith_get_section_bycourse($courseid) {
 
 /**
  * Get teachers
- *
  * @param int $activityid
  * @param int $courseid
  * @return obj
  */
 function local_sharewith_get_teachers($activityid, $courseid) {
-    global $DB, $USER, $OUTPUT, $PAGE, $CFG;
+    global $DB, $PAGE;
 
     $context = context_course::instance($courseid);
     $PAGE->set_context($context);
@@ -291,20 +283,13 @@ function local_sharewith_get_teachers($activityid, $courseid) {
             WHERE lss.useridfrom=? AND lss.activityid=?
                  AND (lss.source IS NULL OR lss.source = '')
     ";
-    $arrteachers = $DB->get_records_sql($sql, array($USER->id, $activityid));
-
-    $result = ($arrteachers) ? 1 : 0;
-
-    $arr = array('activityid' => $activityid, 'courseid' => $courseid, 'teachers' => array_values($arrteachers));
-
-    $html = $OUTPUT->render_from_template('local_sharewith/select_teacher', $arr);
-
-    return json_encode(array('result' => $result, 'html' => $html));
+    $result = $DB->get_records_sql($sql, array($USER->id, $activityid));
+    $teachers['teachers'] = array_values($result);
+    return json_encode($teachers);
 }
 
 /**
  * Get teachers
- *
  * @param string $searchstring
  * @return string
  */
@@ -313,46 +298,47 @@ function local_sharewith_autocomplete_teachers($searchstring) {
 
     $result = '';
     if (!empty($searchstring)) {
+
         $roles = get_config('local_sharewith', 'roles');
         $teachers = [];
         if ($roles) {
             $sql = "
-            SELECT
-                DISTINCT u.id,
-                c.id AS courseid,
-                c.fullname AS full_name,
-                u.username AS user_name,
-                u.firstname AS firstname,
-                u.lastname AS lastname,
-                CONCAT(u.firstname, ' ', u.lastname) AS teacher_name,
-                CONCAT('/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
-                u.email AS teacher_mail
-            FROM {course} c,
-                 {role_assignments} AS ra,
-                 {user} AS u, {context} AS ct
-            WHERE c.id = ct.instanceid
-                AND ra.roleid IN($roles)
-                AND ra.userid = u.id
-                AND ct.id = ra.contextid
-                AND ( u.email LIKE(?)
-                    OR u.lastname LIKE(?)
-                    OR u.firstname LIKE(?)
-                    OR u.username LIKE(?)
-                    OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?));
-        ";
+                SELECT
+                    DISTINCT u.id AS id,
+                    c.id AS courseid,
+                    c.fullname AS full_name,
+                    u.username AS user_name,
+                    u.firstname AS firstname,
+                    u.lastname AS lastname,
+                    CONCAT(u.firstname, ' ', u.lastname) AS teacher_name,
+                    CONCAT('/user/pix.php/', u.id ,'/f1.jpg') AS teacher_url,
+                    u.email AS teacher_mail
+                FROM {course} c,
+                     {role_assignments} AS ra,
+                     {user} AS u, {context} AS ct
+                WHERE c.id = ct.instanceid
+                    AND ra.roleid IN(1,2,3,4)
+                    AND ra.userid = u.id
+                    AND ct.id = ra.contextid
+                    AND ( u.email LIKE(?)
+                        OR u.lastname LIKE(?)
+                        OR u.firstname LIKE(?)
+                        OR u.username LIKE(?)
+                        OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?))
+                GROUP BY u.id;
+            ";
+
             $searchstrquery = '%' . $searchstring . '%';
             $teachers = $DB->get_records_sql($sql, array($searchstrquery, $searchstrquery,
-                    $searchstrquery, $searchstrquery, $searchstrquery));
+                $searchstrquery, $searchstrquery, $searchstrquery));
         }
-        $result = json_encode($teachers);
+        $result = json_encode(array_values($teachers));
     }
-
     return $result;
 }
 
 /**
  * Submit new task to add activity
- *
  * @param int $activityid
  * @param int $courseid
  * @param int $teachersid
@@ -370,6 +356,7 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
 
         $roles = get_config('local_sharewith', 'roles');
         $teachers = [];
+
         if ($roles) {
 
             $sql = "SELECT DISTINCT u.id
@@ -405,7 +392,9 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 $objinsert->timecreated = time();
 
                 $rowid = $DB->insert_record('local_sharewith_shared', $objinsert);
-
+                if (!$rowid) {
+                    return false;
+                }
                 // Prepare message for user.
                 $a = new stdClass;
                 $a->activity_name = $cm->name;
@@ -413,7 +402,8 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
                 $a = new stdClass;
                 $a->restore_id = $rowid;
-                $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id;
+                $a->activityid = $activityid;
+                $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id.'&swactivityname='.$cm->name;
                 $fullmessage = $message . "<br>" . get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 
                 $notif = new \core\message\message();
@@ -430,10 +420,13 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                 $notif->replyto = "";
                 $notif->courseid = $courseid;
                 $messageid = message_send($notif);
+                if (!$messageid) {
+                    return false;
+                }
             }
         }
     }
-    return '';
+    return $messageid;
 }
 
 /**
@@ -457,8 +450,8 @@ function local_sharewith_check_metadata_id($cmid) {
                    AND fieldid = :fieldid";
 
     $srcmetadatafieldid = $DB->get_record_sql($sql, array(
-            'instanceid' => $cmid,
-            'fieldid' => $fieldid->id
+        'instanceid' => $cmid,
+        'fieldid' => $fieldid->id
     ));
 
     if (empty($srcmetadatafieldid)) {

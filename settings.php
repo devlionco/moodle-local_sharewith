@@ -17,19 +17,52 @@
 /**
  * Plugin administration pages are defined here.
  *
- * @package     local_sharewith
- * @copyright   2018 Devlion <info@devlion.co>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_sharewith
+ * @copyright 2018 Devlion <info@devlion.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+use tool_dataprivacy\output\categories;
+use function PHPSTORM_META\map;
+
+global $PAGE;
+
+$setting = new admin_settingpage('local_sharewith', get_string('pluginname', 'local_sharewith'));
+
 if ($hassiteconfig) {
-    $setting = new admin_settingpage('local_sharewith', get_string('pluginname', 'local_sharewith'));
+    $setting->add(new  admin_setting_configcheckbox(
+        'local_sharewith/coursecopy',
+        get_string('settingscoursecopy', 'local_sharewith'),
+        get_string('settingscoursecopydesc', 'local_sharewith'),
+        '1')
+    );
+
+    $setting->add(new  admin_setting_configcheckbox(
+        'local_sharewith/sectioncopy',
+        get_string('settingssectioncopy', 'local_sharewith'),
+        get_string('settingssectioncopydesc', 'local_sharewith'),
+        '1')
+    );
+
+    $setting->add(new  admin_setting_configcheckbox(
+        'local_sharewith/activitycopy',
+        get_string('settingsactivitycopy', 'local_sharewith'),
+        get_string('settingsactivitycopydesc', 'local_sharewith'),
+        '1')
+    );
+
+    $setting->add(new  admin_setting_configcheckbox(
+        'local_sharewith/activitysending',
+        get_string('settingsactivitysending', 'local_sharewith'),
+        get_string('settingsactivitysendingdesc', 'local_sharewith'),
+        '1')
+    );
 
     $sql = "SELECT id, name, shortname
-              FROM {role} 
-              ";
+          FROM {role}
+          ";
 
     $roles = $DB->get_records_sql($sql);
     $displayoptions = [];
@@ -43,35 +76,5 @@ if ($hassiteconfig) {
             get_string('rolesoptions', 'local_sharewith'),
             get_string('rolesdisplayoptions', 'local_sharewith'),
             $defaultdisplayoptions, $displayoptions));
-
-    $setting->add(new  admin_setting_configcheckbox(
-                    'local_sharewith/coursecopy',
-                    get_string('settingscoursecopy', 'local_sharewith'),
-                    get_string('settingscoursecopydesc', 'local_sharewith'),
-                    '1')
-    );
-
-    $setting->add(new  admin_setting_configcheckbox(
-                    'local_sharewith/sectioncopy',
-                    get_string('settingssectioncopy', 'local_sharewith'),
-                    get_string('settingssectioncopydesc', 'local_sharewith'),
-                    '1')
-    );
-
-    $setting->add(new  admin_setting_configcheckbox(
-                    'local_sharewith/activitycopy',
-                    get_string('settingsactivitycopy', 'local_sharewith'),
-                    get_string('settingsactivitycopydesc', 'local_sharewith'),
-                    '1')
-    );
-
-    $setting->add(new  admin_setting_configcheckbox(
-                    'local_sharewith/activitysending',
-                    get_string('settingsactivitysending', 'local_sharewith'),
-                    get_string('settingsactivitysendingdesc', 'local_sharewith'),
-                    '1')
-    );
-
-    $ADMIN->add('localplugins', $setting);
-
 }
+$ADMIN->add('localplugins', $setting);

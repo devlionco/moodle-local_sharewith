@@ -25,73 +25,33 @@
 
 define([
     'jquery',
-    'local_sharewith/buildtree',
-    'local_sharewith/events',
-    'local_sharewith/modal'
-], function ($, buildtree, events, modal) {
+    'local_sharewith/modal',
+    'local_sharewith/sharewithteacher',
+    'local_sharewith/copyinstance'
+], function($, modal, shareWithTeacher, copyInstance) {
 
     var root = document.querySelector('body');
+
     return {
-        init: function (sectioncopy, activitycopy, sendactivity) {
-            events.getCurrentCourse();
-            modal.insertTemplates();
+        init: function(actions) {
+            // Add modal bootstap markup to the DOM
+            modal.insertTemplates(actions).done(function() {
+                modal.addActionNode();
+                shareWithTeacher.init();
+                copyInstance.init();
 
-            if (Number(activitycopy) === 1) {
-                buildtree.addCopyActivityButton(root);
-            }
-
-            if (Number(sectioncopy) === 1) {
-                buildtree.addCopySectionButton(root);
-            }
-
-            if (Number(sendactivity) === 1) {
-                buildtree.addShareActivityButton(root);
-            }
-
-            root.addEventListener('click', function (e) {
-                var target = e.target;
-                while (target !== root) {
-                    // Open popup and choose a category for copying the current course.
-                    if (target.classList.contains('selectCategory')) {
-                        events.selectCategory();
-                        return;
+                root.addEventListener('click', function(e) {
+                    var target = e.target;
+                    while (root.contains(target)) {
+                        switch (target.dataset.handler) {
+                          case 'goBack':
+                              modal.goBack();
+                              break;
+                        }
+                        target = target.parentNode;
                     }
-                    if (target.dataset.handler === 'copyCourseToCategory') {
-                        events.copyCourseToCategory();
-                        return;
-                    }
-                    if (target.dataset.handler === 'selectCourse') {
-                        events.selectCourse(target);
-                        return;
-                    }
-                    if (target.dataset.handler === 'selectTeacher') {
-                        events.selectTeacher(target);
-                        return;
-                    }
-                    if (target.dataset.handler === 'selectSection') {
-                        events.selectSection();
-                        return;
-                    }
-                    if (target.dataset.handler === 'copyActivityToCourse') {
-                        events.copyActivityToCourse();
-                        return;
-                    }
-                    if (target.dataset.handler === 'copySectionToCourse') {
-                        events.copySectionToCourse();
-                        return;
-                    }
-                    if (target.dataset.handler === 'saveActivityToCourse') {
-                        events.saveActivityToCourse();
-                        return;
-                    }
-                    if (target.dataset.handler === 'saveActivity') {
-                        events.saveActivity(target);
-                        return;
-                    }
-                    target = target.parentNode;
-                }
-            });
+                });
+          });
         }
     };
-
 });

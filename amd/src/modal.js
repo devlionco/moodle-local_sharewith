@@ -25,219 +25,213 @@
 
 define([
     'jquery',
-    'core/str',
     'core/templates',
-    'core/notification',
-    'theme_boost/modal'
-], function ($, Str, templates, notification, Modal) {
+    'core/notification'
+], function($, Templates, Notification) {
+
+    var SELECTORS = {
+        modalWrapper: '#modalSharewith',
+        modalContent: '#modalContentSharewith',
+        triggerBtn: '#triggerModalSharewith',
+        editMenu: '.course-content li.activity [role="menu"]',
+        actionMenu: '.course-content li.activity .actions .action-menu',
+        actionBlock: '.course-content li.activity .actions > div',
+        menuSection: '.course-content .section_action_menu [role="menu"]',
+    };
 
     return /** @alias module:local_sharewith/modal */ {
 
-        MODAL: {
-            selectors: {
-                modal: '#selectItem',
-                content: '.modal-content',
-                body: '.modal-body',
-                title: '.modal-title',
-                submit: '[data-ref="submit"]',
-                cancel: '[data-ref="cancel"]',
-                approve: '[data-ref="approve"]',
-                close: '[data-ref="close"]',
-                error: '[data-ref="error"]'
-            },
-            config: {}
+        template: {
+            modalwrapper: 'local_sharewith/modalwrapper',
+            selector: 'local_sharewith/selector',
+            copyinstance: 'local_sharewith/copyinstance',
+            error: 'local_sharewith/error',
+            confirm: 'local_sharewith/confirm',
+            shareteacher: 'local_sharewith/shareteacher',
+            uploadactivity: 'local_sharewith/uploadactivity'
+        },
+
+        actions: '',
+
+        modalInit: false,
+
+        triggerBtn: '',
+
+        modalContent: '',
+
+        modalWrapper: '',
+
+        /**
+         * Clone and add the button for copying activity.
+         *
+         * @method addShareButtonEditMenu
+         * @param {boolean} activitysending send activity to teacher.
+         */
+        addShareButtonEditMenu: function(activitysending) {
+
+            var string = M.util.get_string('use_activity', 'local_sharewith'),
+                menu = $(document).find(SELECTORS.editMenu);
+
+            menu.each(function() {
+                var clone = $(this).children().last().clone();
+                clone
+                    .find('.menu-action-text')
+                    .text(string);
+                clone
+                    .attr('href', '#')
+                    .attr('data-handler', 'openShareWith')
+                    .attr('data-activitysending', activitysending)
+                    .removeAttr('data-action')
+                    .addClass('sharingact_item');
+                clone
+                    .find('.icon')
+                    .attr('title', string)
+                    .attr('aria-label', string)
+                    .removeAttr('class')
+                    .addClass('icon fa fa-share-alt fa-fw');
+
+                $(this).append(clone);
+            });
         },
 
         /**
-         * Insert modal markaps on the page.
+         * Add share button to the activity.
+         *
+         * @method addShareButtonActivity
+         */
+        addShareButtonActivity: function() {
+
+            var menu = $(document).find(SELECTORS.actionMenu),
+                string = M.util.get_string('share', 'local_sharewith');
+
+            menu.each(function() {
+                var shareBtn = $('<button><i class = "icon"></i>' + string + '</button>');
+                    shareBtn
+                        .attr('data-handler', 'openShareWith')
+                        .addClass('btn btn-outline-primary btn-sm');
+                    shareBtn
+                        .find('.icon')
+                        .attr('title', string)
+                        .attr('aria-label', string)
+                        .addClass('fa fa-share-alt fa-fw');
+                shareBtn.insertAfter($(this));
+            });
+        },
+
+        /**
+         * Clone and add the button for copying section.
+         *
+         * @method addCopyActivityButton
+         * @param {jquery} root The root element.
+         */
+        addCopySectionButton: function() {
+
+            var string = M.util.get_string('eventsectioncopy', 'local_sharewith'),
+                menu = $(document).find(SELECTORS.menuSection);
+
+            menu.each(function() {
+                var clone = $(this).children().last().clone();
+                clone
+                    .attr('href', '#')
+                    .attr('data-handler', 'selectCourseForSection');
+                clone
+                    .find('.menu-action-text')
+                    .text(string);
+                clone
+                    .find('.icon')
+                    .removeAttr('class')
+                    .attr('title', string)
+                    .attr('aria-label', string)
+                    .addClass('icon fa fa-copy fa-fw');
+
+                $(this).append(clone);
+            });
+
+        },
+
+        /**
+         * Insert modal markup on the page.
          *
          * @method insertTemplates
+         * @return {Promise|boolean}
+         * @param {object} actions Available actions.
          */
-        insertTemplates: function () {
-            var context = {};
+        insertTemplates: function(actions) {
+            this.actions = actions;
+            var context = {},
+                self = this;
 
-            templates.render('local_sharewith/modal', context)
-                .then(function (html, js) {
-                    return templates.appendNodeContents('body', html, js);
+            return Templates.render('local_sharewith/modalwrapper', context)
+              .done(function(html, js) {
+                    if (!self.modalInit) {
+                        Templates.appendNodeContents('body', html, js);
+                        self.modalInit = true;
+                        self.modalWrapper = document.querySelector(SELECTORS.modalWrapper);
+                        self.modalContent = document.querySelector(SELECTORS.modalContent);
+                        self.triggerBtn = document.querySelector(SELECTORS.triggerBtn);
+                    }
                 })
-                .fail(notification.exception);
+                .fail(Notification.exception);
         },
 
         /**
-         * Initialization and show modal window.
+         * Insert modal markup on the page.
          *
-         * @method init
+         * @method render
+         * @param {string} template The template name.
+         * @param {object} context The context for template.
+         * @return {Promise}
          */
-        init: function () {
-            var element = document.querySelector(this.MODAL.selectors.modal),
-                modal = new Modal.default(element, this.MODAL.config);
-            this.initState();
-            modal.show();
+        render: function(template, context) {
+            var self = this;
+            return Templates.render(template, context)
+                    .done(function(html, js) {
+                        Templates.replaceNodeContents(self.modalContent, html, js);
+                    })
+                    .fail(Notification.exception);
         },
 
         /**
-         * Hide and unset prop of the modal window.
+         * Add necessary nodes to the DOM.
          *
-         * @method hide
+         * @method addActionNode
          */
-        hide: function () {
-            this.initState();
-            this.getClose().trigger('click');
+        addActionNode: function() {
+
+
+            if (this.actions.sectioncopy) {
+                this.addCopySectionButton();
+            }
+            if (this.actions.activitycopy) {
+                // Adding share btn to edit menu
+                this.addShareButtonEditMenu(this.actions.activitysending);
+                // Add share button to activity block
+                // this.addShareButtonActivity();
+            }
+
         },
 
         /**
-         * Drop current state for modal window.
+         * Show spinner.
          *
-         * @method initState
+         * @method addSpinner
          */
-        initState: function () {
-            this.getBody().html('');
-            this.getCancel().show();
-            this.getSubmit().show();
-            this.getApprove().hide();
-            this.getError().hide();
-            this.getContent().removeClass('alert-danger');
+        addBtnSpinner: function() {
+            $('#modalspinner').removeClass('d-none');
+            $('#modalspinner').addClass('loading');
+            $('#modalspinner').parent().prop('disabled', true);
         },
 
         /**
-         * Set approve state to the modal window.
+         * Return to the main window.
          *
-         * @method approveState
+         * @method goBack
          */
-        approveState: function () {
-            this.getCancel().fadeOut();
-            this.getSubmit().fadeOut();
-            this.getApprove().delay('slow').fadeIn();
-            setTimeout(this.hide.bind(this), 5000);
+        goBack: function() {
+            var context = {
+                activitysending: Number(this.actions.activitysending)
+            };
+            this.render(this.template.selector, context);
         },
-
-        /**
-         * Set cancel state to the modal window.
-         *
-         * @method approveState
-         */
-        cancelState: function () {
-            this.getSubmit().fadeOut();
-        },
-
-        /**
-         * Set error state to the modal window.
-         *
-         * @method errorState
-         */
-        errorState: function () {
-            this.getCancel().fadeOut();
-            this.getSubmit().fadeOut();
-            this.getError().delay('slow').fadeIn();
-            this.getContent().addClass('alert-danger');
-            Str.get_strings([{
-                key: 'system_error_contact_administrator', component: 'local_sharewith'
-            }]).done(function (s) {
-                this.getBody().text(s);
-            }.bind(this));
-        },
-
-        /**
-         * Set error text state to the modal window.
-         *
-         * @method errorState
-         */
-        errorTextState: function () {
-            this.getCancel().fadeOut();
-            this.getSubmit().fadeOut();
-            this.getError().delay('slow').fadeIn();
-            this.getContent().addClass('alert-danger');
-        },
-
-        /**
-         * Gets the wrapper of the modal window.
-         *
-         * @method getModal.
-         * @return {jQuery}.
-         */
-        getModal: function () {
-            return $(this.MODAL.selectors.modal);
-        },
-
-        /**
-         * Gets the body of a modal window.
-         *
-         * @method getBody.
-         * @return {jQuery}.
-         */
-        getBody: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.body);
-        },
-
-        /**
-         * Gets the Submit btn of a modal window.
-         *
-         * @method getSubmit.
-         * @return {jQuery}.
-         */
-        getSubmit: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.submit);
-        },
-
-        /**
-         * Gets the Cancel btn of a modal window.
-         *
-         * @method getCancel.
-         * @return {jQuery}.
-         */
-        getCancel: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.cancel);
-        },
-
-        /**
-         * Gets the Approve btn of a modal window.
-         *
-         * @method getCancel.
-         * @return {jQuery}.
-         */
-        getApprove: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.approve);
-        },
-
-        /**
-         * Gets the Close btn of a modal window.
-         *
-         * @method getClose.
-         * @return {jQuery}.
-         */
-        getClose: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.close);
-        },
-
-        /**
-         * Gets the Error btn of a modal window.
-         *
-         * @method getError.
-         * @return {jQuery}.
-         */
-        getError: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.error);
-        },
-
-        /**
-         * Gets the content block of the modal window.
-         *
-         * @method getContent.
-         * @return {jQuery}.
-         */
-        getContent: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.content);
-        },
-
-        /**
-         * Gets the title block of the modal window.
-         *
-         * @method getTitle.
-         * @return {jQuery}.
-         */
-        getTitle: function () {
-            return $(this.getModal()).find(this.MODAL.selectors.title);
-        }
-
     };
 });

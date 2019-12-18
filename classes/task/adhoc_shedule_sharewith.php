@@ -35,7 +35,7 @@ require_once(__DIR__ . '/../../lib.php');
  * The local_sandbox restore courses task class.
  *
  * @package    local_sharewith
- * @copyright  2014 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class adhoc_shedule_sharewith extends \core\task\adhoc_task {
@@ -263,6 +263,4 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
         return $shortname;
     }
-
 }
-

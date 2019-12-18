@@ -15,43 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The local_sharewith chapter viewed event.
+ * The mod_book chapter viewed event.
  *
- * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
+ * @package    mod_book
+ * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_sharewith\event;
-
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Section copy
- * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class section_copy extends \core\event\base {
-
+class activity_to_teacher_copy extends \core\event\base {
     /**
      * Create instance of event.
      *
-     * @param int $id
-     * @param obj $eventdata
-     * @return obj
+     * @since Moodle 2.7
+     *
+     * @param \stdClass $book
+     * @param \context_module $context
+     * @param \stdClass $chapter
+     * @return \core\event\base
      */
-    public static function create_event($id, $eventdata) {
 
-        $contextid = \context_course::instance($id);
+    public static function create_event($eventdata) {
+
+        $contextid = \context_course::instance($eventdata['courseid']);
 
         $data = array(
             'context' => $contextid,
-            'other' => $eventdata
+            'other' => $eventdata,
         );
-        /** @var chapter_viewed $event */
-        $event = self::create($data);
-        return $event;
+
+        return self::create($data);
     }
 
     /**
@@ -60,12 +55,10 @@ class section_copy extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        $userid = $this->other['userid'];
-        $instanceid = $this->other['instanceid'];
-        $targetcourseid = $this->other['targetcourseid'];
-        $sectionid = $this->other['sectionid'];
-
-        return "The user with id '$userid' copied section with id '$sectionid' to course id " . $targetcourseid;
+        $userid_to = $this->other['targetuserid'];
+        $userid_from = $this->other['userid'];
+        $activity_id = $this->other['instanceid'];
+        return "The user with id '$userid_from' shared activity id '$activity_id' with user id '$userid_to'";
     }
 
     /**
@@ -83,16 +76,7 @@ class section_copy extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventsectioncopy', 'local_sharewith');
-    }
-
-    /**
-     * Get URL related to the action.
-     *
-     * @return \moodle_url
-     */
-    public function get_url() {
-        return new \moodle_url('/course/view.php', array('id' => $this->contextinstanceid));
+        return get_string('eventcopytoteacher', 'local_sharewith');
     }
 
     /**
@@ -101,16 +85,11 @@ class section_copy extends \core\event\base {
      * @return void
      */
     protected function init() {
-        $this->data['crud'] = 'r';
+        $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
-    /**
-     * Get mapping
-     * @return array
-     */
     public static function get_objectid_mapping() {
         return array();
     }
-
 }
