@@ -28,30 +28,29 @@ define([
     'local_sharewith/modal',
     'local_sharewith/sharewithteacher',
     'local_sharewith/copyinstance'
-], function($, modal, shareWithTeacher, copyInstance) {
+], function ($, modal, shareWithTeacher, copyInstance) {
 
     var root = document.querySelector('body');
 
     return {
-        init: function(actions) {
-            // Add modal bootstap markup to the DOM
-            modal.insertTemplates(actions).done(function() {
+        init: function (actions) {
+            modal.insertTemplates(actions).done(function () {
                 modal.addActionNode();
                 shareWithTeacher.init();
                 copyInstance.init();
 
-                root.addEventListener('click', function(e) {
+                root.addEventListener('click', function (e) {
                     var target = e.target;
                     while (root.contains(target)) {
                         switch (target.dataset.handler) {
-                          case 'goBack':
-                              modal.goBack();
-                              break;
+                            case 'goBack':
+                                modal.goBack();
+                                break;
                         }
                         target = target.parentNode;
                     }
                 });
-          });
+            });
         }
     };
 });

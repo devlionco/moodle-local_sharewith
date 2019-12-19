@@ -27,7 +27,7 @@ define([
     'jquery',
     'core/templates',
     'core/notification'
-], function($, Templates, Notification) {
+], function ($, Templates, Notification) {
 
     var SELECTORS = {
         modalWrapper: '#modalSharewith',
@@ -67,12 +67,12 @@ define([
          * @method addShareButtonEditMenu
          * @param {boolean} activitysending send activity to teacher.
          */
-        addShareButtonEditMenu: function(activitysending) {
+        addShareButtonEditMenu: function (activitysending) {
 
             var string = M.util.get_string('use_activity', 'local_sharewith'),
                 menu = $(document).find(SELECTORS.editMenu);
 
-            menu.each(function() {
+            menu.each(function () {
                 var clone = $(this).children().last().clone();
                 clone
                     .find('.menu-action-text')
@@ -99,21 +99,21 @@ define([
          *
          * @method addShareButtonActivity
          */
-        addShareButtonActivity: function() {
+        addShareButtonActivity: function () {
 
             var menu = $(document).find(SELECTORS.actionMenu),
                 string = M.util.get_string('share', 'local_sharewith');
 
-            menu.each(function() {
+            menu.each(function () {
                 var shareBtn = $('<button><i class = "icon"></i>' + string + '</button>');
-                    shareBtn
-                        .attr('data-handler', 'openShareWith')
-                        .addClass('btn btn-outline-primary btn-sm');
-                    shareBtn
-                        .find('.icon')
-                        .attr('title', string)
-                        .attr('aria-label', string)
-                        .addClass('fa fa-share-alt fa-fw');
+                shareBtn
+                    .attr('data-handler', 'openShareWith')
+                    .addClass('btn btn-outline-primary btn-sm');
+                shareBtn
+                    .find('.icon')
+                    .attr('title', string)
+                    .attr('aria-label', string)
+                    .addClass('fa fa-share-alt fa-fw');
                 shareBtn.insertAfter($(this));
             });
         },
@@ -124,12 +124,12 @@ define([
          * @method addCopyActivityButton
          * @param {jquery} root The root element.
          */
-        addCopySectionButton: function() {
+        addCopySectionButton: function () {
 
             var string = M.util.get_string('eventsectioncopy', 'local_sharewith'),
                 menu = $(document).find(SELECTORS.menuSection);
 
-            menu.each(function() {
+            menu.each(function () {
                 var clone = $(this).children().last().clone();
                 clone
                     .attr('href', '#')
@@ -156,13 +156,13 @@ define([
          * @return {Promise|boolean}
          * @param {object} actions Available actions.
          */
-        insertTemplates: function(actions) {
+        insertTemplates: function (actions) {
             this.actions = actions;
             var context = {},
                 self = this;
 
             return Templates.render('local_sharewith/modalwrapper', context)
-              .done(function(html, js) {
+                .done(function (html, js) {
                     if (!self.modalInit) {
                         Templates.appendNodeContents('body', html, js);
                         self.modalInit = true;
@@ -182,13 +182,13 @@ define([
          * @param {object} context The context for template.
          * @return {Promise}
          */
-        render: function(template, context) {
+        render: function (template, context) {
             var self = this;
             return Templates.render(template, context)
-                    .done(function(html, js) {
-                        Templates.replaceNodeContents(self.modalContent, html, js);
-                    })
-                    .fail(Notification.exception);
+                .done(function (html, js) {
+                    Templates.replaceNodeContents(self.modalContent, html, js);
+                })
+                .fail(Notification.exception);
         },
 
         /**
@@ -196,19 +196,13 @@ define([
          *
          * @method addActionNode
          */
-        addActionNode: function() {
-
-
+        addActionNode: function () {
             if (this.actions.sectioncopy) {
                 this.addCopySectionButton();
             }
             if (this.actions.activitycopy) {
-                // Adding share btn to edit menu
                 this.addShareButtonEditMenu(this.actions.activitysending);
-                // Add share button to activity block
-                // this.addShareButtonActivity();
             }
-
         },
 
         /**
@@ -216,7 +210,7 @@ define([
          *
          * @method addSpinner
          */
-        addBtnSpinner: function() {
+        addBtnSpinner: function () {
             $('#modalspinner').removeClass('d-none');
             $('#modalspinner').addClass('loading');
             $('#modalspinner').parent().prop('disabled', true);
@@ -227,7 +221,7 @@ define([
          *
          * @method goBack
          */
-        goBack: function() {
+        goBack: function () {
             var context = {
                 activitysending: Number(this.actions.activitysending)
             };

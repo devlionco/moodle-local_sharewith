@@ -42,8 +42,8 @@ class activity_to_teacher_copy extends \core\event\base {
         $contextid = \context_course::instance($eventdata['courseid']);
 
         $data = array(
-            'context' => $contextid,
-            'other' => $eventdata,
+                'context' => $contextid,
+                'other' => $eventdata,
         );
 
         return self::create($data);
@@ -55,10 +55,10 @@ class activity_to_teacher_copy extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        $userid_to = $this->other['targetuserid'];
-        $userid_from = $this->other['userid'];
-        $activity_id = $this->other['instanceid'];
-        return "The user with id '$userid_from' shared activity id '$activity_id' with user id '$userid_to'";
+        $useridto = $this->other['targetuserid'];
+        $useridfrom = $this->other['userid'];
+        $activityid = $this->other['instanceid'];
+        return "The user with id '$useridfrom' shared activity id '$activityid' with user id '$useridto'";
     }
 
     /**

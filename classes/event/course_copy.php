@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Course copy
+ *
  * @package    local_sharewith
  * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -106,6 +107,7 @@ class course_copy extends \core\event\base {
 
     /**
      * Get mapping
+     *
      * @return array
      */
     public static function get_objectid_mapping() {

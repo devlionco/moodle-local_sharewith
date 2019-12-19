@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Activity copy
+ *
  * @package    local_sharewith
  * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -36,6 +37,7 @@ class activity_copy extends \core\event\base {
 
     /**
      * Create instance of event
+     *
      * @param int $id
      * @param obj $eventdata
      * @return obj
@@ -45,8 +47,8 @@ class activity_copy extends \core\event\base {
         $contextid = \context_course::instance($id);
 
         $data = array(
-            'context' => $contextid,
-            'other' => $eventdata
+                'context' => $contextid,
+                'other' => $eventdata
         );
         /** @var chapter_viewed $event */
         $event = self::create($data);
@@ -108,6 +110,7 @@ class activity_copy extends \core\event\base {
 
     /**
      * Get mapping
+     *
      * @return array
      */
     public static function get_objectid_mapping() {

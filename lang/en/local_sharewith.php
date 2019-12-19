@@ -31,10 +31,8 @@ $string['menucoursenode'] = 'Copy course to category';
 $string['wordcopy'] = 'Share';
 $string['generalsectionname'] = 'General';
 
-// Cron.
 $string['tasksharewith'] = 'Task sharewith';
 
-// Settings.
 $string['settingscoursecopy'] = 'Copy course';
 $string['settingscoursecopydesc'] = 'Enable/disable copy courses';
 $string['settingssectioncopy'] = 'Copy topic';
@@ -46,13 +44,11 @@ $string['settingsactivitycopydesc'] = 'Enable/disable copy activities';
 $string['settingsactivitysending'] = 'Send activity';
 $string['settingsactivitysendingdesc'] = 'Enable/disable send activities';
 
-// Events.
 $string['eventcoursecopy'] = 'Copy course';
 $string['eventsectioncopy'] = 'Copy topic';
 $string['eventactivitycopy'] = 'Copy activity';
 $string['eventactivityshare'] = 'Share activity';
 
-// Modals.
 $string['selectioncategories'] = 'Select category';
 $string['sectionselection'] = 'Select topic';
 $string['selectcourse'] = 'Select course';
@@ -99,7 +95,8 @@ $string['activity_upload_to_mr'] = 'Activity {$a->activitytitle} has been sent t
 thanks for sharing!';
 $string['subject_message_for_teacher_by'] = 'Activity {$a->activity_name} added by {$a->teacher_name}';
 $string['subject_message_for_teacher'] = 'Teacher {$a->teacher_name} share to you activity {$a->activity_name}';
-$string['fullmessagehtml_for_teacher'] = 'Share it to you course <a data-handler="selectCourse" data-activitysharing="{$a->activityid}" href="#">link</a> <br>Ask the teacher about the activity <a href="{$a->teacherlink}">link</a>.';
+$string['fullmessagehtml_for_teacher'] =
+        'Share it to you course <a data-handler="selectCourse" data-activitysharing="{$a->activityid}" href="#">link</a> <br>Ask the teacher about the activity <a href="{$a->teacherlink}">link</a>.';
 $string['info_message_for_teacher'] = 'Message from Sharing Activity';
 $string['enter_subject_name'] = 'Enter the name of the subject';
 $string['succesfullyshared'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';
@@ -122,7 +119,6 @@ $string['share_national_shared'] = 'Share the national shared database';
 $string['send_to_teacher'] = 'Send to the teacher';
 $string['transfer_another_course'] = 'Transfer to another course';
 
-// Sharing popup.
 $string['choose'] = 'Choose...';
 $string['reduce_catalog_options'] = 'Reduce catalog options';
 $string['advanced_catalog_options'] = 'Advanced catalog options';
@@ -161,7 +157,8 @@ At least some of the questions in your exam do not belong to the "Default examin
 You must check and categorize these questions before uploading the examiner to the shared repository.<br>
 For questions / clarifications, please contact: petel@weizmann.ac.il';
 
-$string['sharing_content_materials_repository'] = 'Pay attention! By sharing this activity, you will be able to access the activity content without the performance of your students to all physics teachers who use the PeTeL environment. Please ensure that the content that appears in the activity is standardized';
+$string['sharing_content_materials_repository'] =
+        'Pay attention! By sharing this activity, you will be able to access the activity content without the performance of your students to all physics teachers who use the PeTeL environment. Please ensure that the content that appears in the activity is standardized';
 $string['item_name'] = 'item name:';
 $string['availability_describe'] = 'שימו לב! פעילות זו היא חלק מרצף הוראה. ברצונכם לשתף את כל שאר הפריטים ברצף למאגר המשוותף?';
 $string['define_item_cataloged'] = 'Define where the item will be cataloged in the shareport';
@@ -218,7 +215,6 @@ $string['share_national_shared'] = 'Share the national shared database';
 $string['send_to_teacher'] = 'Send to the teacher';
 $string['transfer_another_course'] = 'Transfer to another course';
 
-// Sharing popup.
 $string['choose'] = 'Choose...';
 $string['reduce_catalog_options'] = 'Reduce catalog options';
 $string['advanced_catalog_options'] = 'Advanced catalog options';
@@ -234,14 +230,13 @@ $string['settingscatalogcategoryid'] = 'Catalog category for upload';
 $string['settingscatalogcategoryiddesc'] = 'Catalog category for upload';
 $string['succesfullyrecieved'] = 'Succesfully recieved';
 
-// sharewithbutton
 $string['use_activity'] = 'Use activity';
 $string['select_desired_action'] = 'Select the desired action';
 $string['messageprovider:sharewith_notification'] = 'Share with';
 $string['messageprovider:shared_notification'] = 'Shared';
 
-$string['ask_question_before_copying']='Hi! I got a link to copy the activity {$a->activityname}, And I have a question about the item. I wanted to ask...';
-//errors
+$string['ask_question_before_copying'] =
+        'Hi! I got a link to copy the activity {$a->activityname}, And I have a question about the item. I wanted to ask...';
 $string['no_accessible_category'] = 'There is no accessible category for copying course';
 
 $string['rolesoptions'] = 'Sharing roles permissions ';

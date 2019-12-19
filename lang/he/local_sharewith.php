@@ -30,10 +30,8 @@ $string['menucoursenode'] = 'העתק קורס ליחידה';
 $string['wordcopy'] = 'העתקה';
 $string['defaultsectionname'] = 'יחידת־הוראה';
 
-// Cron.
 $string['tasksharewith'] = 'פעילות שיתוף משימות';
 
-// Settings.
 $string['settingscoursecopy'] = 'העתק קורס';
 $string['settingscoursecopydesc'] = 'הפעלה / השבתה של קורס העתקה';
 $string['settingssectioncopy'] = 'העתק מיחידה';
@@ -45,13 +43,11 @@ $string['settingsactivitycopydesc'] = 'הפעלה / השבתה של פעילות
 $string['settingsactivitysending'] = 'Send activity';
 $string['settingsactivitysendingdesc'] = 'Enable/disable send activities';
 
-// Events.
 $string['eventcoursecopy'] = 'העתק קורס';
 $string['eventsectioncopy'] = 'העתק יחידה';
 $string['eventactivitycopy'] = 'העתק פעילות';
 $string['eventactivityshare'] = 'Share activity';
 
-// Modals.
 $string['selectioncategories'] = 'בחירת קטגוריה להעתקת הקורס';
 $string['sectionselection'] = 'בחירת יחידת־הוראה';
 $string['selectcourse'] = 'בחירת קורס';
@@ -99,7 +95,8 @@ $string['activity_upload_to_mr'] = 'הפעילות {$a->activitytitle} נשלח�
 תודה על השיתוף!';
 $string['subject_message_for_teacher_by'] = 'פעילות {$a->activity_name} התווספה על ידי {$a->teacher_name}';
 $string['subject_message_for_teacher'] = 'You can share activity-{$a->activity_name} from teacher {$a->teacher_name}';
-$string['fullmessagehtml_for_teacher'] = 'You can share activity <a data-handler="selectCourse" data-activitysharing="{$a->activityid}" href="#">here</a>';
+$string['fullmessagehtml_for_teacher'] =
+        'You can share activity <a data-handler="selectCourse" data-activitysharing="{$a->activityid}" href="#">here</a>';
 $string['info_message_for_teacher'] = 'Message from Sharing Activity';
 $string['enter_subject_name'] = 'נא להזין את שם הפריט';
 
@@ -120,7 +117,6 @@ $string['activitycopy_fullmessage'] = 'Your activity was successfully copied to 
 $string['sectioncopy_fullmessage'] = 'Your section was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 $string['coursecopy_fullmessage'] = 'Your course was successfully copied to the <a href="{$a->link}">{$a->coursename}</a>';
 
-// Sharing popup.
 $string['choose'] = 'יש לבחור...';
 $string['reduce_catalog_options'] = 'צימצום אפשרויות קטלוג';
 $string['advanced_catalog_options'] = 'אפשרויות קטלוג מתקדמות';
@@ -158,7 +154,8 @@ $string['category_error_teacher'] = 'מורה יקר/ה,<br>
 עליך לבדוק ותלקן את השיוך של השאלות האלה לפני העלאת הבוחן למאגר המשותף.<br>
 לשאלות/הבהרות ניתן לפנות ל: petel@weizmann.ac.il';
 
-$string['sharing_content_materials_repository'] = 'שימו לב! שיתוף פעילות זו, תאפשר גישה לתוכן הפעילות ללא ביצועי תלמידיכם לכלל מורי הפיזיקה המשתמשים בסביבת PeTeL. אנא הקפידו על תקניות התכנים אשר מופיעים בפעילות';
+$string['sharing_content_materials_repository'] =
+        'שימו לב! שיתוף פעילות זו, תאפשר גישה לתוכן הפעילות ללא ביצועי תלמידיכם לכלל מורי הפיזיקה המשתמשים בסביבת PeTeL. אנא הקפידו על תקניות התכנים אשר מופיעים בפעילות';
 $string['item_name'] = ':שם הפריט';
 $string['availability_describe'] = 'שימו לב! פעילות זו היא חלק מרצף הוראה. ברצונכם לשתף את כל שאר הפריטים ברצף למאגר המשוותף?';
 $string['glossary_describe'] = 'האם ברצונך ליבא נתונים לפעולות הזאת?';
@@ -222,11 +219,11 @@ $string['settingscatalogcategoryid'] = 'Catalog category for upload';
 $string['settingscatalogcategoryiddesc'] = 'Catalog category for upload';
 $string['succesfullyrecieved'] = 'התקבל בהצלחה';
 
-// sharewithbutton
 $string['use_activity'] = 'שיתוף פעילות';
 $string['select_desired_action'] = 'בחירת פעולה רצויה';
 
-$string['ask_question_before_copying']='היי! קיבלתי קישור להעתקת הפעילות {$a->activityname}, ויש לי שאלה לגבי הפריט. רציתי לשאול...';
+$string['ask_question_before_copying'] =
+        'היי! קיבלתי קישור להעתקת הפעילות {$a->activityname}, ויש לי שאלה לגבי הפריט. רציתי לשאול...';
 $string['no_accessible_category'] = 'אין קטגוריה נגישה לקורס העתקה';
 
 $string['rolesoptions'] = 'תפקידים שניתן לשתף את הפעילות';

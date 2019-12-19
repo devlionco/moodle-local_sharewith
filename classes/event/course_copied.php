@@ -36,21 +36,18 @@ class course_copied extends \core\event\base {
      * @param \stdClass $chapter
      * @return chapter_viewed
      */
-     
+
     public static function create_event($id, $eventdata) {
-        
+
         $contextid = \context_course::instance($id);
-        
+
         $data = array(
-            'context' => $contextid,
-            'other' => $eventdata
+                'context' => $contextid,
+                'other' => $eventdata
         );
         /** @var chapter_viewed $event */
-                        
+
         $event = self::create($data);
-        
-        $f = new \stdClass();        
-        //$event->add_record_snapshot('enter_maagar', $f);        
         return $event;
     }
 
@@ -61,12 +58,11 @@ class course_copied extends \core\event\base {
      */
     public function get_description() {
         $userid = $this->other['userid'];
-        $new_courseid = $this->other['new_courseid'];
-        $old_courseid = $this->other['old_courseid'];
-        $category = $this->other['category'];
-        $name_course = $this->other['name_course'];
+        $newcourseid = $this->other['newcourseid'];
+        $oldcourseid = $this->other['oldcourseid'];
+        $coursename = $this->other['coursename'];
 
-        return "The user with id '$userid' copied course id '$old_courseid' to course '$name_course' with id '$new_courseid'";
+        return "The user with id '$userid' copied course id '$oldcourseid' to course '$coursename' with id '$newcourseid'";
     }
 
     /**

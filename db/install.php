@@ -53,7 +53,6 @@ function xmldb_local_sharewith_install() {
         $dbman->create_table($table);
     }
 
-    //============================================================================================================================================
     if (!$dbman->table_exists('local_sharewith_shared')) {
         $table = new xmldb_table('local_sharewith_shared');
 
