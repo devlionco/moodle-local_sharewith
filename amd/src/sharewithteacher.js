@@ -28,7 +28,13 @@ define([
     'core/ajax',
     'core/notification',
     'local_sharewith/modal',
-], function ($, Ajax, Notification, modal) {
+], function($, Ajax, Notification, modal) {
+
+    var SELECTORS = {
+        root: 'body',
+    };
+
+    var STORAGE = {};
 
     /** @alias module:local_sharewith/sharewithteacher */
     return {
@@ -38,10 +44,10 @@ define([
         input: '',
         numOfSings: 3,
 
-        init: function () {
+        init: function() {
 
-            var root = modal.modalWrapper;
-            root.addEventListener('click', function (e) {
+            var root = $(SELECTORS.root)[0];
+            root.addEventListener('click', function(e) {
                 var target = e.target;
                 while (root.contains(target)) {
                     switch (target.dataset.handler) {
@@ -55,14 +61,14 @@ define([
                             this.submitTeachers();
                             break;
                         case 'shareActivity':
-                            this.shareActivity();
+                            this.shareActivity(target);
                             break;
                     }
                     target = target.parentNode;
                 }
             }.bind(this));
 
-            root.addEventListener('input', function (e) {
+            root.addEventListener('input', function(e) {
                 var target = e.target;
                 while (root.contains(target)) {
                     switch (target.dataset.handler) {
@@ -75,62 +81,65 @@ define([
             }.bind(this));
 
         },
+
         /**
          * Choose a teacher for copying the activity.
          *
          * @method shareActivity
          * @param {Node} target element.
          */
-        shareActivity: function () {
-            var cmid = $(modal.modalContent).attr('data-cmid');
+        shareActivity: function(target) {
+            STORAGE.cmid = $(target).attr('data-cmid');
+            STORAGE.courseid = this.getCurrentCourse();
             var self = this;
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 var context = JSON.parse(response);
                 modal.render(modal.template.shareteacher, context)
-                    .done(function () {
+                    .done(function() {
                         self.resultBlock = document.querySelector('.result-block');
                         self.tagWrapper = document.querySelector('.tag-wrapper');
                         self.input = document.querySelector('input[data-handler = "selectTeacher"]');
+                        modal.triggerBtn.click();
                     });
             };
 
             Ajax.call([{
                 methodname: 'local_sharewith_get_teachers',
                 args: {
-                    activityid: Number(cmid),
-                    courseid: Number(this.getCurrentCourse())
+                    activityid: Number(STORAGE.cmid),
+                    courseid: Number(STORAGE.courseid)
                 },
                 done: renderPopup,
                 fail: Notification.exception
             }]);
         },
 
-        keySelect: function (container) {
+        keySelect: function(container) {
 
             var currentItem = 0;
             var tagWrapper = document.querySelector('.tag-wrapper');
             var items = Array.from(container.children);
-            items.forEach(function (item) {
+            items.forEach(function(item) {
                 item.tabIndex = 0;
             });
 
-            container.onmouseover = function (e) {
+            container.onmouseover = function(e) {
                 e.target.focus();
-                items.forEach(function (item, index) {
-                    item.onfocus = function () {
+                items.forEach(function(item, index) {
+                    item.onfocus = function() {
                         currentItem = index;
                     };
                 });
             };
 
-            var setBlur = function () {
+            var setBlur = function() {
                 items[currentItem].blur();
             };
-            var setFocus = function () {
+            var setFocus = function() {
                 items[currentItem].focus();
             };
 
-            var goUp = function () {
+            var goUp = function() {
                 if (currentItem <= 0) {
                     return;
                 } else {
@@ -139,7 +148,7 @@ define([
                     setFocus();
                 }
             };
-            var goDown = function () {
+            var goDown = function() {
                 if (currentItem >= items.length - 1) {
                     return;
                 } else {
@@ -148,12 +157,12 @@ define([
                     setFocus();
                 }
             };
-            var selectItem = function () {
+            var selectItem = function() {
                 var event = new Event('click', {bubbles: true});
                 items[currentItem].dispatchEvent(event);
 
             };
-            var hideAll = function () {
+            var hideAll = function() {
                 container.innerHTML = '';
                 container.classList.add('d-none');
                 currentItem = -1;
@@ -161,7 +170,7 @@ define([
                 document.removeEventListener('keydown', keyCodeHandler);
             };
 
-            var keyCodeHandler = function (e) {
+            var keyCodeHandler = function(e) {
                 switch (e.keyCode) {
                     case 38: // Arrow up.
                         goUp();
@@ -178,7 +187,7 @@ define([
                 }
             };
 
-            var closeBlockResult = function (e) {
+            var closeBlockResult = function(e) {
                 if (container.contains(e.target) || e.path.indexOf(tagWrapper) != -1) {
                     return;
                 }
@@ -189,11 +198,11 @@ define([
             document.addEventListener('keydown', keyCodeHandler);
         },
 
-        showSearchResult: function (response) {
+        showSearchResult: function(response) {
             this.resultBlock.innerHTML = '';
             var teachers = JSON.parse(response);
 
-            teachers.forEach(function (teacher) {
+            teachers.forEach(function(teacher) {
                 var unit = document.createElement('li');
                 unit.dataset.teacherid = teacher.id;
                 unit.dataset.teachername = teacher.teacher_name;
@@ -212,7 +221,7 @@ define([
             this.keySelect(this.resultBlock);
         },
 
-        autocompleteTeachers: function (target) {
+        autocompleteTeachers: function(target) {
             var inputValue = target.value;
 
             if (!this.resultBlock.childElementCount && !inputValue) {
@@ -231,23 +240,16 @@ define([
             }
         },
 
-        submitTeachers: function () {
-            var chosenBlocks = $(this.tagWrapper).find('.btn:not(.example)');
-            var teachersId = [];
+        submitTeachers: function() {
+            var myForm = modal.modalWrapper.querySelector('form');
+            var formData = new FormData(myForm);
 
-            chosenBlocks.each(function () {
-                teachersId.push($(this).attr('data-teacherid'));
-            });
-
-            if (!this.isValidData(teachersId)) {
+            if (!this.isValidData(formData)) {
                 return;
             }
             modal.addBtnSpinner();
-            var activityId = $(modal.modalContent).attr('data-cmid');
-            var courseId = this.getCurrentCourse();
-            var message = $("#message_for_teacher").val();
 
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 var template = modal.template.error;
                 var context = {
                     title: M.util.get_string('eventcopytoteacher', 'local_sharewith'),
@@ -257,17 +259,16 @@ define([
                     template = modal.template.confirm;
                     context.text = M.util.get_string('succesfullyshared', 'local_sharewith');
                 }
-
                 modal.render(template, context);
             };
 
             Ajax.call([{
                 methodname: 'local_sharewith_submit_teachers',
                 args: {
-                    activityid: activityId,
-                    courseid: courseId,
-                    teachersid: JSON.stringify(teachersId),
-                    message: message
+                    activityid: STORAGE.cmid,
+                    courseid: STORAGE.courseid,
+                    teachersid: JSON.stringify(formData.getAll('teacherid')),
+                    message: formData.get('message')
                 },
                 done: renderPopup,
                 fail: Notification.exception
@@ -275,7 +276,7 @@ define([
 
         },
 
-        addTag: function (target) {
+        addTag: function(target) {
             var teacherid = target.dataset.teacherid,
                 tag = $(this.tagWrapper).find('[data-teacherid=' + teacherid + ']');
 
@@ -285,7 +286,11 @@ define([
             }
 
             var teacherTag = $(this.tagWrapper).find('.example').clone();
-            teacherTag.attr('data-teacherid', teacherid);
+            $(teacherTag).attr('data-teacherid', teacherid);
+            $(teacherTag)
+              .find('input')
+              .attr('value', teacherid)
+              .attr('checked', 'checked');
             teacherTag.append('<span>' + target.dataset.teachername + '</span>');
             teacherTag.removeClass('example d-none');
 
@@ -294,20 +299,20 @@ define([
             this.input.value = '';
         },
 
-        removeTag: function (target) {
+        removeTag: function(target) {
             var teacherid = target.dataset.teacherid;
             $(this.resultBlock).find('[data-teacherid=' + teacherid + ']')
                 .removeClass('active');
             $(target).remove();
         },
 
-        isValidData: function (data) {
+        isValidData: function(formData) {
             var errors = [];
-            if (!data.length) {
+            if (!formData.getAll('teacherid').length) {
                 errors.push($('#selectteacher'));
             }
 
-            errors.forEach(function (el) {
+            errors.forEach(function(el) {
                 $(el).popover({
                     template: '<div class="popover" role="tooltip">' +
                     '<div class="arrow"></div>' +
@@ -315,7 +320,7 @@ define([
                     '</div>'
                 });
                 $(el).popover('show');
-                $(el).on('click remove', function () {
+                $(el).on('click remove', function() {
                     $(this).popover('hide');
                 });
             });
@@ -329,7 +334,7 @@ define([
          * @param {string} handler name of the handler.
          * @return {int} id number of the course.
          */
-        getCurrentCourse: function () {
+        getCurrentCourse: function() {
             var str = $('body').attr('class'),
                 result = str.match(/course-\d+/gi)[0].replace(/\D+/, '');
             return result;

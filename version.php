@@ -18,7 +18,7 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     local_sharewith
- * @copyright   2018 Devlion <info@devlion.co>
+ * @copyright   2020 Devlion <info@devlion.co>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,5 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'local_sharewith';
 $plugin->maturity = MATURITY_BETA;
 $plugin->release = 'INITIAL';
-$plugin->version = 2019121800;
+$plugin->version = 2020010900;
 $plugin->requires = 2016052300;

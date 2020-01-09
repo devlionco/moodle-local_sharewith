@@ -28,18 +28,27 @@ define([
     'local_sharewith/modal',
     'local_sharewith/sharewithteacher',
     'local_sharewith/copyinstance'
-], function ($, modal, shareWithTeacher, copyInstance) {
+], function($, modal, shareWithTeacher, copyInstance) {
 
     var root = document.querySelector('body');
 
     return {
-        init: function (actions) {
-            modal.insertTemplates(actions).done(function () {
-                modal.addActionNode();
+        init: function(actions) {
+            modal.insertModalTemplates().done(function() {
+                if (actions.activitysharing) {
+                    modal.addShareActivityButton();
+                }
+                if (actions.activitycopy) {
+                    modal.addCopyActivityButton();
+                }
+                if (actions.sectioncopy) {
+                    modal.addCopySectionButton();
+                }
+
                 shareWithTeacher.init();
                 copyInstance.init();
 
-                root.addEventListener('click', function (e) {
+                root.addEventListener('click', function(e) {
                     var target = e.target;
                     while (root.contains(target)) {
                         switch (target.dataset.handler) {

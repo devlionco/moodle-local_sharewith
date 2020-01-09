@@ -30,14 +30,16 @@ define([
     'core/notification',
     'local_sharewith/modal',
 
-], function ($, Str, Ajax, Notification, modal) {
+], function($, Str, Ajax, Notification, modal) {
+
+    var STORAGE = {};
 
     return /** @alias module:local_sharewith/copyInstance */ {
 
-        init: function () {
+        init: function() {
             var root = document.querySelector('body');
 
-            root.addEventListener('click', function (e) {
+            root.addEventListener('click', function(e) {
                 var target = e.target;
                 while (root.contains(target)) {
 
@@ -76,11 +78,11 @@ define([
             this.typeMessage();
         },
 
-        selectCourseForSection: function (target) {
+        selectCourseForSection: function(target) {
             var sectionid = $(target).parents('.section').find('[data-itemtype="sectionname"]').data('itemid');
 
-            $(modal.modalContent).attr('data-sectionid', sectionid);
-            var renderPopup = function (response) {
+            STORAGE.sectionid = sectionid;
+            var renderPopup = function(response) {
                 var context = {
                     copySection: true,
                     courses: JSON.parse(response.courses)
@@ -102,15 +104,17 @@ define([
          *
          * @method copySectionToCourse
          */
-        copySectionToCourse: function () {
+        copySectionToCourse: function() {
             var modalContent = $(modal.modalContent),
-                sectionid = modalContent.attr('data-sectionid'),
                 courseid = modalContent.find(':selected').data('courseid');
 
             modal.addBtnSpinner();
-            var renderPopup = function (response) {
-                var template = modal.template.error,
-                    context = {title: M.util.get_string('eventsectioncopy', 'local_sharewith'), text: M.util.get_string('system_error_contact_administrator', 'local_sharewith')};
+            var renderPopup = function(response) {
+                var template = modal.template.error;
+                var context = {
+                    title: M.util.get_string('eventsectioncopy', 'local_sharewith'),
+                    text: M.util.get_string('system_error_contact_administrator', 'local_sharewith'),
+                };
                 if (response.result) {
                     template = modal.template.confirm;
                     context = {
@@ -126,24 +130,12 @@ define([
                 args: {
                     courseid: Number(courseid),
                     sourcecourseid: Number(this.getCurrentCourse()),
-                    sourcesectionid: Number(sectionid),
+                    sourcesectionid: Number(STORAGE.sectionid),
                     type: 'sectioncopy'
                 },
                 done: renderPopup,
                 fail: Notification.exception
             }]);
-        },
-
-        openShareWith: function (target) {
-            var cmid = $(target).parents('.activity').find('[data-itemtype="activityname"]').data('itemid'),
-                sectionid = $(target).parents('.section').find('[data-itemtype="sectionname"]').data('itemid'),
-                context = {activitysending: Number(target.dataset.activitysending)},
-                template = modal.template.selector;
-            $(modal.modalContent)
-                .attr('data-cmid', cmid)
-                .attr('data-sectionid', sectionid);
-            modal.render(template, context)
-                .done(modal.triggerBtn.click());
         },
 
         /**
@@ -152,25 +144,21 @@ define([
          * @method selectCourse
          * @param {Node} target element.
          */
-        selectCourse: function (target) {
+        selectCourse: function(target) {
             var self = this;
 
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 var context = {
                     courses: JSON.parse(response.courses),
                     copyActivity: true
                 };
-                if (target.dataset.activitysharing) {
-                    var cmid = target.dataset.activitysharing;
-                    $(modal.modalContent).attr('data-cmid', cmid);
-                    context.hidebackbtn = true;
-                    modal.render(modal.template.copyinstance, context)
-                        .done(modal.triggerBtn.click())
-                        .done(self.selectSection);
-                } else {
-                    modal.render(modal.template.copyinstance, context)
-                        .done(self.selectSection);
-                }
+
+                STORAGE.cmid = target.dataset.cmid;
+                context.hidebackbtn = true;
+                modal.render(modal.template.copyinstance, context)
+                    .done(modal.triggerBtn.click())
+                    .done(self.selectSection);
+
             };
 
             Ajax.call([{
@@ -186,7 +174,7 @@ define([
          *
          * @method selectSection
          */
-        selectSection: function () {
+        selectSection: function() {
             var modalContent = $(modal.modalContent),
                 courseid = modalContent.find(':selected').attr('data-courseid');
 
@@ -194,10 +182,10 @@ define([
                 courseid = this.getCurrentCourse();
             }
 
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 var sections = JSON.parse(response.sections);
                 modalContent.find('.sections').html('');
-                sections.forEach(function (section) {
+                sections.forEach(function(section) {
                     modalContent.find('.sections')
                         .append($('<option data-sectionid =' + section.section_id + '>' + section.section_name + '</option>'));
                 });
@@ -219,13 +207,12 @@ define([
          * @method copyActivityToCourse
          */
 
-        copyActivityToCourse: function () {
+        copyActivityToCourse: function() {
             var modalContent = $(modal.modalContent),
-                cmid = modalContent.attr('data-cmid'),
                 courseid = modalContent.find('.courses option:selected').attr('data-courseid'),
                 sectionid = modalContent.find('.sections option:selected').attr('data-sectionid');
             modal.addBtnSpinner();
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 var context = {
                     title: M.util.get_string('eventdublicatetoteacher', 'local_sharewith'),
                 };
@@ -261,7 +248,7 @@ define([
                     courseid: Number(courseid),
                     sourcecourseid: Number(this.getCurrentCourse()),
                     sectionid: Number(sectionid),
-                    sourceactivityid: Number(cmid),
+                    sourceactivityid: Number(STORAGE.cmid),
                     type: 'activitycopy'
                 },
                 done: renderPopup,
@@ -274,9 +261,9 @@ define([
          *
          * @method selectCategory
          */
-        selectCategory: function () {
+        selectCategory: function() {
 
-            var renderPopup = function (response) {
+            var renderPopup = function(response) {
                 var context = {
                     hidebackbtn: true,
                     copyCourse: true,
@@ -310,11 +297,14 @@ define([
          *
          * @method copyCourseToCategory
          */
-        copyCourseToCategory: function () {
+        copyCourseToCategory: function() {
             var categoryid = $(modal.modalContent).find(':selected').attr('data-categoryid');
 
-            var renderPopup = function (response) {
-                var context = {title: M.util.get_string('eventcoursecopy', 'local_sharewith'), text: M.util.get_string('system_error_contact_administrator', 'local_sharewith')},
+            var renderPopup = function(response) {
+                var context = {
+                    title: M.util.get_string('eventcoursecopy', 'local_sharewith'),
+                    text: M.util.get_string('system_error_contact_administrator', 'local_sharewith')
+                },
                     template = modal.template.error;
                 if (response.result) {
                     context = {
@@ -338,24 +328,28 @@ define([
             }]);
         },
 
-        typeMessage: function () {
+        typeMessage: function() {
             var urlString = window.location.href;
             var url = new URL(urlString);
             var param = url.searchParams.get('swactivityname');
             if (param) {
-                var input = document.querySelector('textarea[data-region="send-message-txt"]');
+                var textarea = $('textarea[data-region="send-message-txt"]')[0];
                 var speed = 30;
                 /* The speed/duration of the effect in milliseconds */
                 var data = {activityname: param};
-                Str.get_string('ask_question_before_copying', 'local_sharewith', data).done(function (message) {
+                Str.get_string('ask_question_before_copying', 'local_sharewith', data).done(function(message) {
                     var i = 0;
                     (function typeWriter() {
                         if (i < message.length) {
-                            input.innerHTML += message.charAt(i);
+                            textarea.innerHTML += message.charAt(i);
                             i++;
                             setTimeout(typeWriter, speed);
                         } else {
-                            input.focus();
+                            var val = textarea.value;
+                            $(textarea)
+                              .focus()
+                              .val("")
+                              .val(val);
                         }
                     })();
                 }).fail(Notification.exception);
@@ -369,7 +363,7 @@ define([
          * @param {string} handler name of the handler.
          * @return {int} id number of the course.
          */
-        getCurrentCourse: function () {
+        getCurrentCourse: function() {
             var str = $('body').attr('class'),
                 result = str.match(/course-\d+/gi)[0].replace(/\D+/, '');
             return result;

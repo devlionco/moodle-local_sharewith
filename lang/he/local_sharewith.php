@@ -96,7 +96,7 @@ $string['activity_upload_to_mr'] = 'הפעילות {$a->activitytitle} נשלח�
 $string['subject_message_for_teacher_by'] = 'פעילות {$a->activity_name} התווספה על ידי {$a->teacher_name}';
 $string['subject_message_for_teacher'] = 'You can share activity-{$a->activity_name} from teacher {$a->teacher_name}';
 $string['fullmessagehtml_for_teacher'] =
-        'You can share activity <a data-handler="selectCourse" data-activitysharing="{$a->activityid}" href="#">here</a>';
+        'You can share activity <a data-handler="selectCourse" data-cmid="{$a->activityid}" href="#">here</a>';
 $string['info_message_for_teacher'] = 'Message from Sharing Activity';
 $string['enter_subject_name'] = 'נא להזין את שם הפריט';
 
@@ -219,7 +219,6 @@ $string['settingscatalogcategoryid'] = 'Catalog category for upload';
 $string['settingscatalogcategoryiddesc'] = 'Catalog category for upload';
 $string['succesfullyrecieved'] = 'התקבל בהצלחה';
 
-$string['use_activity'] = 'שיתוף פעילות';
 $string['select_desired_action'] = 'בחירת פעולה רצויה';
 
 $string['ask_question_before_copying'] =

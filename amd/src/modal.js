@@ -27,16 +27,16 @@ define([
     'jquery',
     'core/templates',
     'core/notification'
-], function ($, Templates, Notification) {
+], function($, Templates, Notification) {
 
     var SELECTORS = {
         modalWrapper: '#modalSharewith',
         modalContent: '#modalContentSharewith',
         triggerBtn: '#triggerModalSharewith',
-        editMenu: '.course-content li.activity [role="menu"]',
         actionMenu: '.course-content li.activity .actions .action-menu',
         actionBlock: '.course-content li.activity .actions > div',
         menuSection: '.course-content .section_action_menu [role="menu"]',
+        editMenu: '.course-content li.activity [role="menu"]',
     };
 
     return /** @alias module:local_sharewith/modal */ {
@@ -51,8 +51,6 @@ define([
             uploadactivity: 'local_sharewith/uploadactivity'
         },
 
-        actions: '',
-
         modalInit: false,
 
         triggerBtn: '',
@@ -64,23 +62,24 @@ define([
         /**
          * Clone and add the button for copying activity.
          *
-         * @method addShareButtonEditMenu
+         * @method addShareActivityButton
          * @param {boolean} activitysending send activity to teacher.
          */
-        addShareButtonEditMenu: function (activitysending) {
+        addShareActivityButton: function() {
 
-            var string = M.util.get_string('use_activity', 'local_sharewith'),
+            var string = M.util.get_string('eventcopytoteacher', 'local_sharewith'),
                 menu = $(document).find(SELECTORS.editMenu);
 
-            menu.each(function () {
-                var clone = $(this).children().last().clone();
+            menu.each(function() {
+                var clone = $(this).children().last().clone(),
+                    cmid = $(this).parents('.activity').find('[data-itemtype="activityname"]').data('itemid');
                 clone
                     .find('.menu-action-text')
                     .text(string);
                 clone
                     .attr('href', '#')
-                    .attr('data-handler', 'openShareWith')
-                    .attr('data-activitysending', activitysending)
+                    .attr('data-handler', 'shareActivity')
+                    .attr('data-cmid', cmid)
                     .removeAttr('data-action')
                     .addClass('sharingact_item');
                 clone
@@ -95,26 +94,36 @@ define([
         },
 
         /**
-         * Add share button to the activity.
+         * Clone and add the button for copying activity.
          *
-         * @method addShareButtonActivity
+         * @method addCopyActivityButton
+         * @param {boolean} activitysending send activity to teacher.
          */
-        addShareButtonActivity: function () {
+        addCopyActivityButton: function() {
 
-            var menu = $(document).find(SELECTORS.actionMenu),
-                string = M.util.get_string('share', 'local_sharewith');
+            var string = M.util.get_string('eventactivitycopy', 'local_sharewith'),
+                menu = $(document).find(SELECTORS.editMenu);
 
-            menu.each(function () {
-                var shareBtn = $('<button><i class = "icon"></i>' + string + '</button>');
-                shareBtn
-                    .attr('data-handler', 'openShareWith')
-                    .addClass('btn btn-outline-primary btn-sm');
-                shareBtn
+            menu.each(function() {
+                var clone = $(this).children().last().clone(),
+                    cmid = $(this).parents('.activity').find('[data-itemtype="activityname"]').data('itemid');
+                clone
+                    .find('.menu-action-text')
+                    .text(string);
+                clone
+                    .attr('href', '#')
+                    .attr('data-handler', 'selectCourse')
+                    .attr('data-cmid', cmid)
+                    .removeAttr('data-action')
+                    .addClass('sharingact_item');
+                clone
                     .find('.icon')
                     .attr('title', string)
                     .attr('aria-label', string)
-                    .addClass('fa fa-share-alt fa-fw');
-                shareBtn.insertAfter($(this));
+                    .removeAttr('class')
+                    .addClass('icon fa fa-copy fa-fw');
+
+                $(this).append(clone);
             });
         },
 
@@ -124,12 +133,12 @@ define([
          * @method addCopyActivityButton
          * @param {jquery} root The root element.
          */
-        addCopySectionButton: function () {
+        addCopySectionButton: function() {
 
             var string = M.util.get_string('eventsectioncopy', 'local_sharewith'),
                 menu = $(document).find(SELECTORS.menuSection);
 
-            menu.each(function () {
+            menu.each(function() {
                 var clone = $(this).children().last().clone();
                 clone
                     .attr('href', '#')
@@ -146,23 +155,21 @@ define([
 
                 $(this).append(clone);
             });
-
         },
 
         /**
          * Insert modal markup on the page.
          *
-         * @method insertTemplates
+         * @method insertModalTemplates
          * @return {Promise|boolean}
-         * @param {object} actions Available actions.
+
          */
-        insertTemplates: function (actions) {
-            this.actions = actions;
+        insertModalTemplates: function() {
             var context = {},
                 self = this;
 
             return Templates.render('local_sharewith/modalwrapper', context)
-                .done(function (html, js) {
+                .done(function(html, js) {
                     if (!self.modalInit) {
                         Templates.appendNodeContents('body', html, js);
                         self.modalInit = true;
@@ -182,27 +189,13 @@ define([
          * @param {object} context The context for template.
          * @return {Promise}
          */
-        render: function (template, context) {
+        render: function(template, context) {
             var self = this;
             return Templates.render(template, context)
-                .done(function (html, js) {
+                .done(function(html, js) {
                     Templates.replaceNodeContents(self.modalContent, html, js);
                 })
                 .fail(Notification.exception);
-        },
-
-        /**
-         * Add necessary nodes to the DOM.
-         *
-         * @method addActionNode
-         */
-        addActionNode: function () {
-            if (this.actions.sectioncopy) {
-                this.addCopySectionButton();
-            }
-            if (this.actions.activitycopy) {
-                this.addShareButtonEditMenu(this.actions.activitysending);
-            }
         },
 
         /**
@@ -210,7 +203,7 @@ define([
          *
          * @method addSpinner
          */
-        addBtnSpinner: function () {
+        addBtnSpinner: function() {
             $('#modalspinner').removeClass('d-none');
             $('#modalspinner').addClass('loading');
             $('#modalspinner').parent().prop('disabled', true);
@@ -221,7 +214,7 @@ define([
          *
          * @method goBack
          */
-        goBack: function () {
+        goBack: function() {
             var context = {
                 activitysending: Number(this.actions.activitysending)
             };
