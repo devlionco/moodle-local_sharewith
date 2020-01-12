@@ -324,8 +324,7 @@ function local_sharewith_autocomplete_teachers($searchstring) {
                         OR u.lastname LIKE(?)
                         OR u.firstname LIKE(?)
                         OR u.username LIKE(?)
-                        OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?))
-                GROUP BY u.id;
+                        OR CONCAT(u.firstname, ' ', u.lastname) LIKE(?));
             ";
 
             $searchstrquery = '%' . $searchstring . '%';

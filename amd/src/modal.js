@@ -72,7 +72,7 @@ define([
 
             menu.each(function() {
                 var clone = $(this).children().last().clone(),
-                    cmid = $(this).parents('.activity').find('[data-itemtype="activityname"]').data('itemid');
+                    cmid = $(this).parents('.activity').attr('id').match(/module-\d+/gi)[0].replace(/\D+/, '');
                 clone
                     .find('.menu-action-text')
                     .text(string);
@@ -106,7 +106,7 @@ define([
 
             menu.each(function() {
                 var clone = $(this).children().last().clone(),
-                    cmid = $(this).parents('.activity').find('[data-itemtype="activityname"]').data('itemid');
+                    cmid = $(this).parents('.activity').attr('id').match(/module-\d+/gi)[0].replace(/\D+/, '');
                 clone
                     .find('.menu-action-text')
                     .text(string);
