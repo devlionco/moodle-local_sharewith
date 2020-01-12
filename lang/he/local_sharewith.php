@@ -227,3 +227,8 @@ $string['no_accessible_category'] = 'אין קטגוריה נגישה לקורס
 
 $string['rolesoptions'] = 'תפקידים שניתן לשתף את הפעילות';
 $string['rolesdisplayoptions'] = 'תפקידים שמאפשרים לעשות פעולה שיתוף';
+// Errors.
+$string['error:invalidparams'] = 'שגיאת הזנת נתונים, צור קשר עם מנהל המערכת';
+$string['error:db'] = 'שגיאת בסיס נתונים, צור קשר עם מנהל המערכת';
+$string['error:message'] = 'שגיאה בשליחת הודעה, צור קשר עם מנהל המערכת';
+$string['error:teacherpermission'] = 'שגיאה! לאחד המורים אין זכויות גישה לשיתוף, צור קשר עם מנהל המערכת';

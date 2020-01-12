@@ -240,3 +240,8 @@ $string['no_accessible_category'] = 'There is no accessible category for copying
 
 $string['rolesoptions'] = 'Sharing roles permissions ';
 $string['rolesdisplayoptions'] = 'Roles that can be shared activities';
+// Errors.
+$string['error:invalidparams'] = 'Data entry error, contact administrator';
+$string['error:db'] = 'Database error, contact administrator';
+$string['error:message'] = 'Error sending message, contact administrator';
+$string['error:teacherpermission'] = 'Error! One of the teachers has no access rights for sharing, contact administrator';

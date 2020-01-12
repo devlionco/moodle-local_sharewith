@@ -468,7 +468,12 @@ class local_sharewith_external extends external_api
      * @return result
      */
     public static function submit_teachers_returns() {
-        return new external_value(PARAM_RAW, 'Send activity result');
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_BOOL, 'Status type'),
+                'message' => new external_value(PARAM_TEXT, 'Status message'),
+            )
+        );
     }
 
     /**
@@ -495,13 +500,13 @@ class local_sharewith_external extends external_api
             )
         );
 
-        $teachers = local_sharewith_submit_teachers(
+        $result = local_sharewith_submit_teachers(
             $params['activityid'],
             $params['courseid'],
             $params['teachersid'],
             $params['message']
         );
 
-        return $teachers;
+        return $result;
     }
 }

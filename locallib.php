@@ -301,9 +301,9 @@ function local_sharewith_autocomplete_teachers($searchstring) {
 
         $roles = get_config('local_sharewith', 'roles');
         $teachers = [];
+
         if ($roles) {
-            $sql = "
-                SELECT
+            $sql = "SELECT
                     DISTINCT u.id AS id,
                     c.id AS courseid,
                     c.fullname AS full_name,
@@ -317,7 +317,7 @@ function local_sharewith_autocomplete_teachers($searchstring) {
                      {role_assignments} AS ra,
                      {user} AS u, {context} AS ct
                 WHERE c.id = ct.instanceid
-                    AND ra.roleid IN(1,2,3,4)
+                    AND ra.roleid IN($roles)
                     AND ra.userid = u.id
                     AND ct.id = ra.contextid
                     AND ( u.email LIKE(?)
@@ -350,6 +350,9 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
 
     $modinfo = get_fast_modinfo($courseid);
     $cm = $modinfo->cms[$activityid];
+    $result = new stdClass();
+    $result->status = true;
+    $result->message = 'ok';
 
     $teachersid = json_decode($teachersid);
     if (!empty($teachersid) && !empty($activityid) && $activityid != 0 && !empty($courseid) && $courseid != 0) {
@@ -358,7 +361,6 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
         $teachers = [];
 
         if ($roles) {
-
             $sql = "SELECT DISTINCT u.id
                 FROM {course} c,
                      {role_assignments} AS ra,
@@ -370,63 +372,73 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
                     AND ct.id = ra.contextid;";
             $teachers = $DB->get_records_sql($sql);
         }
-
         $teacherlist = array();
         foreach ($teachers as $item) {
             $teacherlist[] = $item->id;
         }
 
+        $permittedteachers = array_intersect($teachersid, $teacherlist);
+
+        if ($teachersid != $permittedteachers) {
+            $result->status = false;
+            $result->message = get_string('error:teacherpermission', 'local_sharewith');
+            return $result;
+        }
+
         foreach ($teachersid as $teacherid) {
-            // Check if present teacher.
-            if (in_array($teacherid, $teacherlist)) {
+            // Save in local_sharewith_shared.
+            $objinsert = new stdClass();
+            $objinsert->useridto = $teacherid;
+            $objinsert->useridfrom = $USER->id;
+            $objinsert->courseid = $courseid;
+            $objinsert->activityid = $activityid;
+            $objinsert->messageid = null;
+            $objinsert->restoreid = null;
+            $objinsert->complete = 0;
+            $objinsert->timecreated = time();
 
-                // Save in local_sharewith_shared.
-                $objinsert = new stdClass();
-                $objinsert->useridto = $teacherid;
-                $objinsert->useridfrom = $USER->id;
-                $objinsert->courseid = $courseid;
-                $objinsert->activityid = $activityid;
-                $objinsert->messageid = null;
-                $objinsert->restoreid = null;
-                $objinsert->complete = 0;
-                $objinsert->timecreated = time();
+            $rowid = $DB->insert_record('local_sharewith_shared', $objinsert);
+            if (!$rowid) {
+                $result->status = false;
+                $result->message = get_string('error:db', 'local_sharewith');
+                break;
+            }
+            // Prepare message for user.
+            $a = new stdClass;
+            $a->activity_name = $cm->name;
+            $a->teacher_name = $USER->firstname . ' ' . $USER->lastname;
+            $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
+            $a = new stdClass;
+            $a->restore_id = $rowid;
+            $a->activityid = $activityid;
+            $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id.'&swactivityname='.$cm->name;
+            $fullmessage = $message . "<br>" . get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 
-                $rowid = $DB->insert_record('local_sharewith_shared', $objinsert);
-                if (!$rowid) {
-                    return false;
-                }
-                // Prepare message for user.
-                $a = new stdClass;
-                $a->activity_name = $cm->name;
-                $a->teacher_name = $USER->firstname . ' ' . $USER->lastname;
-                $subject = get_string('subject_message_for_teacher', 'local_sharewith', $a);
-                $a = new stdClass;
-                $a->restore_id = $rowid;
-                $a->activityid = $activityid;
-                $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id.'&swactivityname='.$cm->name;
-                $fullmessage = $message . "<br>" . get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
-
-                $notif = new \core\message\message();
-                $notif->component = 'local_sharewith';
-                $notif->name = 'sharewith_notification';
-                $notif->userfrom = 1;
-                $notif->userto = $teacherid;
-                $notif->subject = $subject;
-                $notif->fullmessage = $fullmessage;
-                $notif->fullmessageformat = FORMAT_HTML;
-                $notif->fullmessagehtml = $fullmessage;
-                $notif->smallmessage = get_string('info_message_for_teacher', 'local_sharewith');
-                $notif->notification = 1;
-                $notif->replyto = "";
-                $notif->courseid = $courseid;
-                $messageid = message_send($notif);
-                if (!$messageid) {
-                    return false;
-                }
+            $notif = new \core\message\message();
+            $notif->component = 'local_sharewith';
+            $notif->name = 'sharewith_notification';
+            $notif->userfrom = 1;
+            $notif->userto = $teacherid;
+            $notif->subject = $subject;
+            $notif->fullmessage = $fullmessage;
+            $notif->fullmessageformat = FORMAT_HTML;
+            $notif->fullmessagehtml = $fullmessage;
+            $notif->smallmessage = get_string('info_message_for_teacher', 'local_sharewith');
+            $notif->notification = 1;
+            $notif->replyto = "";
+            $notif->courseid = $courseid;
+            $messageid = message_send($notif);
+            if (!$messageid) {
+                $result->status = false;
+                $result->message = get_string('error:message', 'local_sharewith');
+                break;
             }
         }
+    } else {
+        $result->status = false;
+        $result->message = get_string('error:invalidparams', 'local_sharewith');
     }
-    return $messageid;
+    return $result;
 }
 
 /**

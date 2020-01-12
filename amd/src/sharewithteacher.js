@@ -255,7 +255,9 @@ define([
                     title: M.util.get_string('eventcopytoteacher', 'local_sharewith'),
                     text: M.util.get_string('system_error_contact_administrator', 'local_sharewith'),
                 };
-                if (response) {
+                if (!response.status) {
+                    context.text = response.message;
+                } else {
                     template = modal.template.confirm;
                     context.text = M.util.get_string('succesfullyshared', 'local_sharewith');
                 }
