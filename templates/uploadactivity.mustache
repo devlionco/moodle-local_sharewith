@@ -344,16 +344,16 @@
 
 {{#js}}
 require(['jquery'], function($) {
-  $('#advancedOptions').click(function(e){
+  $('#advancedOptions').click(function() {
       $(this).next().slideToggle();
-      $(this).find('[data-descr="advanced_catalog_options"]').toggleClass('d-none'); // button
-      $(this).find('[data-descr="reduce_catalog_options"]').toggleClass('d-none'); // button
+      $(this).find('[data-descr="advanced_catalog_options"]').toggleClass('d-none'); // Button.
+      $(this).find('[data-descr="reduce_catalog_options"]').toggleClass('d-none'); // Button.
   });
 
-  $('.involve__quiz input').click(function(e){
+  $('.involve__quiz input').click(function() {
       if ($(this).val() === 'true') {
           $('.involve__qiuz-toggle').removeClass('d-none');
-      }else {
+      } else {
           $('.involve__qiuz-toggle').addClass('d-none');
       }
   });
