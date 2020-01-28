@@ -50,6 +50,7 @@ class local_sharewith_external extends external_api
                 'sectionid' => new external_value(PARAM_INT, 'section id int', VALUE_DEFAULT, null),
                 'sourcesectionid' => new external_value(PARAM_INT, 'sourcesection id int', VALUE_DEFAULT, null),
                 'sourceactivityid' => new external_value(PARAM_INT, 'sourceactivity id int', VALUE_DEFAULT, null),
+                'sourceuserid' => new external_value(PARAM_INT, 'sourceuserid id int', VALUE_DEFAULT, null),
             )
         );
     }
@@ -84,7 +85,8 @@ class local_sharewith_external extends external_api
         $courseid,
         $sectionid,
         $sourcesectionid,
-        $sourceactivityid
+        $sourceactivityid,
+        $sourceuserid=null
     ) {
         global $USER, $sharingtypes;
 
@@ -98,6 +100,7 @@ class local_sharewith_external extends external_api
                 'sectionid' => $sectionid,
                 'sourcesectionid' => $sourcesectionid,
                 'sourceactivityid' => $sourceactivityid,
+                'sourceuserid' => $sourceuserid,
             )
         );
 
@@ -133,7 +136,7 @@ class local_sharewith_external extends external_api
         $bool = local_sharewith_add_task(
             $params['type'],
             $USER->id,
-            $USER->id,
+            is_null($sourceuserid) ? $USER->id : $sourceuserid,
             $params['sourcecourseid'],
             $params['courseid'],
             $params['sourcesectionid'],

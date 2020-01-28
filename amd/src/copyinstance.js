@@ -154,6 +154,7 @@ define([
                 };
 
                 STORAGE.cmid = target.dataset.cmid;
+                STORAGE.uid = target.dataset.uid;
                 context.hidebackbtn = true;
                 modal.render(modal.template.copyinstance, context)
                     .done(modal.triggerBtn.click())
@@ -249,6 +250,7 @@ define([
                     sourcecourseid: Number(this.getCurrentCourse()),
                     sectionid: Number(sectionid),
                     sourceactivityid: Number(STORAGE.cmid),
+                    sourceuserid: Number(STORAGE.uid),
                     type: 'activitycopy'
                 },
                 done: renderPopup,

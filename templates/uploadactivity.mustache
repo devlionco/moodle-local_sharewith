@@ -1,3 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_sharewith/uploadactivity
+
+    Upload activity template.
+
+    Context variables required for this template:
+    * ifavailability - Copy Section
+    * ifglossary - Copy Activity
+    * ifdatabase - Copy Course
+    * category_courses - list of categories containing cat_id, cat_name
+    * courses - list of courses containing courseid, course_name
+    * metadata_activitytype - list of metadata activitytype containing metadata_icon, metadata_name, metadata_value
+    * count_durationactivity - count_durationactivity
+    * metadata_durationactivity - list of metadata durationactivity containing metadata_name
+    * metadata_technicalassessments - list of metadata technicalassessments containing metadata_icon, metadata_name, metadata_value
+    * metadata_responsibility - list of metadata responsibility containing metadata_icon, metadata_name, metadata_value
+    * metadata_feedbackadditional - list of metadata feedbackadditional containing metadata_icon, metadata_name, metadata_value
+    * metadata_validation - list of metadata validation containing metadata_icon, metadata_name, metadata_value
+    * metadata_feedback - list of metadata feedback containing metadata_icon, metadata_name, metadata_value
+    * upload_enable - true
+
+    Example context (json):
+    {
+        "ifavailability": true,
+        "ifglossary": true,
+        "ifdatabase": true,
+        "category_courses": [
+            { "cat_id": "1", "cat_name": "name" },
+        ],
+        "courses": [
+            { "courseid": "1", "course_name": "shortname" },
+        ],
+        "metadata_activitytype": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "metadata_durationactivity": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "metadata_technicalassessments": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "metadata_responsibility": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "metadata_feedbackadditional": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "metadata_validation": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "metadata_feedback": [
+            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
+        ],
+        "upload_enable": true,
+        "count_durationactivity": "4",
+    }
+}}
 <div class="modal-header">
     <h5 class="modal-title">{{#str}}share_national_shared, local_sharewith{{/str}}</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -235,17 +308,19 @@
 </div>
 
 {{#js}}
-$('#advancedOptions').click(function(e){
-    $(this).next().slideToggle();
-    $(this).find('[data-descr="advanced_catalog_options"]').toggleClass('d-none'); // button
-    $(this).find('[data-descr="reduce_catalog_options"]').toggleClass('d-none'); // button
-});
+require(['jquery'], function($) {
+  $('#advancedOptions').click(function(e){
+      $(this).next().slideToggle();
+      $(this).find('[data-descr="advanced_catalog_options"]').toggleClass('d-none'); // button
+      $(this).find('[data-descr="reduce_catalog_options"]').toggleClass('d-none'); // button
+  });
 
-$('.involve__quiz input').click(function(e){
-    if ($(this).val() === 'true') {
-        $('.involve__qiuz-toggle').removeClass('d-none');
-    }else {
-        $('.involve__qiuz-toggle').addClass('d-none');
-    }
+  $('.involve__quiz input').click(function(e){
+      if ($(this).val() === 'true') {
+          $('.involve__qiuz-toggle').removeClass('d-none');
+      }else {
+          $('.involve__qiuz-toggle').addClass('d-none');
+      }
+  });
 });
 {{/js}}

@@ -55,8 +55,7 @@ function local_sharewith_permission_allow_copy($type, $userid, $sourceuserid, $s
             }
             break;
         case "activitycopy":
-            if (has_capability('local/sharewith:copyactivity', context_course::instance($sourcecourseid), $sourceuserid)
-                    AND has_capability('local/sharewith:copyactivity', context_course::instance($courseid), $userid)) {
+            if (has_capability('local/sharewith:copyactivity', context_course::instance($courseid), $userid)) {
                 return true;
             }
             break;
@@ -264,7 +263,7 @@ function local_sharewith_get_section_bycourse($courseid) {
  * @return obj
  */
 function local_sharewith_get_teachers($activityid, $courseid) {
-    global $DB, $PAGE;
+    global $DB, $PAGE, $USER;
 
     $context = context_course::instance($courseid);
     $PAGE->set_context($context);
@@ -410,6 +409,7 @@ function local_sharewith_submit_teachers($activityid, $courseid, $teachersid, $m
             $a = new stdClass;
             $a->restore_id = $rowid;
             $a->activityid = $activityid;
+            $a->uid = $USER->id;
             $a->teacherlink = "$CFG->wwwroot/message/index.php?id=" . $USER->id.'&swactivityname='.$cm->name;
             $fullmessage = $message . "<br>" . get_string('fullmessagehtml_for_teacher', 'local_sharewith', $a);
 

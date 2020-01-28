@@ -96,7 +96,7 @@ thanks for sharing!';
 $string['subject_message_for_teacher_by'] = 'Activity {$a->activity_name} added by {$a->teacher_name}';
 $string['subject_message_for_teacher'] = 'Teacher {$a->teacher_name} share to you activity {$a->activity_name}';
 $string['fullmessagehtml_for_teacher'] =
-        'Share it to you course <a data-handler="selectCourse" data-cm="{$a->activityid}" href="#">link</a> <br>Ask the teacher about the activity <a href="{$a->teacherlink}">link</a>.';
+        'Share it to you course <a data-handler="selectCourse" data-uid="{$a->uid}" data-cmid="{$a->activityid}" href="#">link</a> <br>Ask the teacher about the activity <a href="{$a->teacherlink}">link</a>.';
 $string['info_message_for_teacher'] = 'Message from Sharing Activity';
 $string['enter_subject_name'] = 'Enter the name of the subject';
 $string['succesfullyshared'] = 'The request was successfully updated. It will copied after number of minutes. Thank you!';

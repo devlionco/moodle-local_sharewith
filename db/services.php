@@ -43,24 +43,6 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
-    'local_sharewith_select_upload_activity' => array(
-        'classname' => 'local_sharewith_external',
-        'methodname' => 'select_upload_activity',
-        'classpath' => 'local/sharewith/externallib.php',
-        'description' => 'Select upload activity to catalog',
-        'type' => 'read',
-        'ajax' => true,
-        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
-    ),
-    'local_sharewith_submit_upload_activity' => array(
-        'classname' => 'local_sharewith_external',
-        'methodname' => 'submit_upload_activity',
-        'classpath' => 'local/sharewith/externallib.php',
-        'description' => 'Upload activity to catalog',
-        'type' => 'read',
-        'ajax' => true,
-        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
-    ),
     'local_sharewith_add_saveactivity_task' => array(
         'classname' => 'local_sharewith_external',
         'methodname' => 'add_saveactivity_task',
