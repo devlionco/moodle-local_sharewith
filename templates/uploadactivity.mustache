@@ -36,40 +36,75 @@
     * upload_enable - true
 
     Example context (json):
+{
+  "ifavailability": true,
+  "ifglossary": true,
+  "ifdatabase": true,
+  "category_courses": [
     {
-        "ifavailability": true,
-        "ifglossary": true,
-        "ifdatabase": true,
-        "category_courses": [
-            { "cat_id": "1", "cat_name": "name" },
-        ],
-        "courses": [
-            { "courseid": "1", "course_name": "shortname" },
-        ],
-        "metadata_activitytype": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "metadata_durationactivity": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "metadata_technicalassessments": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "metadata_responsibility": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "metadata_feedbackadditional": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "metadata_validation": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "metadata_feedback": [
-            { "metadata_icon": "metadata_icon", "metadata_name": "metadata_name", "metadata_value": "metadata_value" },
-        ],
-        "upload_enable": true,
-        "count_durationactivity": "4",
+      "cat_id": "1",
+      "cat_name": "name"
     }
+  ],
+  "courses": [
+    {
+      "courseid": "1",
+      "course_name": "shortname"
+    }
+  ],
+  "metadata_activitytype": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_durationactivity": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_technicalassessments": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_responsibility": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_feedbackadditional": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_validation": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_feedback": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "upload_enable": true,
+  "count_durationactivity": "4"
+}
+
 }}
 <div class="modal-header">
     <h5 class="modal-title">{{#str}}share_national_shared, local_sharewith{{/str}}</h5>
