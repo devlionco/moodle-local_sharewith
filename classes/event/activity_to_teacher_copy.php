@@ -15,28 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_book chapter viewed event.
+ * The local_sharewith chapter viewed event.
  *
- * @package    mod_book
- * @copyright  2013 Frédéric Massart
+ * @package    local_sharewith
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_sharewith\event;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class activity_to_teacher_copy
+ * @package local_sharewith\event
+ */
 class activity_to_teacher_copy extends \core\event\base {
-    /**
-     * Create instance of event.
-     *
-     * @since Moodle 2.7
-     *
-     * @param \stdClass $book
-     * @param \context_module $context
-     * @param \stdClass $chapter
-     * @return \core\event\base
-     */
 
+    /**
+     * @param $eventdata
+     * @return mixed
+     */
     public static function create_event($eventdata) {
 
         $contextid = \context_course::instance($eventdata['courseid']);
@@ -89,6 +87,9 @@ class activity_to_teacher_copy extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array();
     }

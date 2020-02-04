@@ -68,14 +68,14 @@ class local_sharewith_external extends external_api
     }
 
     /**
-     * Add share task
-     * @param int $sourcecourseid
-     * @param string $type
-     * @param int $categoryid
-     * @param int $courseid
-     * @param int $sectionid
-     * @param int $sourcesectionid
-     * @param int $sourceactivityid
+     * @param $sourcecourseid
+     * @param $type
+     * @param $categoryid
+     * @param $courseid
+     * @param $sectionid
+     * @param $sourcesectionid
+     * @param $sourceactivityid
+     * @param null $sourceuserid
      * @return array
      */
     public static function add_sharewith_task(
@@ -431,11 +431,8 @@ class local_sharewith_external extends external_api
     }
 
     /**
-     * Get teachers list
-     * @param int $activityid
-     * @param int $courseid
-     * @param string $searchstring
-     * @return array
+     * @param $searchstring
+     * @return string
      */
     public static function autocomplete_teachers($searchstring) {
 

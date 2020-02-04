@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 use tool_dataprivacy\output\categories;
-use function PHPSTORM_META\map;
 
 global $PAGE;
 

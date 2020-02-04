@@ -25,18 +25,17 @@
 namespace local_sharewith\event;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class course_copied
+ * @package local_sharewith\event
+ */
 class course_copied extends \core\event\base {
+
     /**
-     * Create instance of event.
-     *
-     * @since Moodle 2.7
-     *
-     * @param \stdClass $book
-     * @param \context_module $context
-     * @param \stdClass $chapter
+     * @param $id
+     * @param $eventdata
      * @return chapter_viewed
      */
-
     public static function create_event($id, $eventdata) {
 
         $contextid = \context_course::instance($id);
@@ -102,6 +101,9 @@ class course_copied extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
+    /**
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array();
     }
