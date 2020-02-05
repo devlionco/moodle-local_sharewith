@@ -27,13 +27,19 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class activity_to_teacher_copy
- * @package local_sharewith\event
+ *
+ * @package   local_sharewith
+ * @copyright 2018 Devlion <info@devlion.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class activity_to_teacher_copy extends \core\event\base {
 
     /**
-     * @param $eventdata
-     * @return mixed
+     * create_event
+     *
+     * @param  mixed $eventdata
+     *
+     * @return void
      */
     public static function create_event($eventdata) {
 
@@ -88,7 +94,9 @@ class activity_to_teacher_copy extends \core\event\base {
     }
 
     /**
-     * @return array
+     * get_objectid_mapping
+     *
+     * @return void
      */
     public static function get_objectid_mapping() {
         return array();

@@ -27,14 +27,20 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class course_copied
- * @package local_sharewith\event
+ *
+ * @package   local_sharewith
+ * @copyright 2018 Devlion <info@devlion.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_copied extends \core\event\base {
 
     /**
-     * @param $id
-     * @param $eventdata
-     * @return chapter_viewed
+     * create_event
+     *
+     * @param  mixed $id
+     * @param  mixed $eventdata
+     *
+     * @return void
      */
     public static function create_event($id, $eventdata) {
 
@@ -102,7 +108,9 @@ class course_copied extends \core\event\base {
     }
 
     /**
-     * @return array
+     * get_objectid_mapping
+     *
+     * @return void
      */
     public static function get_objectid_mapping() {
         return array();

@@ -68,26 +68,22 @@ class local_sharewith_external extends external_api
     }
 
     /**
-     * @param $sourcecourseid
-     * @param $type
-     * @param $categoryid
-     * @param $courseid
-     * @param $sectionid
-     * @param $sourcesectionid
-     * @param $sourceactivityid
-     * @param null $sourceuserid
-     * @return array
+     * add_sharewith_task
+     *
+     * @param  mixed $sourcecourseid
+     * @param  mixed $type
+     * @param  mixed $categoryid
+     * @param  mixed $courseid
+     * @param  mixed $sectionid
+     * @param  mixed $sourcesectionid
+     * @param  mixed $sourceactivityid
+     * @param  mixed $sourceuserid
+     *
+     * @return void
      */
     public static function add_sharewith_task(
-        $sourcecourseid,
-        $type,
-        $categoryid,
-        $courseid,
-        $sectionid,
-        $sourcesectionid,
-        $sourceactivityid,
-        $sourceuserid=null
-    ) {
+        $sourcecourseid, $type, $categoryid, $courseid, $sectionid, $sourcesectionid, $sourceactivityid, $sourceuserid=null
+        ) {
         global $USER, $sharingtypes;
 
         $params = self::validate_parameters(
@@ -431,8 +427,11 @@ class local_sharewith_external extends external_api
     }
 
     /**
-     * @param $searchstring
-     * @return string
+     * autocomplete_teachers
+     *
+     * @param  mixed $searchstring
+     *
+     * @return void
      */
     public static function autocomplete_teachers($searchstring) {
 
