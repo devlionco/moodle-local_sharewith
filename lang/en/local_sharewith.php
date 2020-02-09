@@ -128,3 +128,5 @@ $string['sendingnotallowed'] = 'Share activities disabled by administrator.';
 
 $string['rolesoptions'] = 'Sharing roles permissions ';
 $string['rolesdisplayoptions'] = 'Roles that can be shared activities';
+
+// I made this change 09-02-2020
