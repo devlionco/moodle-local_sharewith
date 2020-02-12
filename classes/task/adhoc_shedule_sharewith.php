@@ -35,7 +35,7 @@ require_once(__DIR__ . '/../../lib.php');
  * The local_sandbox restore courses task class.
  *
  * @package    local_sharewith
- * @copyright  2014 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2018 Devlion <info@devlion.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class adhoc_shedule_sharewith extends \core\task\adhoc_task {
@@ -76,13 +76,30 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
         require_once($CFG->dirroot . '/local/sharewith/classes/duplicate.php');
 
+        mtrace("Sharewith | - Getting tasks");
         $obj = $DB->get_records('local_sharewith_task', array('status' => 0));
 
+        mtrace("Sharewith | - number of tasks: " . count($obj));
+
         foreach ($obj as $item) {
+
+            mtrace("Sharewith | -- task #$item->id set status 2 (processing)");
+
+            // Setting processing status '2'.
+            $taskprocesserror = true;
+            $item->status = 2;
+            $DB->update_record('local_sharewith_task', $item);
+
+            mtrace("Sharewith | -- task #$item->id set status 2 (processing) - OK");
+
+            mtrace("Sharewith | -- task #$item->id type $item->type");
+
             switch ($item->type) {
                 case 'coursecopy':
                     // Required.
                     // $item->sourcecourseid.
+
+                    mtrace("Sharewith | -- task #$item->id checking capability");
 
                     if (!empty($item->sourcecourseid) && !empty($item->categoryid) &&
                             get_config('local_sharewith', 'coursecopy') &&
@@ -90,6 +107,10 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                                     $item->sourceuserid) &&
                             has_capability('moodle/restore:restorecourse', context_course::instance($item->sourcecourseid),
                                     $item->userid)) {
+
+                        mtrace("Sharewith | -- task #$item->id checking capability - OK");
+
+                        mtrace("Sharewith | -- task #$item->id preparing names");
 
                         $tc = get_course($item->sourcecourseid);
                         $category = $DB->get_record('course_categories', array('id' => $item->categoryid));
@@ -100,15 +121,27 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
                         $adminid = isset($CFG->adminid) ? $CFG->adminid : 2;
 
+                        mtrace("Sharewith | -- task #$item->id preparing names - OK");
+
+                        mtrace("Sharewith | -- task #$item->id COPING");
+
                         // Copy course.
                         $newcourse = \duplicate::duplicate_course($adminid, $tc->id, $fullname, $shortname,
                                 $item->categoryid);
+
+                        mtrace("Sharewith | -- task #$item->id COPING - OK");
+
+                        mtrace("Sharewith | -- task #$item->id Set user to course");
 
                         // Set user to course.
                         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
                         if (!empty($role)) {
                             enrol_try_internal_enrol($newcourse['id'], $item->sourceuserid, $role->id);
                         }
+
+                        mtrace("Sharewith | -- task #$item->id Set user to course - OK");
+
+                        mtrace("Sharewith | -- task #$item->id Sent event");
 
                         // Sent event.
                         $eventdata = array(
@@ -119,6 +152,13 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                         );
 
                         \local_sharewith\event\course_copy::create_event($newcourse['id'], $eventdata)->trigger();
+
+                        mtrace("Sharewith | -- task #$item->id Sent event - OK");
+
+                        $taskprocesserror = false;
+
+                    } else {
+                        mtrace("Sharewith | -- task #$item->id checking capability - FAIL");
                     }
                     break;
 
@@ -127,6 +167,8 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                     // $item->sourcesectionid.
                     // $item->courseid.
 
+                    mtrace("Sharewith | -- task #$item->id checking capability");
+
                     if (!empty($item->sourcesectionid) && !empty($item->courseid) &&
                             get_config('local_sharewith', 'sectioncopy') &&
                             has_capability('moodle/backup:backupcourse', context_course::instance($item->sourcecourseid),
@@ -134,7 +176,13 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                             has_capability('moodle/restore:restorecourse', context_course::instance($item->courseid),
                                     $item->userid)) {
 
+                        mtrace("Sharewith | -- task #$item->id checking capability - OK");
+
+                        mtrace("Sharewith | -- task #$item->id COPING");
+
                         $newsection = \duplicate::duplicate_section($item->sourcesectionid, $item->courseid);
+
+                        mtrace("Sharewith | -- task #$item->id COPING - OK");
 
                         $roles = array();
                         $context = \context_course::instance($item->courseid);
@@ -143,6 +191,8 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                                 $roles[] = $role->shortname;
                             }
                         }
+
+                        mtrace("Sharewith | -- task #$item->id Sent event");
 
                         // Sent event.
                         $eventdata = array(
@@ -155,6 +205,13 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                         );
 
                         \local_sharewith\event\section_copy::create_event($item->courseid, $eventdata)->trigger();
+
+                        mtrace("Sharewith | -- task #$item->id Sent event - OK");
+
+                        $taskprocesserror = false;
+
+                    } else {
+                        mtrace("Sharewith | -- task #$item->id checking capability - FAIL");
                     }
                     break;
 
@@ -164,6 +221,8 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                     // $item->courseid.
                     // $item->sectionid.
 
+                    mtrace("Sharewith | -- task #$item->id checking capability");
+
                     if (!empty($item->sourceactivityid) && !empty($item->courseid) && !empty($item->sectionid) &&
                             get_config('local_sharewith', 'activitycopy') &&
                             has_capability('moodle/backup:backupactivity', context_module::instance($item->sourceactivityid),
@@ -171,7 +230,15 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                             has_capability('moodle/restore:restoreactivity', context_course::instance($item->courseid),
                                     $item->userid)) {
 
+                        mtrace("Sharewith | -- task #$item->id checking capability - OK");
+
+                        mtrace("Sharewith | -- task #$item->id COPING");
+
                         $newactivity = $this->copy_activity($item->sourceactivityid, $item->courseid, $item->sectionid);
+
+                        mtrace("Sharewith | -- task #$item->id COPING - OK");
+
+                        mtrace("Sharewith | -- task #$item->id Sent event");
 
                         // Sent event.
                         $eventdata = array(
@@ -183,10 +250,19 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                         );
 
                         \local_sharewith\event\activity_copy::create_event($item->courseid, $eventdata)->trigger();
+
+                        mtrace("Sharewith | -- task #$item->id Sent event - OK");
+
+                        $taskprocesserror = false;
+
+                    } else {
+                        mtrace("Sharewith | -- task #$item->id checking capability - FAIL");
                     }
                     break;
 
                 case 'activityshare':
+
+                    mtrace("Sharewith | -- task #$item->id checking capability");
 
                     if (!empty($item->sourceactivityid) && !empty($item->courseid) && !empty($item->sectionid) &&
                             get_config('local_sharewith', 'activitysending') &&
@@ -195,7 +271,16 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                             has_capability('moodle/restore:restoreactivity', context_course::instance($item->courseid),
                                     $item->userid)) {
 
+                        mtrace("Sharewith | -- task #$item->id checking capability - OK");
+
+                        mtrace("Sharewith | -- task #$item->id COPING");
+
                         $newactivityshared = $this->copy_activity($item->sourceactivityid, $item->courseid, $item->sectionid);
+
+                        mtrace("Sharewith | -- task #$item->id COPING - OK");
+
+                        mtrace("Sharewith | -- task #$item->id Sent event");
+
                         // Send event.
                         $eventdatashared = array(
                                 'userid' => $item->sourceuserid,
@@ -205,18 +290,36 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
                                 'targetactivityid' => $newactivityshared->id
                         );
                         \local_sharewith\event\activity_copy::create_event($item->courseid, $eventdatashared)->trigger();
+
+                        mtrace("Sharewith | -- task #$item->id Sent event - OK");
+
+                        $taskprocesserror = false;
+
+                    } else {
+                        mtrace("Sharewith | -- task #$item->id checking capability - FAIL");
                     }
                     break;
             }
+
+            if ($taskprocesserror) {
+                continue;
+            }
+
+            mtrace("Sharewith | -- task #$item->id set status 1 (End working)");
 
             // End working.
             $item->status = 1;
             $DB->update_record('local_sharewith_task', $item);
 
+            mtrace("Sharewith | -- task #$item->id set status 1 (End working) - OK");
+
             if ($item->sourceuserid != $item->userid) {
                 \duplicate::send_notification($item, $newactivity);
             }
         }
+
+        mtrace("Sharewith | - tasks processed");
+
     }
 
     /**
@@ -263,6 +366,4 @@ class adhoc_shedule_sharewith extends \core\task\adhoc_task {
 
         return $shortname;
     }
-
 }
-

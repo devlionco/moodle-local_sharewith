@@ -36,6 +36,7 @@ function xmldb_local_sharewith_uninstall() {
         $table = new xmldb_table('local_sharewith_task');
         $dbman->drop_table($table);
     }
+
     if ($dbman->table_exists('local_sharewith_shared')) {
         $table = new xmldb_table('local_sharewith_shared');
         $dbman->drop_table($table);

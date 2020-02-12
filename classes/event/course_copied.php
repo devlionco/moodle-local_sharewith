@@ -18,7 +18,7 @@
  * The local_sharewith chapter viewed event.
  *
  * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
+ * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,20 +26,21 @@ namespace local_sharewith\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Course copy
+ * Class course_copied
  *
- * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_sharewith
+ * @copyright 2018 Devlion <info@devlion.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_copy extends \core\event\base {
+class course_copied extends \core\event\base {
 
     /**
-     * Create instance of event.
+     * create_event
      *
-     * @param id $id
-     * @param obj $eventdata
-     * @return obj
+     * @param  mixed $id
+     * @param  mixed $eventdata
+     *
+     * @return void
      */
     public static function create_event($id, $eventdata) {
 
@@ -62,10 +63,11 @@ class course_copy extends \core\event\base {
      */
     public function get_description() {
         $userid = $this->other['userid'];
-        $courseid = $this->other['courseid'];
-        $targetcourseid = $this->other['targetcourseid'];
+        $newcourseid = $this->other['newcourseid'];
+        $oldcourseid = $this->other['oldcourseid'];
+        $coursename = $this->other['coursename'];
 
-        return "The user id '$userid' copied course id '$courseid' to course id " . $targetcourseid;
+        return "The user with id '$userid' copied course id '$oldcourseid' to course '$coursename' with id '$newcourseid'";
     }
 
     /**
@@ -83,7 +85,7 @@ class course_copy extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventcoursecopy', 'local_sharewith');
+        return get_string('eventcoursecopied', 'local_sharewith');
     }
 
     /**
@@ -106,9 +108,9 @@ class course_copy extends \core\event\base {
     }
 
     /**
-     * Get mapping
+     * get_objectid_mapping
      *
-     * @return array
+     * @return void
      */
     public static function get_objectid_mapping() {
         return array();

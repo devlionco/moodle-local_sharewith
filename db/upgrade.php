@@ -29,5 +29,9 @@ defined('MOODLE_INTERNAL') || die();
  * @return bool result
  */
 function xmldb_local_sharewith_upgrade($oldversion) {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
     return true;
 }

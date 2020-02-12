@@ -1,0 +1,361 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_sharewith/uploadactivity
+
+    Upload activity template.
+
+    Context variables required for this template:
+    * ifavailability - Copy Section
+    * ifglossary - Copy Activity
+    * ifdatabase - Copy Course
+    * category_courses - list of categories containing cat_id, cat_name
+    * courses - list of courses containing courseid, course_name
+    * metadata_activitytype - list of metadata activitytype containing metadata_icon, metadata_name, metadata_value
+    * count_durationactivity - count_durationactivity
+    * metadata_durationactivity - list of metadata durationactivity containing metadata_name
+    * metadata_technicalassessments - list of metadata technicalassessments containing metadata_icon, metadata_name, metadata_value
+    * metadata_responsibility - list of metadata responsibility containing metadata_icon, metadata_name, metadata_value
+    * metadata_feedbackadditional - list of metadata feedbackadditional containing metadata_icon, metadata_name, metadata_value
+    * metadata_validation - list of metadata validation containing metadata_icon, metadata_name, metadata_value
+    * metadata_feedback - list of metadata feedback containing metadata_icon, metadata_name, metadata_value
+    * upload_enable - true
+
+    Example context (json):
+{
+  "ifavailability": true,
+  "ifglossary": true,
+  "ifdatabase": true,
+  "category_courses": [
+    {
+      "cat_id": "1",
+      "cat_name": "name"
+    }
+  ],
+  "courses": [
+    {
+      "courseid": "1",
+      "course_name": "shortname"
+    }
+  ],
+  "metadata_activitytype": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_durationactivity": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_technicalassessments": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_responsibility": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_feedbackadditional": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_validation": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "metadata_feedback": [
+    {
+      "metadata_icon": "metadata_icon",
+      "metadata_name": "metadata_name",
+      "metadata_value": "metadata_value"
+    }
+  ],
+  "upload_enable": true,
+  "count_durationactivity": "4"
+}
+
+}}
+<div class="modal-header">
+    <h5 class="modal-title">{{#str}}share_national_shared, local_sharewith{{/str}}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div id="uploadactivity" class = "uploadactivity">
+  <form class="container-fluid" action="" id="sharing_activities_form" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="activityid" value = "{{activityid}}">
+
+    <p>{{#str}}sharing_content_materials_repository, local_sharewith{{/str}}</p>
+    <p class="mb-2">{{#str}}item_name, local_sharewith{{/str}}</p>
+    <input
+        class ="form-control"
+        id="item_name"
+        data-placement = "top"
+        data-trigger="manual"
+        data-content = "{{#str}}please_enter_item_name, local_sharewith{{/str}}"
+        name="activitytitle"
+        value = "{{activity_title}}"
+        placeholder="{{#str}}enter_subject_name, local_sharewith{{/str}}"
+        >
+
+    {{#ifavailability}}
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input"  name="ifavailability" value="1" id="availability">
+      <label class="custom-control-label" for="availability">{{#str}}availability_describe, local_sharewith{{/str}}</label>
+    </div>
+    {{/ifavailability}}
+
+    {{#ifglossary}}
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" name="ifglossary" value="1" id="glossary">
+      <label class="custom-control-label" for="glossary">{{#str}}glossary_describe, local_sharewith{{/str}}</label>
+    </div>
+    {{/ifglossary}}
+
+    {{#ifdatabase}}
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" name="ifdatabase" value="1" id="database">
+      <label class="custom-control-label" for="database">{{#str}}database_describe, local_sharewith{{/str}}</label>
+    </div>
+    {{/ifdatabase}}
+
+    <p class="mb-1 mt-3">{{#str}}define_item_cataloged, local_sharewith{{/str}}</p>
+    <p class="mb-1">{{#str}}select_main_topic, local_sharewith{{/str}}</p>
+
+    <div class="d-flex mb-2">
+      {{#category_courses}}
+      <label>
+          <input
+              name = "catid"
+              type = "radio"
+              class = "sr-only"
+              value = "{{cat_id}}"
+              data-descr="selectCategory"
+              data-placement = "top"
+              data-trigger="manual"
+              data-content = "{{#str}}selectioncategories, local_sharewith{{/str}}"
+              >
+          <span class="btn btn-primary justify-content-center d-flex mr-2">{{cat_name}}</span>
+      </label>
+      {{/category_courses}}
+    </div>
+
+    <div id = "selectCourse" class = "d-none">
+      <p class="mb-1">{{#str}}assignment_appropriate_topics, local_sharewith{{/str}}</p>
+      {{#category_courses}}
+      <div class = "select-course d-none mb-2" data-catid = "{{cat_id}}">
+        <select
+            disabled
+            class="custom-select mr-2"
+            name = "courseid"
+            data-descr="selectCourse"
+            data-catid = "{{cat_id}}"
+            data-trigger="manual"
+            data-content = "{{#str}}selectcourse, local_sharewith{{/str}}"
+            >
+          <option>{{#str}}choose, local_sharewith{{/str}}</option>
+          {{#courses}}
+          <option value="{{courseid}}">{{course_name}}</option>
+          {{/courses}}
+        </select>
+        <span></span>
+        <button type="button" class="btn btn-outline-primary d-none" data-descr="addAssociation">
+          <span class = "add">{{#str}}add_association, local_sharewith{{/str}}</span>
+          <span class = "remove">{{#str}}remove_association, local_sharewith{{/str}}</span>
+        </button>
+      </div>
+      {{/category_courses}}
+    </div>
+
+    <p class="involve__block-name">{{#str}}mark_recommended, local_sharewith{{/str}}</p>
+    <div class="d-flex flex-wrap justify-content-start">
+      {{#metadata_activitytype}}
+        <button class="btn btn-primary involve__button-image {{metadata_icon}} mr-2 mb-2 px-2 d-flex" data-descr="checkbox-btn">{{metadata_name}}</button>
+        <input class = "sr-only" type = "checkbox" name = "activitytype" value = "{{metadata_value}}">
+      {{/metadata_activitytype}}
+    </div>
+
+    <div class="involve__action-level">
+      <p class="involve__block-name mb-1 mt-3">{{#str}}difficulty_of_activity, local_sharewith{{/str}}</p>
+      {{#metadata_levelactivity}}
+      <div class="custom-control custom-radio custom-control-inline">
+        <input class="custom-control-input" id = "{{metadata_value}}" type="radio" name="levelactivity" {{metadata_checked}} value="{{metadata_value}}">
+        <label for = "{{metadata_value}}"  class = "involve__label custom-control-label"> {{metadata_name}} </label>
+      </div>
+      {{/metadata_levelactivity}}
+    </div>
+
+    <div class="involve__action-time">
+      <p class="involve__block-name mb-1 mt-3">{{#str}}duration_of_activity, local_sharewith{{/str}}</p>
+      <div class="invole__action-time-wrap">
+        <div class="px-md-2">
+          <input class="involve__input-time custom-range" name = "durationactivity" type = "range" min = "0" max = "{{count_durationactivity}}" step = "1" value = "0">
+        </div>
+        <div class="d-flex justify-content-between">
+          {{#metadata_durationactivity}}
+          <div>{{metadata_name}}</div>
+          {{/metadata_durationactivity}}
+        </div>
+      </div>
+    </div>
+
+    <p class="involve__block-name mb-1 mt-3">
+      {{#str}}rely_other_activity, local_sharewith{{/str}}
+    </p>
+    <div class="involve__quiz">
+      <div class="custom-control custom-radio">
+        <input id="question_activity-1" type="radio" name="question_activity" checked value = "false"  class="custom-control-input"/>
+        <label class="custom-control-label" for="question_activity-1">{{#str}}rely_other_activity_no, local_sharewith{{/str}} </label>
+      </div>
+      <div class="custom-control custom-radio">
+        <input id="question_activity-2" type="radio" name="question_activity" value = "true"  class="custom-control-input"/>
+        <label class="custom-control-label" for="question_activity-2"> {{#str}}rely_other_activity_yes, local_sharewith{{/str}} </label>
+      </div>
+        <div class="involve__qiuz-toggle d-none">
+          <p class=" mb-1 mt-3">{{#str}}register_resource, local_sharewith{{/str}}</p>
+          <textarea class="form-control" name = "question_activity_url" placeholder="http://www"></textarea>
+        </div>
+    </div>
+
+    <div id="advancedOptions" class="btn btn-outline-primary mt-3 mb-3">
+      <span data-descr="advanced_catalog_options">
+        <i class="icon fa fa-arrows-v fa-fw" aria-hidden="true"></i>
+        {{#str}}advanced_catalog_options, local_sharewith{{/str}}
+      </span>
+      <span data-descr="reduce_catalog_options" class="d-none">
+        <i class="icon fa fa-arrows-v fa-fw" aria-hidden="true"></i>
+        {{#str}}reduce_catalog_options, local_sharewith{{/str}}</span>
+    </div>
+
+    <div class="pt-3" style = "display: none">
+
+      <h2>{{#str}}advanced_catalog_options_2, local_sharewith{{/str}}</h2>
+      <p class="mb-1">{{#str}}advanced_catalog_options_3, local_sharewith{{/str}}</p>
+      <p class="mb-1">{{#str}}teacherremarks, local_sharewith{{/str}}</p>
+
+      <textarea rows = "4" class="form-control" name = "teacherremarks" placeholder="{{#str}}teacherremarks, local_sharewith{{/str}}">{{saved_teacherremarks}}</textarea>
+
+      <div class = "involve__tags my-4">
+        <p class="mb-1 mt-3">{{#str}}tag_item, local_sharewith{{/str}}</p>
+        <input data-descr="addtag" class = "form-control" type = "text" name = "" value = "" placeholder="{{#str}}write_tags_here, local_sharewith{{/str}}">
+      </div>
+
+      <div class="involve__block-tech">
+        <p class=" mb-1">{{#str}}technical_evaluations, local_sharewith{{/str}}</p>
+        <div class="d-flex flex-wrap justify-content-start mb-2">
+          {{#metadata_technicalassessments}}
+          <button class="btn btn-primary involve__button-image--{{metadata_icon}} mr-2 px-2 d-flex" data-descr="checkbox-btn">{{metadata_name}}</button>
+          <input class="sr-only" type="checkbox" name="technicalassessments[]" value="{{metadata_value}}"/>
+          {{/metadata_technicalassessments}}
+        </div>
+      </div>
+      <div class="involve__block-screen d-flex flex-wrap justify-content-start mb-4">
+        {{#metadata_responsibility}}
+        <button class="btn btn-primary involve__button--{{metadata_icon}} mr-2 px-2 d-flex" data-descr="checkbox-btn">{{metadata_name}}</button>
+        <input class="sr-only" type = "checkbox" value ="{{metadata_value}}" name ="responsibility">
+        {{/metadata_responsibility}}
+      </div>
+
+      <div class="involve__check-type mb-4">
+        <p class=" mb-1">{{#str}}feedback_activity, local_sharewith{{/str}}</p>
+        <div class="d-flex flex-wrap justify-content-start">
+          {{#metadata_feedback}}
+          <button class="btn btn-primary involve__button {{metadata_icon}} mr-2 px-2 d-flex" data-descr="checkbox-btn">{{metadata_name}}</button>
+          <input type="checkbox" name = "feedback" value = "{{metadata_value}}" class="sr-only">
+          {{/metadata_feedback}}
+        </div>
+      </div>
+
+      <p class="inveolve__topic-title mb-1">{{#str}}feedback_during_activity, local_sharewith{{/str}}</p>
+      {{#metadata_feedbackadditional}}
+      <div class="custom-control custom-checkbox custom-control-inline mb-4">
+        <input type="checkbox" name="feedbackadditional[]" class="custom-control-input" id="{{metadata_value}}">
+        <label class="custom-control-label" for="{{metadata_value}}">{{metadata_name}}</label>
+      </div>
+      {{/metadata_feedbackadditional}}
+
+      <div class="involve__check">
+        <p class=" mb-1">{{#str}}validation, local_sharewith{{/str}}</p>
+        <div class="d-flex flex-wrap justify-content-start">
+        {{#metadata_validation}}
+        <label data-descr="radio-btn">
+          <input class = "sr-only" type = "radio" name = "validation" value = "{{metadata_value}}">
+          <span class="btn btn-primary involve__button-image--{{metadata_icon}} mr-2 px-2 d-flex">{{metadata_name}}</span>
+        </label>
+        {{/metadata_validation}}
+        </div>
+      </div>
+
+      {{#upload_enable}}
+      <p class="mb-1">{{#str}}add_image, local_sharewith{{/str}}</p>
+      <input class="involve__button-image involve__button-image--upload" type="file" name="imageactivity" >
+      {{/upload_enable}}
+
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" type="button" data-handler = "goBack">{{#str}}back, local_sharewith{{/str}}</button>
+  <button
+      type="button"
+      data-handler="uploadactivity"
+      class="btn btn-success submited"
+      >
+      <div id ="modalspinner" class="spinner-border spinner-border-sm d-none" role="status">
+          <span class = "sr-only">loading...</span>
+      </div>
+      <span class = "spinner-loading">{{#str}}loading, local_sharewith{{/str}}</span>
+      <span>{{#str}}submit, local_sharewith{{/str}}</span>
+  </button>
+</div>
+
+{{#js}}
+require(['jquery'], function($) {
+  $('#advancedOptions').click(function() {
+      $(this).next().slideToggle();
+      $(this).find('[data-descr="advanced_catalog_options"]').toggleClass('d-none'); // Button.
+      $(this).find('[data-descr="reduce_catalog_options"]').toggleClass('d-none'); // Button.
+  });
+
+  $('.involve__quiz input').click(function() {
+      if ($(this).val() === 'true') {
+          $('.involve__qiuz-toggle').removeClass('d-none');
+      } else {
+          $('.involve__qiuz-toggle').addClass('d-none');
+      }
+  });
+});
+{{/js}}

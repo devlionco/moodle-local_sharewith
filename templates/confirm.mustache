@@ -1,0 +1,55 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_sharewith/confirm
+
+    Confirm template.
+
+    Context variables required for this template:
+    * title - title of modal
+    * text - body of modal
+
+    Example context (json):
+{
+  "title": "Title",
+  "text": "Text"
+}
+
+}}
+  <div class="modal-header">
+    <h5 class="modal-title">{{title}}</h5>
+    <button id="confirmClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+      <span>{{text}}</span>
+  </div>
+
+  <div class="modal-footer">
+    <!-- <button class="btn btn-secondary" type="button" data-handler = "goBack">{{#str}}back, local_sharewith{{/str}}</button> -->
+    <button class="btn btn-success" type="button" data-dismiss="modal">{{#str}}finish, local_sharewith{{/str}}</button>
+  </div>
+
+{{#js}}
+require(['jquery'], function($) {
+    setTimeout(function() {
+      $('#confirmClose').trigger('click');
+    }, 10000);
+});
+{{/js}}

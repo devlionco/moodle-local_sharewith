@@ -509,4 +509,3 @@ class duplicate extends external_api {
     }
 
 }
-

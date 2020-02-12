@@ -26,33 +26,31 @@ namespace local_sharewith\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Course copy
+ * Class copy_activity_to_teacher
  *
- * @package    local_sharewith
- * @copyright  2018 Devlion <info@devlion.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_sharewith
+ * @copyright 2018 Devlion <info@devlion.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_copy extends \core\event\base {
+class copy_activity_to_teacher extends \core\event\base {
 
     /**
-     * Create instance of event.
+     * create_event
      *
-     * @param id $id
-     * @param obj $eventdata
-     * @return obj
+     * @param  mixed $eventdata
+     *
+     * @return void
      */
-    public static function create_event($id, $eventdata) {
+    public static function create_event($eventdata) {
 
-        $contextid = \context_course::instance($id);
+        $contextid = \context_course::instance($eventdata['courseid']);
 
         $data = array(
                 'context' => $contextid,
-                'other' => $eventdata
+                'other' => $eventdata,
         );
-        /** @var chapter_viewed $event */
 
-        $event = self::create($data);
-        return $event;
+        return self::create($data);
     }
 
     /**
@@ -61,11 +59,10 @@ class course_copy extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        $userid = $this->other['userid'];
-        $courseid = $this->other['courseid'];
-        $targetcourseid = $this->other['targetcourseid'];
-
-        return "The user id '$userid' copied course id '$courseid' to course id " . $targetcourseid;
+        $useridto = $this->other['useridto'];
+        $useridfrom = $this->other['useridfrom'];
+        $activityid = $this->other['activityid'];
+        return "The user with id '$useridfrom' shared activity id '$activityid' with user id '$useridto'";
     }
 
     /**
@@ -83,16 +80,7 @@ class course_copy extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventcoursecopy', 'local_sharewith');
-    }
-
-    /**
-     * Get URL related to the action.
-     *
-     * @return \moodle_url
-     */
-    public function get_url() {
-        return new \moodle_url('/course/view.php', array('id' => $this->contextinstanceid));
+        return get_string('eventcopytoteacher', 'local_sharewith');
     }
 
     /**
@@ -101,14 +89,14 @@ class course_copy extends \core\event\base {
      * @return void
      */
     protected function init() {
-        $this->data['crud'] = 'r';
+        $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
     /**
-     * Get mapping
+     * get_objectid_mapping
      *
-     * @return array
+     * @return void
      */
     public static function get_objectid_mapping() {
         return array();

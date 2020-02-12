@@ -37,26 +37,31 @@ function local_sharewith_render_navbar_output() {
 
     $output = '';
 
-    $sectioncopyenable = get_config('local_sharewith', 'sectioncopy');
-    $activitycopyenable = get_config('local_sharewith', 'activitycopy');
-    $sendenable = get_config('local_sharewith', 'activitysending');
+    $sectioncopy = get_config('local_sharewith', 'sectioncopy');
+    $activitycopy = get_config('local_sharewith', 'activitycopy');
+    $activitysharing = get_config('local_sharewith', 'activitysending');
 
     // Check permission.
     if (!has_capability('local/sharewith:copysection', context_course::instance($COURSE->id), $USER->id)) {
-        $sectioncopyenable = 0;
+        $sectioncopy = 0;
     }
     if (!has_capability('local/sharewith:copyactivity', context_course::instance($COURSE->id), $USER->id)) {
-        $activitycopyenable = 0;
-        $sendenable = 0;
+        $activitycopy = 0;
+        $activitysharing = 0;
     }
 
+    $stringman = get_string_manager();
+    $strings = $stringman->load_component_strings('local_sharewith', 'en');
+    $PAGE->requires->strings_for_js(array_keys($strings), 'local_sharewith');
+
     $params = array(
-            $sectioncopyenable,
-            $activitycopyenable,
-            $sendenable
+        'sectioncopy' => $sectioncopy,
+        'activitycopy' => $activitycopy,
+        'activitysharing' => $activitysharing
     );
 
-    $PAGE->requires->js_call_amd('local_sharewith/init', 'init', $params);
+    $PAGE->requires->js_call_amd('local_sharewith/init', 'init', array($params));
+
     return $output;
 }
 
