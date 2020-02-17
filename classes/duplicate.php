@@ -307,6 +307,9 @@ class duplicate extends external_api {
             $newcm = $info->get_cm($newcmid);
             $section = $DB->get_record('course_sections', array('id' => $sectionid, 'course' => $courseid));
             moveto_module($newcm, $section);
+
+            // Copy users from mod glossary.
+            self::copy_users_mod_glossary($sourceactivityid, $newcmid);
         }
 
         rebuild_course_cache($newcm->course);
@@ -508,4 +511,248 @@ class duplicate extends external_api {
         $messageid = message_send($message);
     }
 
+    public static function copy_users_mod_glossary($sourceactivityid, $targetactivityid) {
+        global $DB, $CFG, $USER;
+
+        $sql = '
+        SELECT m.name, cm.instance, cm.course
+        FROM {course_modules} cm
+        LEFT JOIN {modules} m ON(cm.module = m.id)
+        WHERE cm.id = ?
+    ';
+
+        $source = $DB->get_record_sql($sql, array($sourceactivityid));
+        $target = $DB->get_record_sql($sql, array($targetactivityid));
+
+        if($source->name == 'glossary' && $target->name == 'glossary'){
+            require_once($CFG->dirroot . '/mod/glossary/lib.php');
+
+            if ($glossary = $DB->get_record('glossary', array('id'=>$source->instance))) {
+
+                // Build xml file.
+                $content = glossary_generate_export_file($glossary, NULL, 0);
+
+                // Upload XML.
+                if (! $glossary = $DB->get_record("glossary", array("id"=>$target->instance))) {
+                    print_error('invalidid', 'glossary');
+                }
+
+                if ($cm = get_coursemodule_from_id('glossary', $targetactivityid)) {
+                    $context = context_module::instance($cm->id);
+
+                    $data = new stdClass();
+                    $data->id = $targetactivityid;
+                    $data->dest = 'current';
+                    $data->catsincl = 1;
+
+                    if ($xml = glossary_read_imported_file($content)) {
+                        $importedentries = 0;
+                        $importedcats = 0;
+                        $entriesrejected = 0;
+                        $rejections = '';
+                        $glossarycontext = $context;
+
+                        if ($data->dest == 'newglossary') {
+                            // If the user chose to create a new glossary
+                            $xmlglossary = $xml['GLOSSARY']['#']['INFO'][0]['#'];
+
+                            if ($xmlglossary['NAME'][0]['#']) {
+                                $glossary = new stdClass();
+                                $glossary->modulename = 'glossary';
+                                $glossary->module = $cm->module;
+                                $glossary->name = ($xmlglossary['NAME'][0]['#']);
+                                $glossary->globalglossary = ($xmlglossary['GLOBALGLOSSARY'][0]['#']);
+                                $glossary->intro = ($xmlglossary['INTRO'][0]['#']);
+                                $glossary->introformat =
+                                        isset($xmlglossary['INTROFORMAT'][0]['#']) ? $xmlglossary['INTROFORMAT'][0]['#'] :
+                                                FORMAT_MOODLE;
+                                $glossary->showspecial = ($xmlglossary['SHOWSPECIAL'][0]['#']);
+                                $glossary->showalphabet = ($xmlglossary['SHOWALPHABET'][0]['#']);
+                                $glossary->showall = ($xmlglossary['SHOWALL'][0]['#']);
+                                $glossary->cmidnumber = null;
+
+                                // Setting the default values if no values were passed
+                                if (isset($xmlglossary['ENTBYPAGE'][0]['#'])) {
+                                    $glossary->entbypage = ($xmlglossary['ENTBYPAGE'][0]['#']);
+                                } else {
+                                    $glossary->entbypage = $CFG->glossary_entbypage;
+                                }
+                                if (isset($xmlglossary['ALLOWDUPLICATEDENTRIES'][0]['#'])) {
+                                    $glossary->allowduplicatedentries = ($xmlglossary['ALLOWDUPLICATEDENTRIES'][0]['#']);
+                                } else {
+                                    $glossary->allowduplicatedentries = $CFG->glossary_dupentries;
+                                }
+                                if (isset($xmlglossary['DISPLAYFORMAT'][0]['#'])) {
+                                    $glossary->displayformat = ($xmlglossary['DISPLAYFORMAT'][0]['#']);
+                                } else {
+                                    $glossary->displayformat = 2;
+                                }
+                                if (isset($xmlglossary['ALLOWCOMMENTS'][0]['#'])) {
+                                    $glossary->allowcomments = ($xmlglossary['ALLOWCOMMENTS'][0]['#']);
+                                } else {
+                                    $glossary->allowcomments = $CFG->glossary_allowcomments;
+                                }
+                                if (isset($xmlglossary['USEDYNALINK'][0]['#'])) {
+                                    $glossary->usedynalink = ($xmlglossary['USEDYNALINK'][0]['#']);
+                                } else {
+                                    $glossary->usedynalink = $CFG->glossary_linkentries;
+                                }
+                                if (isset($xmlglossary['DEFAULTAPPROVAL'][0]['#'])) {
+                                    $glossary->defaultapproval = ($xmlglossary['DEFAULTAPPROVAL'][0]['#']);
+                                } else {
+                                    $glossary->defaultapproval = $CFG->glossary_defaultapproval;
+                                }
+
+                                // These fields were not included in export, assume zero.
+                                $glossary->assessed = 0;
+                                $glossary->availability = null;
+
+                                // New glossary is to be inserted in section 0, it is always visible.
+                                $glossary->section = 0;
+                                $glossary->visible = 1;
+                                $glossary->visibleoncoursepage = 1;
+                            }
+                        }
+
+                        $xmlentries = $xml['GLOSSARY']['#']['INFO'][0]['#']['ENTRIES'][0]['#']['ENTRY'];
+                        $sizeofxmlentries = sizeof($xmlentries);
+                        for ($i = 0; $i < $sizeofxmlentries; $i++) {
+                            // Inserting the entries
+                            $xmlentry = $xmlentries[$i];
+                            $newentry = new stdClass();
+                            $newentry->concept = trim($xmlentry['#']['CONCEPT'][0]['#']);
+                            $definition = $xmlentry['#']['DEFINITION'][0]['#'];
+                            if (!is_string($definition)) {
+                                print_error('errorparsingxml', 'glossary');
+                            }
+                            $newentry->definition = trusttext_strip($definition);
+                            if (isset($xmlentry['#']['CASESENSITIVE'][0]['#'])) {
+                                $newentry->casesensitive = $xmlentry['#']['CASESENSITIVE'][0]['#'];
+                            } else {
+                                $newentry->casesensitive = $CFG->glossary_casesensitive;
+                            }
+
+                            $permissiongranted = 1;
+                            if ($newentry->concept and $newentry->definition) {
+                                if (!$glossary->allowduplicatedentries) {
+                                    // checking if the entry is valid (checking if it is duplicated when should not be)
+                                    if ($newentry->casesensitive) {
+                                        $dupentry = $DB->record_exists_select('glossary_entries',
+                                                'glossaryid = :glossaryid AND concept = :concept', array(
+                                                        'glossaryid' => $glossary->id,
+                                                        'concept' => $newentry->concept));
+                                    } else {
+                                        $dupentry = $DB->record_exists_select('glossary_entries',
+                                                'glossaryid = :glossaryid AND LOWER(concept) = :concept', array(
+                                                        'glossaryid' => $glossary->id,
+                                                        'concept' => core_text::strtolower($newentry->concept)));
+                                    }
+                                    if ($dupentry) {
+                                        $permissiongranted = 0;
+                                    }
+                                }
+                            } else {
+                                $permissiongranted = 0;
+                            }
+
+
+                            if ($permissiongranted) {
+                                $newentry->glossaryid = $glossary->id;
+                                $newentry->sourceglossaryid = 0;
+                                $newentry->approved = 1;
+                                $newentry->userid = $USER->id;
+                                $newentry->teacherentry = 1;
+                                $newentry->definitionformat = $xmlentry['#']['FORMAT'][0]['#'];
+                                $newentry->timecreated = time();
+                                $newentry->timemodified = time();
+
+                                // Setting the default values if no values were passed
+                                if (isset($xmlentry['#']['USEDYNALINK'][0]['#'])) {
+                                    $newentry->usedynalink = $xmlentry['#']['USEDYNALINK'][0]['#'];
+                                } else {
+                                    $newentry->usedynalink = $CFG->glossary_linkentries;
+                                }
+                                if (isset($xmlentry['#']['FULLMATCH'][0]['#'])) {
+                                    $newentry->fullmatch = $xmlentry['#']['FULLMATCH'][0]['#'];
+                                } else {
+                                    $newentry->fullmatch = $CFG->glossary_fullmatch;
+                                }
+
+                                $newentry->id = $DB->insert_record("glossary_entries", $newentry);
+                                $importedentries++;
+
+                                $xmlaliases = @$xmlentry['#']['ALIASES'][0]['#']['ALIAS']; // ignore missing ALIASES
+                                $sizeofxmlaliases = sizeof($xmlaliases);
+                                for ($k = 0; $k < $sizeofxmlaliases; $k++) {
+                                    /// Importing aliases
+                                    $xmlalias = $xmlaliases[$k];
+                                    $aliasname = $xmlalias['#']['NAME'][0]['#'];
+
+                                    if (!empty($aliasname)) {
+                                        $newalias = new stdClass();
+                                        $newalias->entryid = $newentry->id;
+                                        $newalias->alias = trim($aliasname);
+                                        $newalias->id = $DB->insert_record("glossary_alias", $newalias);
+                                    }
+                                }
+
+                                if (!empty($data->catsincl)) {
+                                    // If the categories must be imported...
+                                    $xmlcats = @$xmlentry['#']['CATEGORIES'][0]['#']['CATEGORY']; // ignore missing CATEGORIES
+                                    $sizeofxmlcats = sizeof($xmlcats);
+                                    for ($k = 0; $k < $sizeofxmlcats; $k++) {
+                                        $xmlcat = $xmlcats[$k];
+
+                                        $newcat = new stdClass();
+                                        $newcat->name = $xmlcat['#']['NAME'][0]['#'];
+                                        $newcat->usedynalink = $xmlcat['#']['USEDYNALINK'][0]['#'];
+                                        if (!$category = $DB->get_record("glossary_categories",
+                                                array("glossaryid" => $glossary->id, "name" => $newcat->name))) {
+                                            // Create the category if it does not exist
+                                            $category = new stdClass();
+                                            $category->name = $newcat->name;
+                                            $category->glossaryid = $glossary->id;
+                                            $category->id = $DB->insert_record("glossary_categories", $category);
+                                            $importedcats++;
+                                        }
+                                        if ($category) {
+                                            // inserting the new relation
+                                            $entrycat = new stdClass();
+                                            $entrycat->entryid = $newentry->id;
+                                            $entrycat->categoryid = $category->id;
+                                            $DB->insert_record("glossary_entries_categories", $entrycat);
+                                        }
+                                    }
+                                }
+
+                                // Import files embedded in the entry text.
+                                glossary_xml_import_files($xmlentry['#'], 'ENTRYFILES', $glossarycontext->id, 'entry', $newentry->id);
+
+                                // Import files attached to the entry.
+                                if (glossary_xml_import_files($xmlentry['#'], 'ATTACHMENTFILES', $glossarycontext->id, 'attachment',
+                                        $newentry->id)) {
+                                    $DB->update_record("glossary_entries", array('id' => $newentry->id, 'attachment' => '1'));
+                                }
+
+                            } else {
+                                $entriesrejected++;
+                                if ($newentry->concept and $newentry->definition) {
+                                    // add to exception report (duplicated entry))
+                                    $rejections .= "<tr><td>$newentry->concept</td>" .
+                                            "<td>" . get_string("duplicateentry", "glossary") . "</td></tr>";
+                                } else {
+                                    // add to exception report (no concept or definition found))
+                                    $rejections .= "<tr><td>---</td>" .
+                                            "<td>" . get_string("noconceptfound", "glossary") . "</td></tr>";
+                                }
+                            }
+                        }
+
+                        // Reset caches.
+                        \mod_glossary\local\concept_cache::reset_glossary($glossary);
+                    }
+                }
+            }
+        }
+    }
 }
