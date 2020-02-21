@@ -61,9 +61,6 @@ define([
                         case 'selectCourse':
                             this.selectCourse(target);
                             break;
-                        case 'selectSection':
-                            this.selectSection();
-                            break;
                         case 'copyActivityToCourse':
                             this.copyActivityToCourse();
                             break;
@@ -158,6 +155,11 @@ define([
                 context.hidebackbtn = true;
                 modal.render(modal.template.copyinstance, context)
                     .done(modal.triggerBtn.click())
+                    .done(() => {
+                        $('.courses').on('change', () => {
+                            self.selectSection();
+                        });
+                    })
                     .done(self.selectSection);
 
             };
