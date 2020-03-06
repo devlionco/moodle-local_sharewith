@@ -232,3 +232,4 @@ $string['error:invalidparams'] = 'שגיאת הזנת נתונים, צור קש�
 $string['error:db'] = 'שגיאת בסיס נתונים, צור קשר עם מנהל המערכת';
 $string['error:message'] = 'שגיאה בשליחת הודעה, צור קשר עם מנהל המערכת';
 $string['error:teacherpermission'] = 'שגיאה! לאחד המורים אין זכויות גישה לשיתוף, צור קשר עם מנהל המערכת';
+$string['privacy:metadata'] = 'The Sharewith plugin does not store any personal data.';
